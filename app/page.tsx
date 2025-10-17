@@ -1,9 +1,9 @@
-import Image from "next/image";
+import Presentation from "./components/home-sections/presentation";
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      PAQLLE
-    </div>
+    
+    <Presentation />
+    
   );
 }

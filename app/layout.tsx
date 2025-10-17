@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/navbar/navbar";
+import Footer from "./components/footer/footer";
+    
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -34,12 +36,14 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-1">
           <div
-            className="fixed inset-0 -z-50 bg-cover bg-center bg-no-repeat filter blur-sm dark:blur-md brightness-150 dark:brightness-80 invert dark:invert-0"
+            className="fixed inset-0 -z-50 bg-cover bg-center bg-no-repeat filter blur-md dark:blur-lg brightness-100 dark:brightness-104 dark:invert"
             style={{
-              backgroundImage: 'url("background.jpg")',
+              backgroundImage: 'url("background_2.jpg")',
             }}
           />
+          {children}
         </main>
+       <Footer />
       </body>
     </html>
   );

@@ -88,6 +88,9 @@ export default function Navbar() {
         </div>
       </nav>
 
+      <div> {/* Spacer to prevent content jump */}
+        <div className="h-[90px] md:h-[100px]" />
+      </div>
       {/* ✅ Render the menu in a portal outside the navbar */}
       {mounted &&
         isOpen &&
