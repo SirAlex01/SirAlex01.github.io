@@ -1,7 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import RotatingLogo from "../ui/rotating_logo";
+import RotatingLogo from "../ui/rotating-logo";
 
 export default function Presentation() {
   return (
@@ -20,14 +19,14 @@ export default function Presentation() {
         </h1>
 
         <p className="text-lg text-neutral-700 dark:text-neutral-400 leading-relaxed">
-          Hi, I'm <b>Alessio Maiola</b>, and I'm a Master's graduate in{" "}
+          Hi, I&apos;m <b>Alessio Maiola</b>, and I&apos;m a Master&apos;s graduate in{" "}
           <b>Engineering in Computer Science</b> from{" "}
           <b>Sapienza University of Rome</b>, with a strong focus on{" "}
           <b>artificial intelligence</b>, <b>machine learning</b>, and{" "}
           <b>data engineering</b>.
           <br />
           <br />
-          I'm also passionate about <b>cybersecurity</b>: I actively compete in
+          I&apos;m also passionate about <b>cybersecurity</b>: I actively compete in
           CTFs with <b>TRX</b> and was proud to be among the{" "}
           <b>winners of CyberChallenge.IT 2025</b>.
           <br />

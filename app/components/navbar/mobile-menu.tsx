@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import MobileMenuLink from "./mobile-menu-link";
 
 interface MobileMenuProps {
@@ -11,6 +11,10 @@ interface MobileMenuProps {
 export default function MobileMenu({ links, onClose }: MobileMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const handleClose = useCallback(() => {
+    setVisible(false);
+    setTimeout(onClose, 400);
+  }, [onClose]);
 
   // Animate drawer opening
   useEffect(() => setVisible(true), []);
@@ -24,12 +28,7 @@ export default function MobileMenu({ links, onClose }: MobileMenuProps) {
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const handleClose = () => {
-    setVisible(false);
-    setTimeout(onClose, 400);
-  };
+  }, [handleClose]);
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">

@@ -12,9 +12,19 @@ import MobileMenu from "./mobile-menu";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [scrolled, setScrolled] = useState(
-    () => typeof window !== "undefined" && window.scrollY > 50
-  );
+  const [scrolled, setScrolled] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+  
+    // ✅ Run immediately on mount (so if you’re not at the top, it updates instantly)
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+  
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const rawPathname = usePathname();
   const pathname = rawPathname?.replace(/\/$/, "") || "/";
@@ -48,7 +58,7 @@ export default function Navbar() {
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300
           ${
             scrolled
-              ? "backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800 bg-white/80 dark:bg-black/80"
+              ? "backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800 bg-background/80"
               : "bg-transparent border-transparent"
           }
         `}

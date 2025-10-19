@@ -1,4 +1,4 @@
-import { Home, User, FolderGit2, Mail } from "lucide-react";
+import { Home,/* User, */FolderGit2, Mail } from "lucide-react";
 
 export const navLinks = [
   { name: "Home", path: "/", icon: <Home size={20} /> },
