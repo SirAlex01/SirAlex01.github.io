@@ -1,41 +1,31 @@
 "use client";
 
+import { useEffect } from "react";
 import FadeInSection from "./components/ui/fadein-section";
 import Presentation from "./components/home-sections/presentation";
 import Education from "./components/home-sections/education/education";
-import Palle from "./components/home-sections/palle";
+import CTFs from "./components/home-sections/ctfs";
+import Projects from "./components/home-sections/projects";
+
 const sections = [
-  {
-    id: "presentation",
-    component: <Presentation />,
-    colored: false, // first section transparent
-  },
-  {
-    id: "education",
-    component: <Education />,
-    colored: true, // this one colored background
-  },
-  // You can continue adding more sections below 👇
-   {
-     id: "palle",
-     component: <Palle />,
-     colored: false,
-   },
-  // {
-  //   id: "projects",
-  //   component: <Projects />,
-  //   colored: true,
-  // },
+  { id: "presentation", component: <Presentation /> },
+  { id: "education", component: <Education /> },
+  { id: "ctfs", component: <CTFs /> },
+  { id: "projects", component: <Projects />, colored: true },
 ];
 
 export default function Home() {
+  // ✅ Scroll to top when page (re)loads
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+  }, []);
+
   return (
     <>
       {sections.map((section, index) => {
         const SectionContent = section.component;
-        const backgroundClass = section.colored
-          ? "bg-background"
-          : "bg-transparent";
+        const backgroundClass =
+          (index & 1) === 1 ? "bg-background" : "bg-transparent";
 
         // First section without FadeIn
         if (index === 0) {
@@ -46,7 +36,7 @@ export default function Home() {
           );
         }
 
-        // All other sections wrapped in FadeIn
+        // Other sections with fade-in
         return (
           <FadeInSection key={section.id}>
             <div className={backgroundClass}>{SectionContent}</div>

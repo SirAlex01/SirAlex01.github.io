@@ -4,7 +4,7 @@ import RotatingLogo from "../ui/rotating-logo";
 
 export default function Presentation() {
   return (
-    <section className="flex flex-col md:flex-row items-center justify-center min-h-[calc(100vh-70px)] px-8 gap-12 text-foreground">
+    <section className="flex flex-col md:flex-row items-center justify-center px-8 gap-12 text-foreground">
       {/* --- Left: Logo inside circle --- */}
       <RotatingLogo />
 
