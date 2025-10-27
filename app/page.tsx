@@ -6,12 +6,16 @@ import Presentation from "./components/home-sections/presentation";
 import Education from "./components/home-sections/education/education";
 import CTFs from "./components/home-sections/ctfs";
 import Projects from "./components/home-sections/projects";
+import Skills from "./components/home-sections/skills";
+import Contact from "./components/home-sections/contact";
 
 const sections = [
   { id: "presentation", component: <Presentation /> },
   { id: "education", component: <Education /> },
   { id: "ctfs", component: <CTFs /> },
-  { id: "projects", component: <Projects />, colored: true },
+  { id: "projects", component: <Projects /> },
+  { id: "skills", component: <Skills /> }, 
+  { id: "contact", component: <Contact /> },
 ];
 
 export default function Home() {

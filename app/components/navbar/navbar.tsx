@@ -19,7 +19,7 @@ export default function Navbar() {
   
     const handleScroll = () => setScrolled(window.scrollY > 50);
   
-    // ✅ Run immediately on mount (so if you’re not at the top, it updates instantly)
+    // ✅ Run immediately on mount (so if you're not at the top, it updates instantly)
     handleScroll();
     window.addEventListener("scroll", handleScroll);
   

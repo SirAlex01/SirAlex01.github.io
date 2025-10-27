@@ -22,6 +22,21 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  /* Use a sensible system font stack as the global default */
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  /* Prefer the loaded Geist sans variable (from next/font). Fall back to system stacks. */
+  font-family: var(--font-sans), system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+}
+
+/* Use the loaded Geist mono for code blocks and inline code */
+code,
+kbd,
+samp,
+pre,
+tt {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+}
+
+/* Improve code block appearance */
+pre {
+  tab-size: 4;
+  -moz-tab-size: 4;
 }

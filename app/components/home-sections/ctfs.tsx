@@ -65,7 +65,7 @@ export default function CTFs() {
         </a>
 
         {/* Main text */}
-        <p className="text-base sm:text-lg lg:text-xl text-neutral-600 dark:text-neutral-400 max-w-3xl text-center md:text-justify">
+        <p className="text-lg text-neutral-700 dark:text-neutral-400 leading-relaxed max-w-3xl text-center md:text-justify">
           I am a CTF player for the TRX team. With them, I have participated in several Capture The Flag competitions and contributed to our victories in the 2025 editions of CrewCTF, SnakeCTF, and LITCTF.
           <br />
           I also took part in the University Program CyberChallenge.IT 2025, where I represented Team Sapienza and achieved victory in the final national competition against 40 other universities.

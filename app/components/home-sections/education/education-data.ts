@@ -10,7 +10,7 @@ export interface EducationItem {
 
 export const educationData: EducationItem[] = [
   {
-    title: "Master’s Degree in Engineering in Computer Science",
+    title: "Master's Degree in Engineering in Computer Science",
     school: "Sapienza University, Rome",
     years: "2023 – 2025",
     thesis: "An AI framework for Linear B Translation into Ancient Greek and English",
@@ -19,7 +19,7 @@ export const educationData: EducationItem[] = [
     link: "https://www.uniroma1.it/en/pagina-strutturale/home"
   },
   {
-    title: "Bachelor’s Degree in Computer and Automation Engineering",
+    title: "Bachelor's Degree in Computer and Automation Engineering",
     school: "Sapienza University, Rome",
     years: "2020 – 2023",
     thesis: "Change Detection on Satellite Images using Neural Networks",
