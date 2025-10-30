@@ -2,8 +2,17 @@
 
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
-type Project = { src: string };
+type Project = { 
+  id: string;
+  title: string;
+  src: string;
+  links: string[];
+  description: string;
+  skills: string[];
+  period: string;
+};
 
 interface ProjectPostcardsProps {
   projects: Project[];
@@ -86,13 +95,39 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
 
         const clickable =
           abs > 0.3 && abs <= 2.1; // side cards only, not the center one
+        const isCenterCard = abs < 0.3; // center card can link to projects page
+
+        const cardContent = (
+          <>
+            <img
+              src={p.src}
+              alt={`Project ${i}`}
+              className="w-full h-full object-fill rounded-xl"
+              draggable={false}
+            />
+            {abs > 0.05 && (
+              <div
+                className="absolute inset-0 rounded-xl bg-black/25"
+                style={{
+                  boxShadow: "0 15px 40px rgba(0,0,0,0.45)",
+                }}
+              />
+            )}
+          </>
+        );
 
         return (
           <motion.div
             key={i}
-            onClick={() => clickable && handleClick(offset)}
+            onClick={() => {
+              if (clickable) {
+                handleClick(offset);
+              } else if (isCenterCard) {
+                window.location.href = `/projects#${p.id}`;
+              }
+            }}
             className={`absolute aspect-[16/10] rounded-xl overflow-hidden shadow-2xl 
-              ${clickable ? "cursor-pointer hover:scale-[1.03]" : "cursor-default"}`}
+              ${clickable || isCenterCard ? "cursor-pointer hover:scale-[1.03]" : "cursor-default"}`}
             style={{
               width: "45vw",
               maxWidth: "480px",
@@ -113,20 +148,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
               mass: 0.5,
             }}
           >
-            <img
-              src={p.src}
-              alt={`Project ${i}`}
-              className="w-full h-full object-cover rounded-xl"
-              draggable={false}
-            />
-            {abs > 0.05 && (
-              <div
-                className="absolute inset-0 rounded-xl bg-black/25"
-                style={{
-                  boxShadow: "0 15px 40px rgba(0,0,0,0.45)",
-                }}
-              />
-            )}
+            {cardContent}
           </motion.div>
         );
       })}

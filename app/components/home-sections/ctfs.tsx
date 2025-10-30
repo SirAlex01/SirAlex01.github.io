@@ -1,6 +1,7 @@
 import { FaTrophy, FaDesktop, FaShieldAlt, FaMedal } from "react-icons/fa";
 import Carousel from "../ui/carousel";
 import { FaD } from "react-icons/fa6";
+import { SectionWrapper, SectionTitle } from "../ui/section-wrapper";
 
 const ctfItems = [
   { src: "/cc/IMG_3661.jpg" },
@@ -15,10 +16,10 @@ const ctfItems = [
 
 export default function CTFs() {
   return (
-    <section className="text-center flex flex-col items-center px-4 sm:px-8 py-8">
-      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">
+    <SectionWrapper>
+      <SectionTitle>
         CTF Experience
-      </h3>
+      </SectionTitle>
 
       {/* --- Intro paragraph with responsive logos --- */}
       <div className="mt-4 mb-10 w-full max-w-5xl flex flex-col md:flex-row items-center justify-between gap-6">
@@ -147,6 +148,6 @@ export default function CTFs() {
           </div>
         </div>
       </div>
-    </section>
+    </SectionWrapper>
   );
 }

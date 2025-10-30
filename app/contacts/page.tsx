@@ -9,6 +9,11 @@ export default function ContactsPage() {
   const [isVisible, setIsVisible] = useState(false);
   const buttonsRef = useRef<HTMLDivElement>(null);
 
+  // ✅ Scroll to top when page (re)loads
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+  }, []);
+
   const handleEmailClick = (e: React.MouseEvent, email: string) => {
     e.preventDefault();
     navigator.clipboard.writeText(email);

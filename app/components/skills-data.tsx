@@ -1,16 +1,136 @@
-// app/data/skills-data.ts
-import { BsCodeSlash } from "react-icons/bs";
-import { AiOutlineDeploymentUnit } from "react-icons/ai";
+import {
+  FaCode,
+  FaLock,
+  FaDatabase,
+  FaProjectDiagram,
+  FaNetworkWired,
+  FaServer,
+  FaRobot,
+  FaChartLine,
+} from "react-icons/fa";
+import { GiBrain, GiCircuitry } from "react-icons/gi";
+import {
+  SiNextdotjs,
+  SiFastapi,
+  SiDocker,
+  SiPytorch,
+  SiTensorflow,
+  SiOpencv,
+  SiPostgresql,
+  SiMysql,
+  SiLinux,
+  SiGit,
+  SiCplusplus,
+  SiPython,
+  SiJavascript,
+  SiTailwindcss,
+} from "react-icons/si";
 
 export const skillCategories = [
   {
-    title: "Web Development",
-    icon: <BsCodeSlash />,
-    skills: ["HTML", "CSS", "JavaScript", "React", "Next.js", "TailwindCSS"],
+    title: "Artificial Intelligence and Machine Learning",
+    icon: <GiBrain />,
+    skills: [
+      "Supervised / Unsupervised Learning",
+      "Reinforcement Learning (Q-Learning, DQN, PPO)",
+      "Deep Learning Architectures (CNN, RNN, LSTM, Transformers)",
+      "Computer Vision (U-Net, Attention Models, Video Prediction)",
+      "Natural Language Processing (LLMs, Prompt Engineering)",
+      "PyTorch, TensorFlow, scikit-learn",
+      "Evaluation Metrics: BLEU, ROUGE, METEOR",
+      "Data Preprocessing and Feature Engineering",
+    ],
   },
   {
-    title: "Software Engineering",
-    icon: <AiOutlineDeploymentUnit />,
-    skills: ["Python", "C++", "Algorithms", "Data Structures", "Git"],
+    title: "Software Engineering and DevOps",
+    icon: <FaProjectDiagram />,
+    skills: [
+      "Software Architecture and Design Patterns",
+      "System Design and Distributed Systems",
+      "Version Control (Git, GitHub)",
+      "Docker, CI/CD, Containerization",
+      "Testing, Logging and Monitoring",
+      "Agile Development and Project Planning",
+    ],
+  },
+  {
+    title: "Web and Backend Engineering",
+    icon: <SiNextdotjs />,
+    skills: [
+      "Full Stack Web Development (Next.js, React, TypeScript)",
+      "FastAPI, Flask, Node.js REST APIs",
+      "JWT Authentication and Async Endpoints",
+      "SSR, SPA, and API Design Patterns",
+      "Tailwind CSS, ShadCN/UI, Responsive Design",
+      "Dynamic Routing and Component Reusability",
+    ],
+  },
+  {
+    title: "Cybersecurity and Ethical Hacking",
+    icon: <FaLock />,
+    skills: [
+      "CTF Challenges (Crypto, Pwn, Web, Rev)",
+      "Binary Exploitation (GDB, IDA, pwntools)",
+      "Cryptanalysis (RSA, AES, Diffie-Hellman, LCG attacks)",
+      "Web Exploitation (SQLi, CSRF, Token Forgery)",
+      "Reverse Engineering and Vulnerability Analysis",
+      "Security Governance and Secure Coding Practices",
+    ],
+  },
+  {
+    title: "Data and Database Systems",
+    icon: <FaDatabase />,
+    skills: [
+      "PostgreSQL, MySQL, SQLite",
+      "SQLAlchemy ORM and Migrations",
+      "Data Modeling and Query Optimization",
+      "Large-Scale Data Management (HBase, Hadoop)",
+      "ETL Tools (Pentaho Data Integration)",
+      "Big Data Processing and Analysis",
+    ],
+  },
+  {
+    title: "Networking and Systems",
+    icon: <FaNetworkWired />,
+    skills: [
+      "TCP/IP, UDP, HTTP/HTTPS, SSL/TLS",
+      "LAN/Wi-Fi Simulation (C++, NetAnim, Wireshark)",
+      "Firewall Configuration and VPN Management",
+      "System Administration (Linux, UNIX, Bash)",
+      "Socket Programming and Network Protocols",
+    ],
+  },
+  {
+    title: "Programming and Tooling",
+    icon: <GiCircuitry />,
+    skills: [
+      "Python, C, C++, Java, JavaScript, TypeScript, PHP, Go, Scala",
+      "OOP and Functional Programming",
+      "MATLAB, NumPy, Pandas, OpenCV",
+      "Linux CLI Tools, Shell Scripting, Git",
+      "Next.js, React, Tailwind CSS, ShadCN/UI, Framer Motion",
+    ],
+  },
+  {
+    title: "Robotics and Control Systems",
+    icon: <FaRobot />,
+    skills: [
+      "Robotics Kinematics and Control",
+      "Automatic Control Systems",
+      "Dependable Distributed Systems",
+      "Algorithm Design and Formal Verification",
+    ],
+  },
+  {
+    title: "Mathematical Foundations and Data Science",
+    icon: <FaChartLine />,
+    skills: [
+      "Algorithm Analysis and Complexity",
+      "Probability, Statistics and Operations Research",
+      "Optimization and Linear Algebra",
+      "Data Mining and Big Data Computing",
+      "Decision Analytics and Risk Assessment",
+      "Formal Methods and Logic Verification",
+    ],
   },
 ];

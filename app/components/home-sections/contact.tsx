@@ -3,6 +3,7 @@ import Lottie, { LottieRefCurrentProps } from "lottie-react";
 import animationData from "@/public/animations/contact-email.json"; // your json
 import PrimaryButton from "../ui/primary-button";
 import { FiMail } from "react-icons/fi";
+import { SectionWrapper, SectionTitle, SectionSubtitle } from "../ui/section-wrapper";
 
 export default function Contact() {
   const lottieRef = useRef<LottieRefCurrentProps>(null);
@@ -14,14 +15,14 @@ export default function Contact() {
   }, []);
 
   return (
-    <section className="px-6 py-8 flex flex-col items-center text-center">
-      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">
+    <SectionWrapper className="px-6">
+      <SectionTitle>
         Let&apos;s keep in touch
-      </h3>
+      </SectionTitle>
 
-      <p className="mt-4 mb-6 max-w-lg text-neutral-600 dark:text-neutral-400 text-base">
+      <SectionSubtitle className="max-w-lg">
         Whether you have a question, a project idea or just want to say hi, feel free to reach out!
-      </p>
+      </SectionSubtitle>
 
       {/* ✅ Controlled speed animation */}
       <div className="w-[240px] sm:w-[280px] md:w-[320px] lg:w-[360px]">
@@ -33,11 +34,13 @@ export default function Contact() {
       </div>
 
       {/* ✅ Button */}
-      <PrimaryButton 
-        label="Contact Me"
-        icon={<FiMail className="text-xl" />}
-        href="/contacts"
-      />
-    </section>
+      <div className="mt-6">
+        <PrimaryButton 
+          label="Contact Me"
+          icon={<FiMail className="text-xl" />}
+          href="/contacts"
+        />
+      </div>
+    </SectionWrapper>
   );
 }

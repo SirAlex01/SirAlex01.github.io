@@ -8,6 +8,7 @@ import Lottie from "lottie-react";
 import educationAnimation from "@/public/animations/walking_robot.json";
 
 import { useEffect, useState } from "react";
+import { SectionWrapper, SectionTitle, SectionSubtitle } from "../../ui/section-wrapper";
 
 export default function Education() {
     const [duration, setDuration] = useState(25); // default fallback
@@ -29,14 +30,14 @@ export default function Education() {
     return () => window.removeEventListener("resize", updateDuration);
   }, []);
   return (
-    <section className="px-6 pt-2 pb-0 text-center flex flex-col items-center">
-      <h3 className="mt-4 text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">
+    <SectionWrapper className="px-6 pt-2 pb-0">
+      <SectionTitle className="mt-4">
         Education
-      </h3>
+      </SectionTitle>
 
-      <p className="mt-4 mb-8 text-base text-neutral-600 dark:text-neutral-400">
+      <SectionSubtitle className="mb-8">
         A journey of growth, learning, and discovery — shaping who I am today.
-      </p>
+      </SectionSubtitle>
 
       <div className="flex flex-wrap justify-center gap-4 max-w-4xl">
         {educationData.map((item) => (
@@ -61,6 +62,6 @@ export default function Education() {
           <Lottie animationData={educationAnimation} loop />
         </motion.div>
       </div>
-    </section>
+    </SectionWrapper>
   );
 }

@@ -22,11 +22,13 @@ export default function PrimaryButton({
       href={href}
       onClick={onClick}
       className="
-        inline-flex items-center gap-2 px-6 py-3 mt-6 rounded-xl
-        dark:bg-neutral-900 bg-neutral-100
-        dark:text-white text-neutral-900
+        inline-flex items-center gap-2 px-6 py-3 rounded-xl
+        bg-neutral-100 dark:bg-neutral-900
+        text-neutral-900 dark:text-white
         font-semibold text-base sm:text-lg
-        hover:opacity-90 transition-transform duration-300
+        hover:bg-neutral-200 dark:hover:bg-neutral-800
+        hover:shadow-md
+        transition-all duration-300
         hover:-translate-y-0.5 active:scale-95
       "
     >

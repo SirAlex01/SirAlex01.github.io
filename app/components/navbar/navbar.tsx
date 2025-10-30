@@ -71,7 +71,7 @@ export default function Navbar() {
               width={60}
               height={60}
               priority
-              className="dark:invert transition-transform duration-300 hover:scale-105"
+              className="dark:invert transition-transform duration-300 hover:scale-115"
             />
           </Link>
 

@@ -1,16 +1,32 @@
-import { projects } from "../projects-data";
+import { projects, projectsMetadata } from "../projects-data";
 import ProjectPostcards from "../ui/projects-postcards";
+import { SectionWrapper, SectionTitle, SectionSubtitle } from "../ui/section-wrapper";
+import PrimaryButton from "../ui/primary-button";
+import { FaFolderOpen } from "react-icons/fa";
 
 export default function Projects() {
   return (
-    <section className="text-center flex flex-col items-center px-4 sm:px-8 py-8">
-      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">
-        Projects
-      </h3>
+    <SectionWrapper>
+      <SectionTitle>
+        {projectsMetadata.title}
+      </SectionTitle>
+
+      <SectionSubtitle>
+        {projectsMetadata.subtitle}
+      </SectionSubtitle>
 
       <div className="mt-0 w-full max-w-6xl">
         <ProjectPostcards projects={projects} />
       </div>
-    </section>
+
+      {/* Button to view all projects */}
+      <div className="mt-2">
+        <PrimaryButton 
+          label="View All Projects"
+          icon={<FaFolderOpen className="text-xl" />}
+          href="/projects"
+        />
+      </div>
+    </SectionWrapper>
   );
 }

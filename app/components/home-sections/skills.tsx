@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { skillCategories } from "../skills-data";
+import { SectionWrapper, SectionTitle } from "../ui/section-wrapper";
 
 export default function Skills() {
   const [openItems, setOpenItems] = useState<number[]>([]);
@@ -14,22 +15,19 @@ export default function Skills() {
   };
 
   return (
-    <section className="px-6 py-8 flex flex-col items-center text-center">
-      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">
-        Skills & Expertise
-      </h3>
+    <SectionWrapper className="px-6">
+      <SectionTitle>Skills & Expertise</SectionTitle>
 
-      {/* ✅ Single box around all skills */}
+      {/* Unified box */}
       <div className="mt-8 w-full max-w-4xl bg-white dark:bg-neutral-900 shadow-lg rounded-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
         {skillCategories.map((cat, i) => {
           const isOpen = openItems.includes(i);
           return (
             <div key={cat.title}>
-              {/* Clickable row */}
               <div
                 className="px-6 py-4 cursor-pointer flex items-center justify-between
-                           hover:bg-neutral-100 dark:hover:bg-neutral-800
-                           transition-colors duration-200"
+                  hover:bg-neutral-100 dark:hover:bg-neutral-800
+                  transition-colors duration-200"
                 onClick={() => toggleOpen(i)}
               >
                 <div className="flex items-center gap-3 text-lg font-semibold text-neutral-800 dark:text-neutral-200">
@@ -45,27 +43,27 @@ export default function Skills() {
                 </motion.span>
               </div>
 
-              {/* Expandable list */}
-              <AnimatePresence>
+              <AnimatePresence initial={false}>
                 {isOpen && (
-                  <motion.ul
+                  <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.25 }}
-                    className="px-10 pb-3 text-left text-sm sm:text-base overflow-hidden 
-                               text-neutral-700 dark:text-neutral-300 list-disc"
+                    transition={{ duration: 0.3 }}
+                    className="px-10 pb-4 text-left text-sm sm:text-base
+                      text-neutral-700 dark:text-neutral-300 overflow-hidden"
                   >
-                    {cat.skills.map((skill) => (
-                      <li key={skill} className="py-1">
-                        {skill}
-                      </li>
-                    ))}
-                  </motion.ul>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 mt-2">
+                      {cat.skills.map((skill) => (
+                        <span key={skill} className="before:content-['•'] before:mr-2">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </motion.div>
                 )}
               </AnimatePresence>
 
-              {/* Divider inside box (except last) */}
               {i < skillCategories.length - 1 && (
                 <div className="border-b border-neutral-300 dark:border-neutral-700" />
               )}
@@ -73,6 +71,6 @@ export default function Skills() {
           );
         })}
       </div>
-    </section>
+    </SectionWrapper>
   );
 }
