@@ -44,7 +44,7 @@ export default function MobileMenu({ links, onClose }: MobileMenuProps) {
       <div
         ref={menuRef}
         className={`relative z-50 w-72 h-full flex flex-col p-6 transform transition-transform duration-400 ease-in-out
-          bg-white/50 text-neutral-900 dark:bg-black/50 dark:text-white
+          bg-white/80 text-neutral-900 dark:bg-black/80 dark:text-white
           backdrop-blur-lg border-l border-neutral-200 dark:border-neutral-800
           transition-colors duration-500
           ${visible ? "translate-x-0" : "translate-x-full"}

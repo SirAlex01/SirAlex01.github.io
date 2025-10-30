@@ -1,18 +1,21 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { projectsMetadata, projects } from "../components/projects-data";
 import Lottie from "lottie-react";
 import computerAnimation from "@/public/animations/computer.json";
 import ProjectCard from "../components/ui/project-card";
+import FadeInSection from "../components/ui/fadein-section";
 
 export default function ProjectsPage() {
   // Create refs for each project card
   const projectRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const [hasHashNavigation, setHasHashNavigation] = useState(false);
 
   // Handle scroll behavior on mount
   useEffect(() => {
     const hash = window.location.hash.slice(1); // Remove the '#'
+    setHasHashNavigation(Boolean(hash));
     
     if (!hash) {
       // Only scroll to top if there's no hash
@@ -35,6 +38,15 @@ export default function ProjectsPage() {
       }
     }
   });
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      setHasHashNavigation(Boolean(window.location.hash));
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
 
   return (
     <div className="min-h-screen py-6 px-6">
@@ -72,14 +84,16 @@ export default function ProjectsPage() {
                 projectRefs.current[project.id] = el;
               }}
             >
-              <ProjectCard
-                title={project.title}
-                src={project.src}
-                links={project.links}
-                description={project.description}
-                skills={project.skills}
-                period={project.period}
-              />
+              <FadeInSection delay={hasHashNavigation ? 0 : Math.floor(index / 2) * 50}>
+                <ProjectCard
+                  title={project.title}
+                  src={project.src}
+                  links={project.links}
+                  description={project.description}
+                  skills={project.skills}
+                  period={project.period}
+                />
+              </FadeInSection>
             </div>
           ))}
         </div>
