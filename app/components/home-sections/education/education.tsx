@@ -30,11 +30,11 @@ export default function Education() {
   }, []);
   return (
     <section className="px-6 pt-2 pb-0 text-center flex flex-col items-center">
-      <h3 className="mt-4 text-3xl sm-md:text-4xl lg:text-5xl font-bold text-neutral-800 dark:text-white">
+      <h3 className="mt-4 text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">
         Education
       </h3>
 
-      <p className="mt-8 mb-8 text-sm sm:text-base text-neutral-600 dark:text-neutral-400 max-w-3/4">
+      <p className="mt-4 mb-8 text-base text-neutral-600 dark:text-neutral-400">
         A journey of growth, learning, and discovery — shaping who I am today.
       </p>
 

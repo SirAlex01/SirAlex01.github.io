@@ -29,7 +29,7 @@ export default function Home() {
       {sections.map((section, index) => {
         const SectionContent = section.component;
         const backgroundClass =
-          (index & 1) === 1 ? "bg-background" : "bg-transparent";
+          (index & 1) === 1 ? "bg-background/80" : "bg-transparent";
 
         // First section without FadeIn
         if (index === 0) {

@@ -4,7 +4,7 @@ import { contacts } from "../contact-data";
 
 export default function Footer() {
   return (
-    <footer className="w-full py-8 bg-background">
+    <footer className="w-full py-8 bg-background/80">
       <div className="flex flex-col items-center space-y-4">
         {/* Divider */}
         <div className="w-3/4 border-b border-neutral-300 dark:border-neutral-700 transition-colors duration-500 mb-4" />

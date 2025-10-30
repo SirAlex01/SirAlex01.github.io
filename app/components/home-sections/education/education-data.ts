@@ -14,7 +14,7 @@ export const educationData: EducationItem[] = [
     school: "Sapienza University, Rome",
     years: "2023 – 2025",
     thesis: "An AI framework for Linear B Translation into Ancient Greek and English",
-    mark: "In progress",
+    mark: "110/110 cum laude",
     icon: "graduation-cap",
     link: "https://www.uniroma1.it/en/pagina-strutturale/home"
   },

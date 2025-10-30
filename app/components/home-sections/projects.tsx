@@ -3,12 +3,12 @@ import ProjectPostcards from "../ui/projects-postcards";
 
 export default function Projects() {
   return (
-    <section className="text-center flex flex-col items-center px-4 sm:px-8">
-      <h3 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold text-neutral-800 dark:text-white">
+    <section className="text-center flex flex-col items-center px-4 sm:px-8 py-8">
+      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">
         Projects
       </h3>
 
-      <div className="mt-6 w-full max-w-6xl">
+      <div className="mt-0 w-full max-w-6xl">
         <ProjectPostcards projects={projects} />
       </div>
     </section>

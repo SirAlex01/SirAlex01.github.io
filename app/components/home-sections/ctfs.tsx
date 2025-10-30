@@ -15,13 +15,13 @@ const ctfItems = [
 
 export default function CTFs() {
   return (
-    <section className="text-center flex flex-col items-center px-4 sm:px-8">
-      <h3 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold text-neutral-800 dark:text-white">
+    <section className="text-center flex flex-col items-center px-4 sm:px-8 py-8">
+      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">
         CTF Experience
       </h3>
 
       {/* --- Intro paragraph with responsive logos --- */}
-      <div className="mt-8 mb-10 w-full max-w-5xl flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="mt-4 mb-10 w-full max-w-5xl flex flex-col md:flex-row items-center justify-between gap-6">
         {/* Two logos side-by-side on small screens */}
         <div className="flex md:hidden flex-row items-center justify-center gap-4 mb-2">
           <a
@@ -91,7 +91,7 @@ export default function CTFs() {
 
       {/* --- Awards Section --- */}
       <div className="mt-6 mb-4 space-y-7 w-full max-w-3xl text-left">
-        <h3 className="text-2xl sm:text-3xl font-semibold text-neutral-800 dark:text-neutral-200 mb-6 text-center">
+        <h3 className="text-xl lg:text-2xl font-semibold text-neutral-800 dark:text-neutral-200 mb-2 text-center">
           Awards
         </h3>
 

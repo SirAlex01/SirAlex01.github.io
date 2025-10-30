@@ -14,12 +14,12 @@ export default function Contact() {
   }, []);
 
   return (
-    <section className="px-6 py-12 flex flex-col items-center text-center">
-      <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-neutral-900 dark:text-white">
+    <section className="px-6 py-8 flex flex-col items-center text-center">
+      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">
         Let&apos;s keep in touch
       </h3>
 
-      <p className="mt-4 mb-6 max-w-lg text-neutral-600 dark:text-neutral-400 text-sm sm:text-base">
+      <p className="mt-4 mb-6 max-w-lg text-neutral-600 dark:text-neutral-400 text-base">
         Whether you have a question, a project idea or just want to say hi, feel free to reach out!
       </p>
 

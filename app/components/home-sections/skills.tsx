@@ -14,13 +14,13 @@ export default function Skills() {
   };
 
   return (
-    <section className="px-6 py-12 flex flex-col items-center text-center">
-      <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-neutral-900 dark:text-white">
+    <section className="px-6 py-8 flex flex-col items-center text-center">
+      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">
         Skills & Expertise
       </h3>
 
       {/* ✅ Single box around all skills */}
-      <div className="mt-10 w-full max-w-4xl bg-white dark:bg-neutral-900 shadow-lg rounded-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
+      <div className="mt-8 w-full max-w-4xl bg-white dark:bg-neutral-900 shadow-lg rounded-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
         {skillCategories.map((cat, i) => {
           const isOpen = openItems.includes(i);
           return (
