@@ -106,7 +106,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
               alt={`Project ${i}`}
               fill
               sizes="(min-width: 1280px) 35vw, (min-width: 1024px) 45vw, (min-width: 768px) 60vw, 80vw"
-              className="object-cover rounded-xl"
+              className="object-fill rounded-xl"
               draggable={false}
               priority={baseAbs <= 2}
             />

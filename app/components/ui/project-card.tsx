@@ -155,7 +155,7 @@ export default function ProjectCard({
             alt={title}
             fill
             sizes="(min-width: 1024px) 40vw, (min-width: 768px) 60vw, 90vw"
-            className="object-cover"
+            className="object-fill"
             priority={false}
           />
         </div>
