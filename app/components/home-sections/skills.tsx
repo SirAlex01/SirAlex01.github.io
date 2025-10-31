@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { skillCategories } from "../skills-data";
 import { SectionWrapper, SectionTitle } from "../ui/section-wrapper";
 
@@ -43,26 +43,25 @@ export default function Skills() {
                 </motion.span>
               </div>
 
-              <AnimatePresence initial={false}>
-                {isOpen && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="px-10 pb-4 text-left text-sm sm:text-base
-                      text-neutral-700 dark:text-neutral-300 overflow-hidden"
-                  >
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 mt-2">
-                      {cat.skills.map((skill) => (
-                        <span key={skill} className="before:content-['•'] before:mr-2">
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <motion.div
+                initial={false}
+                animate={isOpen ? "open" : "collapsed"}
+                variants={{
+                  open: { height: "auto", opacity: 1 },
+                  collapsed: { height: 0, opacity: 0 },
+                }}
+                transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+                className="px-10 text-left text-sm sm:text-base text-neutral-700 dark:text-neutral-300 overflow-hidden"
+                style={{ pointerEvents: isOpen ? "auto" : "none", willChange: "height, opacity" }}
+              >
+                <div className="py-3 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
+                  {cat.skills.map((skill) => (
+                    <span key={skill} className="before:content-['•'] before:mr-2">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
 
               {i < skillCategories.length - 1 && (
                 <div className="border-b border-neutral-300 dark:border-neutral-700" />
