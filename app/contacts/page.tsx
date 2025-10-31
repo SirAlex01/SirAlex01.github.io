@@ -43,14 +43,14 @@ export default function ContactsPage() {
       {/* Title - fade in from below */}
       <FadeInSection delay={0}>
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-800 dark:text-white mb-6 text-center">
-          Let&aposs connect!
+          Let&apos;s connect!
         </h1>
       </FadeInSection>
 
       {/* Description - fade in from below */}
       <FadeInSection delay={100}>
         <p className="text-lg text-neutral-700 dark:text-neutral-400 leading-relaxed max-w-2xl text-center mb-12">
-          I&aposd love to hear from you! Whether you have a question, want to collaborate, 
+          I&apos;d love to hear from you! Whether you have a question, want to collaborate, 
           or just want to connect, feel free to reach out through any of the platforms below.
         </p>
       </FadeInSection>
