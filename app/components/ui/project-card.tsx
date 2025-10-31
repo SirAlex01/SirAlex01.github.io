@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaGithub } from "react-icons/fa";
@@ -148,18 +149,23 @@ export default function ProjectCard({
     >
       {/* Background Image - Fits above the title card */}
       <div className="absolute inset-0 pb-[45px]">
-        <img
-          src={src}
-          alt={title}
-          className="w-full h-full object-fit"
-        />
+        <div className="relative h-full w-full">
+          <Image
+            src={src}
+            alt={title}
+            fill
+            sizes="(min-width: 1024px) 40vw, (min-width: 768px) 60vw, 90vw"
+            className="object-cover"
+            priority={false}
+          />
+        </div>
       </div>
 
       {/* Bottom Card - Always visible with title, expands on hover/click */}
       <motion.div
         initial={{ height: "45px" }}
         animate={{ height: isExpanded ? "75%" : "45px" }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        transition={{ type: "spring", stiffness: 200, damping: 32 }}
         className="absolute bottom-0 left-0 right-0 bg-white/90 dark:bg-neutral-900/80 backdrop-blur-xl dark:backdrop-blur-lg flex flex-col rounded-b-xl"
       >
         {/* Title - Always visible */}
@@ -183,7 +189,10 @@ export default function ProjectCard({
             </div>
 
             {/* Description - Scrollable */}
-            <div className="flex-1 overflow-y-auto mb-3 pr-2 custom-scrollbar min-h-0">
+            <div
+              className="flex-1 overflow-y-auto mb-3 pr-2 custom-scrollbar min-h-0"
+              style={{ scrollbarGutter: "stable both-edges" }}
+            >
               <ProjectDescription>
                 {description}
               </ProjectDescription>

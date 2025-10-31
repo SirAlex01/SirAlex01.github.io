@@ -1,5 +1,4 @@
 import {
-  FaCode,
   FaLock,
   FaDatabase,
   FaProjectDiagram,

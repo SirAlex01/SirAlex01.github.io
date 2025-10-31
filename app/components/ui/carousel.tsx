@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import * as React from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi2";
@@ -76,7 +77,13 @@ export default function Carousel({ items }: CarouselProps) {
     if (!isDown.current) return;
     (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId);
     const dx = movedX.current;
-    if (Math.abs(dx) >= SWIPE_THRESHOLD) dx > 0 ? goPrev() : goNext();
+    if (Math.abs(dx) >= SWIPE_THRESHOLD) {
+      if (dx > 0) {
+        goPrev();
+      } else {
+        goNext();
+      }
+    }
     isDown.current = false;
   };
 
@@ -128,12 +135,17 @@ export default function Carousel({ items }: CarouselProps) {
                 />
               </div>
             ) : (
-              <img
-                src={item.src!}
-                alt={`Slide ${i + 1}`}
-                className="w-full h-full object-cover rounded-2xl select-none"
-                draggable={false}
-              />
+              <div className="relative w-full h-full">
+                <Image
+                  src={item.src!}
+                  alt={`Slide ${i + 1}`}
+                  fill
+                  sizes="(min-width: 1024px) 50vw, (min-width: 768px) 80vw, 90vw"
+                  className="object-cover rounded-2xl select-none"
+                  draggable={false}
+                  priority={i === 0}
+                />
+              </div>
             )}
           </div>
         ))}

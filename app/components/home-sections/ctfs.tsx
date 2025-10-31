@@ -1,6 +1,6 @@
+import Image from "next/image";
 import { FaTrophy, FaDesktop, FaShieldAlt, FaMedal } from "react-icons/fa";
 import Carousel from "../ui/carousel";
-import { FaD } from "react-icons/fa6";
 import { SectionWrapper, SectionTitle } from "../ui/section-wrapper";
 
 const ctfItems = [
@@ -31,9 +31,11 @@ export default function CTFs() {
             rel="noopener noreferrer"
             className="transition-transform hover:scale-110"
           >
-            <img
+            <Image
               src="/trx.png"
               alt="TRX Team Logo"
+              width={140}
+              height={140}
               className="w-22 h-22 sm:w-26 sm:h-26 object-contain dark:invert"
             />
           </a>
@@ -43,9 +45,11 @@ export default function CTFs() {
             rel="noopener noreferrer"
             className="transition-transform hover:scale-110"
           >
-            <img
+            <Image
               src="/ccit.png"
               alt="CyberChallenge Logo"
+              width={128}
+              height={128}
               className="w-20 h-20 sm:w-24 sm:h-24 object-contain invert dark:invert-0"
             />
           </a>
@@ -58,9 +62,11 @@ export default function CTFs() {
           rel="noopener noreferrer"
           className="hidden md:block transition-transform hover:scale-110"
         >
-          <img
+          <Image
             src="/trx.png"
             alt="TRX Team Logo"
+            width={192}
+            height={192}
             className="w-36 h-36 object-contain dark:invert"
           />
         </a>
@@ -79,9 +85,11 @@ export default function CTFs() {
           rel="noopener noreferrer"
           className="hidden md:block transition-transform hover:scale-110"
         >
-          <img
+          <Image
             src="/ccit.png"
             alt="CyberChallenge Logo"
+            width={176}
+            height={176}
             className="w-32 h-32 object-contain invert dark:invert-0"
           />
         </a>

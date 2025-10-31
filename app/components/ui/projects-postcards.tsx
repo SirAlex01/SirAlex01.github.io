@@ -1,8 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
 
 type Project = { 
   id: string;
@@ -78,8 +78,10 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
       onTouchEnd={handleEnd}
     >
       {projects.map((p, i) => {
-        const offset = offsetFor(i) - dragOffset;
-        const abs = Math.abs(offset);
+  const rawOffset = offsetFor(i);
+  const offset = rawOffset - dragOffset;
+  const abs = Math.abs(offset);
+  const baseAbs = Math.abs(rawOffset);
 
         if (abs > 2.2) return null;
 
@@ -98,12 +100,15 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
         const isCenterCard = abs < 0.3; // center card can link to projects page
 
         const cardContent = (
-          <>
-            <img
+          <div className="relative w-full h-full">
+            <Image
               src={p.src}
               alt={`Project ${i}`}
-              className="w-full h-full object-fill rounded-xl"
+              fill
+              sizes="(min-width: 1280px) 35vw, (min-width: 1024px) 45vw, (min-width: 768px) 60vw, 80vw"
+              className="object-cover rounded-xl"
               draggable={false}
+              priority={baseAbs <= 2}
             />
             {abs > 0.05 && (
               <div
@@ -113,7 +118,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
                 }}
               />
             )}
-          </>
+          </div>
         );
 
         return (
@@ -126,7 +131,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
                 window.location.href = `/projects#${p.id}`;
               }
             }}
-            className={`absolute aspect-[16/10] rounded-xl overflow-hidden shadow-2xl 
+            className={`absolute aspect-[16/10] rounded-xl overflow-hidden shadow-2xl
               ${clickable || isCenterCard ? "cursor-pointer hover:scale-[1.03]" : "cursor-default"}`}
             style={{
               width: "45vw",
