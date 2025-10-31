@@ -84,7 +84,7 @@ export default function ProjectsPage() {
                 projectRefs.current[project.id] = el;
               }}
             >
-              <FadeInSection delay={hasHashNavigation ? 0 : Math.floor(index / 2) * 50}>
+              <FadeInSection delay={hasHashNavigation ? 0 : 50}>
                 <ProjectCard
                   title={project.title}
                   src={project.src}
