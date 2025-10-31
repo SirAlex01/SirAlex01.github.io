@@ -41,6 +41,15 @@ export const projects = [
     period: "Aug 2024 - Sep 2024"
   },
   {
+    id: "portfolio",
+    title: "My Portfolio Website",
+    src: "/projects/portfolio.webp",
+    links: ["https://github.com/SirAlex01/SirAlex01.github.io"],
+    description: "A sleek, responsive portfolio built with Next.js, designed with a modern and minimal aesthetic.",
+    skills: ["Next.js", "Tailwind CSS", "React.js", "Web Design", "Node.js", "TypeScript"],
+    period: "Oct 2025 - Oct 2025"
+  },
+  {
     id: "emofy",
     title: "EMOFY",
     src: "/projects/emofy.webp",
