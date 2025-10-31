@@ -21,7 +21,7 @@ const sections = [
 export default function Home() {
   // ✅ Scroll to top when page (re)loads
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+    window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
   return (

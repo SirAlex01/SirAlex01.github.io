@@ -19,7 +19,7 @@ export default function ProjectsPage() {
     
     if (!hash) {
       // Only scroll to top if there's no hash
-      window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+      window.scrollTo({ top: 0, behavior: "auto" });
     }
   }, []);
 
