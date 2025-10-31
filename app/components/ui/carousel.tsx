@@ -98,12 +98,13 @@ export default function Carousel({ items }: CarouselProps) {
   };
 
   return (
-    <div
+    <>
+      <div
       ref={emblaRef}
       className="group relative mx-auto overflow-hidden rounded-2xl shadow-lg bg-transparent
                  aspect-[16/9] w-[90vw] md:w-[80vw] lg:w-[60vw] xl:w-[50vw]
                  max-h-[620px]"
-    >
+      >
       {/* --- Slides --- */}
       <div className="flex h-full">
         {items.map((item, i) => (
@@ -174,7 +175,7 @@ export default function Carousel({ items }: CarouselProps) {
             
       {/* --- Dots (hidden on small screens + fade on hover) --- */}
       <div
-        className="hidden sm:flex opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all
+        className="hidden md:flex opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all
                    absolute bottom-3 left-0 right-0 justify-center gap-2 z-20"
       >
         {items.map((_, i) => (
@@ -189,6 +190,22 @@ export default function Carousel({ items }: CarouselProps) {
           />
         ))}
       </div>
-    </div>
+      </div>
+
+      {/* Mobile dots placed below the carousel */}
+      <div className="flex md:hidden justify-center gap-1.5 mt-3">
+        {items.map((_, i) => (
+          <button
+            key={`mobile-${i}`}
+            onClick={() => emblaApi?.scrollTo(i)}
+            className={`w-2.5 h-2.5 rounded-full transition ${
+              i === selectedIndex
+                ? "bg-neutral-800 dark:bg-white scale-110"
+                : "bg-neutral-400 dark:bg-neutral-600"
+            }`}
+          />
+        ))}
+      </div>
+    </>
   );
 }
