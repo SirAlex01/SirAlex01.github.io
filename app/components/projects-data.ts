@@ -25,7 +25,7 @@ export const projects = [
   {
     id: "bipedal-walker",
     title: "Reinforcement Learning algorithms on Bipedal Walker",
-    src: "/projects/bipedal_walker.gif",
+    src: "/projects/bipedal_walker.webp",
     links: ["https://github.com/SirAlex01/Machine-Learning-Project"],
     description: "Implemented and compared various Reinforcement Learning algorithms, including Q-table, Deep Q-Network (DQN), and Proximal Policy Optimization (PPO), within the Bipedal Walker environment of Gymnasium. Analyzed performance and effectiveness of each algorithm in training an agent to navigate challenging terrain.",
     skills: ["Python", "Reinforcement Learning", "Machine Learning", "Artificial Intelligence"],
