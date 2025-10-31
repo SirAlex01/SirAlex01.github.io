@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: "Alessio Maiola - Portfolio",
   description: "Portfolio Website of Alessio Maiola",
   icons: {
-    icon: [{ url: "/logo_colored.png", type: "image/png" }],
+    icon: [{ url: "/logo_colored.webp", type: "image/png" }],
   },
 };
 

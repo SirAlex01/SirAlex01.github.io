@@ -4,13 +4,13 @@ import Carousel from "../ui/carousel";
 import { SectionWrapper, SectionTitle } from "../ui/section-wrapper";
 
 const ctfItems = [
-  { src: "/cc/IMG_3661.jpg" },
+  { src: "/cc/IMG_3661.webp" },
   { video: { id: "m0b_5nNsiu4" } },
-  { src: "/cc/067A2641.jpg" },
-  { src: "/cc/067A3373.jpg" },
-  { src: "/cc/067A4466.jpg" },
-  { src: "/cc/067A4500.jpg" },
-  { src: "/cc/067A4734.jpg" },
+  { src: "/cc/067A2641.webp" },
+  { src: "/cc/067A3373.webp" },
+  { src: "/cc/067A4466.webp" },
+  { src: "/cc/067A4500.webp" },
+  { src: "/cc/067A4734.webp" },
   { video: { id: "WapZTAImkdQ", start: 2125 } },
 ];
 
@@ -32,7 +32,7 @@ export default function CTFs() {
             className="transition-transform hover:scale-110"
           >
             <Image
-              src="/trx.png"
+              src="/trx.webp"
               alt="TRX Team Logo"
               width={140}
               height={140}
@@ -46,7 +46,7 @@ export default function CTFs() {
             className="transition-transform hover:scale-110"
           >
             <Image
-              src="/ccit.png"
+              src="/ccit.webp"
               alt="CyberChallenge Logo"
               width={128}
               height={128}
@@ -63,7 +63,7 @@ export default function CTFs() {
           className="hidden md:block transition-transform hover:scale-110"
         >
           <Image
-            src="/trx.png"
+            src="/trx.webp"
             alt="TRX Team Logo"
             width={192}
             height={192}
@@ -86,7 +86,7 @@ export default function CTFs() {
           className="hidden md:block transition-transform hover:scale-110"
         >
           <Image
-            src="/ccit.png"
+            src="/ccit.webp"
             alt="CyberChallenge Logo"
             width={176}
             height={176}

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
-const images = ["/transparent.png", "/alex.png"];
+const images = ["/transparent.webp", "/alex.webp"];
 
 export default function RotatingLogo() {
   const [flipped, setFlipped] = useState(false);

@@ -66,7 +66,7 @@ export default function Navbar() {
         <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-2">
           <Link href="/">
             <Image
-              src="/logo.png"
+              src="/logo.webp"
               alt="Logo"
               width={60}
               height={60}
