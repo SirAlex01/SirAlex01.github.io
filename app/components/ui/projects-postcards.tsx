@@ -26,7 +26,9 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
   const startX = useRef<number | null>(null);
   const dragging = useRef(false);
 
-  // --- Dragging logic (unchanged) ---
+  const SWIPE_THRESHOLD = 50;
+
+  // --- Dragging logic ---
   const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
     dragging.current = true;
     startX.current = "touches" in e ? e.touches[0].clientX : e.clientX;
@@ -36,16 +38,17 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
     if (!dragging.current || startX.current === null) return;
     const x = "touches" in e ? e.touches[0].clientX : e.clientX;
     const delta = x - startX.current;
-    const fraction = Math.max(Math.min(-delta / 200, 1), -1); // invert direction
-    setDragOffset(fraction);
+    setDragOffset(delta);
   };
 
   const handleEnd = () => {
     if (!dragging.current) return;
     dragging.current = false;
 
-    if (dragOffset > 0.35) setIndex((i) => mod(i + 1, projects.length));
-    else if (dragOffset < -0.35) setIndex((i) => mod(i - 1, projects.length));
+    if (Math.abs(dragOffset) >= SWIPE_THRESHOLD) {
+      if (dragOffset < 0) setIndex((i) => mod(i + 1, projects.length));
+      else setIndex((i) => mod(i - 1, projects.length));
+    }
 
     setDragOffset(0);
     startX.current = null;
@@ -79,7 +82,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
     >
       {projects.map((p, i) => {
   const rawOffset = offsetFor(i);
-  const offset = rawOffset - dragOffset;
+  const offset = rawOffset;
   const abs = Math.abs(offset);
   const baseAbs = Math.abs(rawOffset);
 

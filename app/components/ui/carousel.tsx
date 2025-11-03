@@ -59,7 +59,7 @@ export default function Carousel({ items }: CarouselProps) {
   const isDown = React.useRef(false);
   const startX = React.useRef(0);
   const movedX = React.useRef(0);
-  const SWIPE_THRESHOLD = 22;
+  const SWIPE_THRESHOLD = 25;
 
   const handleDown = (e: React.PointerEvent) => {
     isDown.current = true;

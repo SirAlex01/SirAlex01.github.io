@@ -166,7 +166,7 @@ export default function ProjectCard({
         initial={{ height: "45px" }}
         animate={{ height: isExpanded ? "75%" : "45px" }}
         transition={{ type: "spring", stiffness: 200, damping: 32 }}
-        className="absolute bottom-0 left-0 right-0 bg-white/90 dark:bg-neutral-900/80 backdrop-blur-xl dark:backdrop-blur-lg flex flex-col rounded-b-xl"
+        className="absolute bottom-0 left-0 right-0 bg-background/90 dark:bg-background/80 backdrop-blur-md flex flex-col rounded-b-xl"
       >
         {/* Title - Always visible */}
         <div className="px-4 py-2 flex-shrink-0">
