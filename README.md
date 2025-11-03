@@ -1,36 +1,182 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Alessio Maiola - Portfolio
 
-## Getting Started
+[![Deploy](https://github.com/SirAlex01/SirAlex01.github.io/actions/workflows/pages.yml/badge.svg)](https://github.com/SirAlex01/SirAlex01.github.io/actions/workflows/pages.yml)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-blue?logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/)
 
-First, run the development server:
+> Personal portfolio website showcasing my projects, skills, and experience in AI, Machine Learning, and Cybersecurity.
+
+🔗 **Live Site**: [siralex01.github.io](https://siralex01.github.io)
+
+---
+
+## 📋 About
+
+I'm **Alessio Maiola**, a Software Engineer with a Master's degree in Engineering in Computer Science from **Sapienza University of Rome**. My expertise spans:
+
+- 🤖 **Artificial Intelligence & Machine Learning**
+- 🔒 **Cybersecurity & CTF Competitions** (TRX Team)
+- 💻 **Full-Stack Development**
+- 📊 **Data Engineering**
+
+This portfolio showcases my journey, projects, and technical skills.
+
+---
+
+## ✨ Features
+
+### 🎨 Design & UX
+- **Modern, responsive design** with Tailwind CSS 4
+- **Dark/Light mode** support with smooth transitions
+- **Interactive animations** using Framer Motion
+- **Smooth scrolling** with custom navigation
+- **Accessible** with semantic HTML and ARIA labels
+
+### 🚀 Technical Highlights
+- Built with **Next.js 16** (App Router)
+- **Static export** for GitHub Pages deployment
+- **SEO optimized** with metadata, sitemap, robots.txt, and structured data (JSON-LD)
+- **Open Graph & Twitter Card** integration for social sharing
+- **Performance optimized** with lazy loading and image optimization
+- **Type-safe** with TypeScript
+
+### 📱 Sections
+- **Presentation**: Introduction with rotating logo animation
+- **Education**: Academic background with animated timeline
+- **CTFs**: Cybersecurity competition achievements
+- **Projects**: Interactive carousel and expandable project cards
+- **Skills**: Categorized technical skills with smooth animations
+- **Contact**: Social links and contact information
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Technologies |
+|----------|-------------|
+| **Framework** | Next.js 16, React 19 |
+| **Language** | TypeScript 5 |
+| **Styling** | Tailwind CSS 4 |
+| **Animation** | Framer Motion 12 |
+| **Carousel** | Embla Carousel |
+| **Icons** | React Icons |
+| **Media** | Lottie React |
+| **Deployment** | GitHub Pages, GitHub Actions |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+ installed
+- npm or yarn package manager
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/SirAlex01/SirAlex01.github.io.git
+   cd SirAlex01.github.io
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Run development server**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open browser**
+   ```
+   http://localhost:3000
+   ```
+
+### Build & Deploy
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Build for production
+npm run build
+
+# Export static site
+npm run export
+
+# Lint code
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The site automatically deploys to GitHub Pages via GitHub Actions when pushing to the `main` branch.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📁 Project Structure
 
-## Learn More
+```
+SirAlex01.github.io/
+├── app/
+│   ├── components/
+│   │   ├── home-sections/    # Main page sections
+│   │   ├── navbar/            # Navigation components
+│   │   ├── footer/            # Footer component
+│   │   └── ui/                # Reusable UI components
+│   ├── projects/              # Projects page
+│   ├── contacts/              # Contacts page
+│   ├── layout.tsx             # Root layout with metadata
+│   ├── page.tsx               # Home page
+│   ├── sitemap.ts             # SEO sitemap
+│   └── robots.ts              # Robots.txt
+├── public/                    # Static assets
+│   ├── animations/            # Lottie animations
+│   ├── cc/                    # Project images
+│   └── ...
+├── .github/workflows/         # CI/CD workflows
+└── next.config.ts             # Next.js configuration
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎯 Key Features Explained
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🎴 Project Cards
+- **Expandable cards** with smooth spring animations
+- **Drag-to-scroll** skills badges with threshold detection
+- **Object-fill images** to prevent cropping
+- **Click-to-expand** with backdrop blur effects
 
-## Deploy on Vercel
+### 🎠 Project Carousel
+- **Touch/swipe enabled** with Embla Carousel
+- **Keyboard navigation** support
+- **YouTube integration** for video demos
+- **Mobile-optimized** pagination dots
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 🔍 SEO Optimization
+- **Structured data** (JSON-LD) for rich search results
+- **Open Graph & Twitter Cards** for social sharing
+- **Sitemap & Robots.txt** for search engine crawling
+- **Page-specific metadata** for better indexing
+- **Semantic HTML** with proper heading hierarchy
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📝 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+## 📫 Contact
+
+- **Email**: [alessio.maiola2001@gmail.com](mailto:alessio.maiola2001@gmail.com)
+- **LinkedIn**: [Alessio Maiola](https://www.linkedin.com/in/alessio-maiola-275718331)
+- **GitHub**: [@SirAlex01](https://github.com/SirAlex01)
+- **Website**: [siralex01.github.io](https://siralex01.github.io)
+
+---
+
+<div align="center">
+  <p>Made with ❤️ by Alessio Maiola</p>
+  <p>⭐ Star this repo if you like it!</p>
+</div>
