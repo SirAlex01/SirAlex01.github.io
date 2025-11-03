@@ -33,9 +33,9 @@ export function SectionTitle({ children, className = "" }: SectionTitleProps) {
   const baseClasses = "text-xl sm:text-2xl lg:text-3xl font-bold text-foreground";
   
   return (
-    <h3 className={`${baseClasses} ${className}`}>
+    <h2 className={`${baseClasses} ${className}`}>
       {children}
-    </h3>
+    </h2>
   );
 }
 

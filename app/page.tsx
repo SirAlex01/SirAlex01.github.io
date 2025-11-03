@@ -34,7 +34,7 @@ export default function Home() {
         // First section without FadeIn
         if (index === 0) {
           return (
-            <div key={section.id} className={backgroundClass}>
+            <div key={section.id} id={section.id} className={backgroundClass}>
               {SectionContent}
             </div>
           );
@@ -43,7 +43,7 @@ export default function Home() {
         // Other sections with fade-in
         return (
           <FadeInSection key={section.id}>
-            <div className={backgroundClass}>{SectionContent}</div>
+            <div id={section.id} className={backgroundClass}>{SectionContent}</div>
           </FadeInSection>
         );
       })}

@@ -33,7 +33,7 @@ export default function RotatingLogo() {
         <div className="absolute inset-0 flex items-center justify-center rounded-full backface-hidden overflow-hidden">
           <Image
             src={images[0]}
-            alt="Front logo"
+            alt="Alessio Maiola Logo"
             fill       // 👈 makes it fill the parent div
             className="object-cover rounded-full"
           />
@@ -42,7 +42,7 @@ export default function RotatingLogo() {
         <div className="absolute inset-0 flex items-center justify-center rounded-full rotate-y-180 backface-hidden overflow-hidden">
           <Image
             src={images[1]}
-            alt="Back logo"
+            alt="Alessio Maiola Picture"
             fill       // 👈 also fills
             className="object-cover rounded-full"
           />

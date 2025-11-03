@@ -67,7 +67,7 @@ export default function Navbar() {
           <Link href="/">
             <Image
               src="/logo.webp"
-              alt="Logo"
+              alt="Alessio Maiola Logo"
               width={60}
               height={60}
               priority

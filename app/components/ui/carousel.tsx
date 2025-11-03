@@ -139,7 +139,7 @@ export default function Carousel({ items }: CarouselProps) {
               <div className="relative w-full h-full">
                 <Image
                   src={item.src!}
-                  alt={`Slide ${i + 1}`}
+                  alt={`CyberChallenge.IT slide ${i + 1}`}
                   fill
                   sizes="(min-width: 1024px) 50vw, (min-width: 768px) 80vw, 90vw"
                   className="object-cover rounded-2xl select-none"

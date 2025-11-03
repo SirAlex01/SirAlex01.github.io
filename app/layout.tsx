@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./components/navbar/navbar";
 import Footer from "./components/footer/footer";
 import ScrollRestorationManager from "./components/ui/scroll-restoration";
+import StructuredData from "./components/ui/structured-data";
     
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,10 +17,63 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://siralex01.github.io"),
   title: "Alessio Maiola - Portfolio",
-  description: "Portfolio Website of Alessio Maiola",
+  description: "Software Engineer specialized in AI, Machine Learning, and Cybersecurity. Master's graduate from Sapienza University of Rome, CTF player with TRX.",
+  keywords: [
+    "Alessio Maiola",
+    "Maiola",
+    "AI",
+    "Artificial Intelligence",
+    "Machine Learning",
+    "Deep Learning",
+    "Neural Networks",
+    "Intelligenza Artificiale",
+    "Apprendimento Automatico",
+    "CyberSecurity",
+    "Cyber Security",
+    "Software Engineer",
+    "Software Developer",
+    "Sicurezza Informatica",
+    "Ingegnere Informatico",
+    "Computer Science",
+    "Data Science",
+    "Python",
+    "Portfolio",
+    "Web Development",
+    "Full Stack Developer",
+    "CTF",
+    "Capture The Flag",
+    "Hacking",
+    "Programming",
+    "Programmazione",
+    "Developer Portfolio",
+    "Tech Portfolio",
+  ],
   icons: {
     icon: [{ url: "/logo_colored.webp", type: "image/png" }],
+  },
+  openGraph: {
+    title: "Alessio Maiola - Portfolio",
+    description: "Software Engineer specialized in AI, Machine Learning, and Cybersecurity. Master's graduate from Sapienza University of Rome, CTF player with TRX.",
+    url: "https://siralex01.github.io",
+    siteName: "Alessio Maiola Portfolio",
+    images: [
+      {
+        url: "/logo_colored.webp",
+        width: 512,
+        height: 512,
+        alt: "Alessio Maiola Portfolio",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Alessio Maiola - Portfolio",
+    description: "Software Engineer specialized in AI, Machine Learning, and Cybersecurity. Master's graduate from Sapienza University of Rome, CTF player with TRX.",
+    images: ["/logo_colored.webp"],
   },
 };
 
@@ -30,7 +84,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-
+      <head>
+        <StructuredData />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
