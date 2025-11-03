@@ -61,8 +61,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/logo_colored.webp",
-        width: 512,
-        height: 512,
+        width: 1200,
+        height: 630,
         alt: "Alessio Maiola Portfolio",
       },
     ],
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Alessio Maiola - Portfolio",
     description: "Software Engineer specialized in AI, Machine Learning, and Cybersecurity. Master's graduate from Sapienza University of Rome, CTF player with TRX.",
     images: ["/logo_colored.webp"],
