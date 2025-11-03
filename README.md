@@ -101,11 +101,11 @@ This portfolio showcases my journey, projects, and technical skills.
 # Build for production
 npm run build
 
-# Export static site
-npm run export
-
 # Lint code
-npm run lint
+npx eslint .
+
+# Start site
+npx serve@latest out
 ```
 
 The site automatically deploys to GitHub Pages via GitHub Actions when pushing to the `main` branch.
