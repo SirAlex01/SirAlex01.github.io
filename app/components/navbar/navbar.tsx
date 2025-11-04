@@ -31,13 +31,6 @@ export default function Navbar() {
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  useEffect(() => {
-    setMounted(true);
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   const getLinkStyle = (path: string) => {
     const normalizedPath = path.replace(/\/$/, "") || "/";
     const isActive = pathname === normalizedPath;
