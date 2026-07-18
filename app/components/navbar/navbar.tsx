@@ -8,6 +8,7 @@ import { createPortal } from "react-dom";
 import { Menu } from "lucide-react";
 import { navLinks } from "./nav-links";
 import MobileMenu from "./mobile-menu";
+import ThemeToggle from "../ui/theme-toggle";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,19 +75,23 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
+            {mounted && <ThemeToggle />}
           </div>
 
           {!isOpen && mounted && (
-            <button
-              onClick={toggleMenu}
-              className="md:hidden p-2 rounded focus:outline-none focus:ring-2 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-colors duration-300"
-              aria-label="Toggle menu"
-            >
-              <Menu
-                size={30}
-                className="text-black dark:text-white transition-colors duration-300"
-              />
-            </button>
+            <div className="md:hidden flex items-center gap-1">
+              <ThemeToggle />
+              <button
+                onClick={toggleMenu}
+                className="p-2 rounded focus:outline-none focus:ring-2 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-colors duration-300"
+                aria-label="Toggle menu"
+              >
+                <Menu
+                  size={30}
+                  className="text-black dark:text-white transition-colors duration-300"
+                />
+              </button>
+            </div>
           )}
         </div>
       </nav>

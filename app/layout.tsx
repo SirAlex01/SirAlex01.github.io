@@ -5,6 +5,17 @@ import Navbar from "./components/navbar/navbar";
 import Footer from "./components/footer/footer";
 import ScrollRestorationManager from "./components/ui/scroll-restoration";
 import StructuredData from "./components/ui/structured-data";
+import { ThemeProvider } from "./components/ui/theme-provider";
+
+const themeInitScript = `
+(function () {
+  try {
+    var stored = localStorage.getItem("theme");
+    var isDark = stored ? stored === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    document.documentElement.classList.toggle("dark", isDark);
+  } catch (e) {}
+})();
+`;
     
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -86,22 +97,25 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <StructuredData />
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ScrollRestorationManager />
-        <Navbar />
-        <main className="flex-1">
-          <div
-            className="fixed inset-0 -z-50 bg-cover bg-center bg-no-repeat filter blur-md dark:blur-lg brightness-100 dark:brightness-104 dark:invert"
-            style={{
-              backgroundImage: 'url("background_2.jpg")',
-            }}
-          />
-          {children}
-        </main>
-       <Footer />
+        <ThemeProvider>
+          <ScrollRestorationManager />
+          <Navbar />
+          <main className="flex-1">
+            <div
+              className="fixed inset-0 -z-50 bg-cover bg-center bg-no-repeat filter blur-md dark:blur-lg brightness-100 dark:brightness-104 dark:invert"
+              style={{
+                backgroundImage: 'url("background_2.jpg")',
+              }}
+            />
+            {children}
+          </main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
