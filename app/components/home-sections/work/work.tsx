@@ -19,7 +19,7 @@ export default function Work() {
       <div className="relative w-full max-w-4xl lg:max-w-[68rem] mt-8">
         {/* Connecting line, drawn on scroll into view */}
         <motion.div
-          className="absolute left-7 sm:left-10 top-0 bottom-6 sm:bottom-8 w-px -translate-x-1/2
+          className="absolute left-7 sm:left-10 top-7 sm:top-10 bottom-6 sm:bottom-8 w-px -translate-x-1/2
                      bg-gradient-to-b from-neutral-500 dark:from-neutral-300 to-transparent"
           style={{ transformOrigin: "top" }}
           initial={{ scaleY: 0 }}
