@@ -1,6 +1,5 @@
 // contact-data.ts
-import { SiGithub, SiLinkedin } from "react-icons/si";
-import { FaEnvelope } from "react-icons/fa";
+import { FaEnvelope, FaLinkedin, FaGithub } from "react-icons/fa";
 
 export interface ContactItem {
   label: string;       // Accessible name
@@ -17,11 +16,11 @@ export const contacts: ContactItem[] = [
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/in/alessio-maiola-275718331",
-    icon: <SiLinkedin />,
+    icon: <FaLinkedin />,
   },
   {
     label: "GitHub",
     href: "https://github.com/SirAlex01",
-    icon: <SiGithub />,
+    icon: <FaGithub />,
   },
 ];
