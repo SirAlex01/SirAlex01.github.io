@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import FadeInSection from "./components/ui/fadein-section";
 import Presentation from "./components/home-sections/presentation";
 import Education from "./components/home-sections/education/education";
+import Work from "./components/home-sections/work/work";
 import CTFs from "./components/home-sections/ctfs";
 import Projects from "./components/home-sections/projects";
 import Skills from "./components/home-sections/skills";
@@ -12,6 +13,7 @@ import Contact from "./components/home-sections/contact";
 const sections = [
   { id: "presentation", component: <Presentation /> },
   { id: "education", component: <Education /> },
+  { id: "work", component: <Work /> },
   { id: "ctfs", component: <CTFs /> },
   { id: "projects", component: <Projects /> },
   { id: "skills", component: <Skills /> }, 
