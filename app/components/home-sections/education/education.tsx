@@ -4,11 +4,10 @@ import EducationCard from "../../ui/education-card";
 import { educationData } from "./education-data";
 
 import { motion } from "framer-motion";
-import Lottie from "lottie-react";
-import educationAnimation from "@/public/animations/walking_robot.json";
 
 import { useEffect, useState } from "react";
 import { SectionWrapper, SectionTitle, SectionSubtitle } from "../../ui/section-wrapper";
+import LazyLottie from "../../ui/lazy-lottie";
 
 export default function Education() {
     const [duration, setDuration] = useState(25); // default fallback
@@ -59,7 +58,7 @@ export default function Education() {
             repeatType: "loop",             // restart from right edge
           }}
         >
-          <Lottie animationData={educationAnimation} loop />
+          <LazyLottie loader={() => import("@/public/animations/walking_robot.json")} loop />
         </motion.div>
       </div>
     </SectionWrapper>

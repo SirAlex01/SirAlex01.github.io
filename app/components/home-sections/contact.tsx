@@ -1,18 +1,12 @@
-import { useRef, useEffect } from "react";
-import Lottie, { LottieRefCurrentProps } from "lottie-react";
-import animationData from "@/public/animations/contact-email.json"; // your json
+import { useRef } from "react";
+import { LottieRefCurrentProps } from "lottie-react";
 import PrimaryButton from "../ui/primary-button";
 import { FiMail } from "react-icons/fi";
 import { SectionWrapper, SectionTitle, SectionSubtitle } from "../ui/section-wrapper";
+import LazyLottie from "../ui/lazy-lottie";
 
 export default function Contact() {
   const lottieRef = useRef<LottieRefCurrentProps>(null);
-
-  useEffect(() => {
-    if (lottieRef.current) {
-      lottieRef.current.setSpeed(0.5); // ✅ Slow down animation
-    }
-  }, []);
 
   return (
     <SectionWrapper className="px-6">
@@ -26,9 +20,10 @@ export default function Contact() {
 
       {/* ✅ Controlled speed animation */}
       <div className="w-[240px] sm:w-[280px] md:w-[320px] lg:w-[360px]">
-        <Lottie
+        <LazyLottie
+          loader={() => import("@/public/animations/contact-email.json")}
           lottieRef={lottieRef}
-          animationData={animationData}
+          onDOMLoaded={() => lottieRef.current?.setSpeed(0.5)} // ✅ Slow down animation
           loop
         />
       </div>

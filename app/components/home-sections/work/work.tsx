@@ -1,11 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Lottie from "lottie-react";
-import workAnimation from "@/public/animations/work.json";
 import TimelineItem from "../../ui/timeline-item";
 import { workData } from "./work-data";
 import { SectionWrapper, SectionTitle, SectionSubtitle } from "../../ui/section-wrapper";
+import LazyLottie from "../../ui/lazy-lottie";
 
 export default function Work() {
   return (
@@ -34,7 +33,7 @@ export default function Work() {
       </div>
 
       <div className="w-[180px] sm:w-[220px] -mt-4">
-        <Lottie animationData={workAnimation} loop />
+        <LazyLottie loader={() => import("@/public/animations/work.json")} loop />
       </div>
     </SectionWrapper>
   );
