@@ -40,6 +40,9 @@ export default function Carousel({ items }: CarouselProps) {
     if (!emblaApi) return;
     emblaApi.on("select", onSelect);
     onSelect();
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
   }, [emblaApi, onSelect]);
 
   // Navigation helpers
