@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect } from "react";
+import dynamic from "next/dynamic";
 import FadeInSection from "./components/ui/fadein-section";
 import Presentation from "./components/home-sections/presentation";
-import Education from "./components/home-sections/education/education";
-import Work from "./components/home-sections/work/work";
-import CTFs from "./components/home-sections/ctfs";
-import Projects from "./components/home-sections/projects";
-import Skills from "./components/home-sections/skills";
-import Contact from "./components/home-sections/contact";
+
+const Education = dynamic(() => import("./components/home-sections/education/education"));
+const Work = dynamic(() => import("./components/home-sections/work/work"));
+const CTFs = dynamic(() => import("./components/home-sections/ctfs"));
+const Projects = dynamic(() => import("./components/home-sections/projects"));
+const Skills = dynamic(() => import("./components/home-sections/skills"));
+const Contact = dynamic(() => import("./components/home-sections/contact"));
 
 const sections = [
   { id: "presentation", component: <Presentation /> },
