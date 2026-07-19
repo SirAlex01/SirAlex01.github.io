@@ -32,12 +32,12 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
   // While a card is mid-transition, its logical position (index/offset)
   // has already updated but its visual position hasn't caught up yet —
   // so a rapid click can land on what looks like a side card but is
-  // already, logically, the center one. Block clicks until the spring
-  // animation settles.
+  // already, logically, the center one. This only guards the "open
+  // project" click below; rotation clicks still queue up freely so
+  // fast clicking isn't throttled.
   const isAnimating = useRef(false);
 
   const step = (dir: 1 | -1) => {
-    if (isAnimating.current) return;
     isAnimating.current = true;
     setIndex((i) => mod(i + dir, projects.length));
   };
@@ -138,10 +138,10 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
             key={i}
             onClick={() => {
               if (wasDragged.current) return; // suppress click after a real drag
-              if (isAnimating.current) return; // wait for the transition to settle
               if (clickable) {
                 handleClick(offset);
               } else if (isCenterCard) {
+                if (isAnimating.current) return; // don't open mid-transition
                 window.location.href = `/projects#${p.id}`;
               }
             }}
