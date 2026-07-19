@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 type Project = { 
@@ -35,12 +35,28 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
   // already, logically, the center one. This only guards the "open
   // project" click below; rotation clicks still queue up freely so
   // fast clicking isn't throttled.
+  // Reset via a fixed timer rather than the spring's onAnimationComplete:
+  // that callback waits for strict physical rest (near-zero velocity),
+  // which for this spring lags well behind the point where the card
+  // already looks settled on screen.
+  const SETTLE_MS = 300;
   const isAnimating = useRef(false);
+  const settleTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const step = (dir: 1 | -1) => {
     isAnimating.current = true;
+    if (settleTimeout.current) clearTimeout(settleTimeout.current);
+    settleTimeout.current = setTimeout(() => {
+      isAnimating.current = false;
+    }, SETTLE_MS);
     setIndex((i) => mod(i + dir, projects.length));
   };
+
+  useEffect(() => {
+    return () => {
+      if (settleTimeout.current) clearTimeout(settleTimeout.current);
+    };
+  }, []);
 
   // --- Dragging logic ---
   // dragOffset is a ref (not state): it's only read once in handleEnd, so
@@ -144,9 +160,6 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
                 if (isAnimating.current) return; // don't open mid-transition
                 window.location.href = `/projects#${p.id}`;
               }
-            }}
-            onAnimationComplete={() => {
-              isAnimating.current = false;
             }}
             className={`absolute aspect-[16/10] rounded-xl overflow-hidden shadow-2xl
               ${clickable || isCenterCard ? "cursor-pointer hover:scale-[1.03]" : "cursor-default"}`}
