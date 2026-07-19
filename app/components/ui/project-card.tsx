@@ -4,10 +4,12 @@ import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaGithub } from "react-icons/fa";
+import LazyVideo from "./lazy-video";
 
 interface ProjectCardProps {
   title: string;
-  src: string;
+  src?: string;
+  video?: { mp4: string };
   links: string[];
   description: string;
   skills: string[];
@@ -17,6 +19,7 @@ interface ProjectCardProps {
 export default function ProjectCard({
   title,
   src,
+  video,
   links,
   description,
   skills,
@@ -147,17 +150,23 @@ export default function ProjectCard({
       onMouseLeave={() => setIsExpanded(false)}
       onClick={handleToggle}
     >
-      {/* Background Image - Fits above the title card */}
+      {/* Background media - Fits above the title card */}
       <div className="absolute inset-0 pb-[45px]">
         <div className="relative h-full w-full">
-          <Image
-            src={src}
-            alt={title}
-            fill
-            sizes="(min-width: 1024px) 40vw, (min-width: 768px) 60vw, 90vw"
-            className="object-fill"
-            priority={false}
-          />
+          {video ? (
+            <LazyVideo mp4={video.mp4} className="object-fill w-full h-full" />
+          ) : (
+            src && (
+              <Image
+                src={src}
+                alt={title}
+                fill
+                sizes="(min-width: 1024px) 40vw, (min-width: 768px) 60vw, 90vw"
+                className="object-fill"
+                priority={false}
+              />
+            )
+          )}
         </div>
       </div>
 

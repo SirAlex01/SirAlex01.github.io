@@ -3,11 +3,13 @@
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import LazyVideo from "./lazy-video";
 
-type Project = { 
+type Project = {
   id: string;
   title: string;
-  src: string;
+  src?: string;
+  video?: { mp4: string };
   links: string[];
   description: string;
   skills: string[];
@@ -134,15 +136,21 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
 
         const cardContent = (
           <div className="relative w-full h-full">
-            <Image
-              src={p.src}
-              alt={p.title}
-              fill
-              sizes="(min-width: 1280px) 35vw, (min-width: 1024px) 45vw, (min-width: 768px) 60vw, 80vw"
-              className="object-fill rounded-xl"
-              draggable={false}
-              priority={abs <= 2}
-            />
+            {p.video ? (
+              <LazyVideo mp4={p.video.mp4} className="w-full h-full object-fill rounded-xl" />
+            ) : (
+              p.src && (
+                <Image
+                  src={p.src}
+                  alt={p.title}
+                  fill
+                  sizes="(min-width: 1280px) 35vw, (min-width: 1024px) 45vw, (min-width: 768px) 60vw, 80vw"
+                  className="object-fill rounded-xl"
+                  draggable={false}
+                  priority={abs <= 2}
+                />
+              )
+            )}
             {abs > 0.05 && (
               <div className="absolute inset-0 rounded-xl bg-black/25" />
             )}

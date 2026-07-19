@@ -88,6 +88,7 @@ export default function ProjectsPage() {
                 <ProjectCard
                   title={project.title}
                   src={project.src}
+                  video={project.video}
                   links={project.links}
                   description={project.description}
                   skills={project.skills}
