@@ -29,8 +29,18 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
   const dragOffset = useRef(0);
   const dragging = useRef(false);
   const wasDragged = useRef(false);
+  // While a card is mid-transition, its logical position (index/offset)
+  // has already updated but its visual position hasn't caught up yet —
+  // so a rapid click can land on what looks like a side card but is
+  // already, logically, the center one. Block clicks until the spring
+  // animation settles.
+  const isAnimating = useRef(false);
 
-  const step = (dir: 1 | -1) => setIndex((i) => mod(i + dir, projects.length));
+  const step = (dir: 1 | -1) => {
+    if (isAnimating.current) return;
+    isAnimating.current = true;
+    setIndex((i) => mod(i + dir, projects.length));
+  };
 
   // --- Dragging logic ---
   // dragOffset is a ref (not state): it's only read once in handleEnd, so
@@ -128,11 +138,15 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
             key={i}
             onClick={() => {
               if (wasDragged.current) return; // suppress click after a real drag
+              if (isAnimating.current) return; // wait for the transition to settle
               if (clickable) {
                 handleClick(offset);
               } else if (isCenterCard) {
                 window.location.href = `/projects#${p.id}`;
               }
+            }}
+            onAnimationComplete={() => {
+              isAnimating.current = false;
             }}
             className={`absolute aspect-[16/10] rounded-xl overflow-hidden shadow-2xl
               ${clickable || isCenterCard ? "cursor-pointer hover:scale-[1.03]" : "cursor-default"}`}
