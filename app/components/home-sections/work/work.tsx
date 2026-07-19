@@ -4,11 +4,10 @@ import { motion } from "framer-motion";
 import TimelineItem from "../../ui/timeline-item";
 import { workData } from "./work-data";
 import { SectionWrapper, SectionTitle, SectionSubtitle } from "../../ui/section-wrapper";
-import LazyLottie from "../../ui/lazy-lottie";
 
 export default function Work() {
   return (
-    <SectionWrapper className="px-6">
+    <SectionWrapper className="px-6 pb-3">
       <SectionTitle>Work Experience</SectionTitle>
 
       <SectionSubtitle className="max-w-none lg:whitespace-nowrap">
@@ -32,9 +31,6 @@ export default function Work() {
         ))}
       </div>
 
-      <div className="w-[180px] sm:w-[220px] -mt-4">
-        <LazyLottie loader={() => import("@/public/animations/work.json")} loop />
-      </div>
     </SectionWrapper>
   );
 }
