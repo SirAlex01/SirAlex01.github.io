@@ -39,7 +39,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
   // that callback waits for strict physical rest (near-zero velocity),
   // which for this spring lags well behind the point where the card
   // already looks settled on screen.
-  const SETTLE_MS = 300;
+  const SETTLE_MS = 250;
   const isAnimating = useRef(false);
   const settleTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
