@@ -20,6 +20,9 @@ interface ProjectPostcardsProps {
 
 const mod = (n: number, m: number) => ((n % m) + m) % m;
 
+const SWIPE_THRESHOLD = 50;
+const CLICK_TOLERANCE = 5;
+
 export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
   const [index, setIndex] = useState(0);
   const startX = useRef<number | null>(null);
@@ -27,8 +30,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
   const dragging = useRef(false);
   const wasDragged = useRef(false);
 
-  const SWIPE_THRESHOLD = 50;
-  const CLICK_TOLERANCE = 5;
+  const step = (dir: 1 | -1) => setIndex((i) => mod(i + dir, projects.length));
 
   // --- Dragging logic ---
   // dragOffset is a ref (not state): it's only read once in handleEnd, so
@@ -52,8 +54,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
     dragging.current = false;
 
     if (Math.abs(dragOffset.current) >= SWIPE_THRESHOLD) {
-      if (dragOffset.current < 0) setIndex((i) => mod(i + 1, projects.length));
-      else setIndex((i) => mod(i - 1, projects.length));
+      step(dragOffset.current < 0 ? 1 : -1);
     }
 
     dragOffset.current = 0;
@@ -70,8 +71,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
   // --- Click handler ---
   const handleClick = (offset: number) => {
     if (Math.abs(offset) < 0.3) return; // ignore center clicks
-    if (offset > 0) setIndex((i) => mod(i + 1, projects.length));
-    else if (offset < 0) setIndex((i) => mod(i - 1, projects.length));
+    step(offset > 0 ? 1 : -1);
   };
 
   return (
@@ -87,10 +87,8 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
       onTouchEnd={handleEnd}
     >
       {projects.map((p, i) => {
-  const rawOffset = offsetFor(i);
-  const offset = rawOffset;
-  const abs = Math.abs(offset);
-  const baseAbs = Math.abs(rawOffset);
+        const offset = offsetFor(i);
+        const abs = Math.abs(offset);
 
         if (abs > 2.2) return null;
 
@@ -117,7 +115,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
               sizes="(min-width: 1280px) 35vw, (min-width: 1024px) 45vw, (min-width: 768px) 60vw, 80vw"
               className="object-fill rounded-xl"
               draggable={false}
-              priority={baseAbs <= 2}
+              priority={abs <= 2}
             />
             {abs > 0.05 && (
               <div className="absolute inset-0 rounded-xl bg-black/25" />
