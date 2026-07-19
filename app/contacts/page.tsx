@@ -39,7 +39,7 @@ export default function ContactsPage() {
   }, []);
 
   return (
-    <section className="flex flex-col items-center px-6 py-16 min-h-[80vh] overflow-hidden">
+    <section className="flex flex-col items-center px-6 py-16 overflow-hidden">
       {/* Title - fade in from below */}
       <FadeInSection delay={0}>
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-800 dark:text-white mb-6 text-center">
