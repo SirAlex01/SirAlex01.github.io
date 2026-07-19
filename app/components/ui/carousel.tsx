@@ -14,6 +14,66 @@ interface CarouselProps {
   items: CarouselItem[];
 }
 
+const SWIPE_THRESHOLD = 25;
+
+// Iframes (YouTube) swallow pointer move/up events once a touch enters them,
+// so a carousel drag can't be tracked through the video itself. These two
+// transparent strips sit on top of the iframe's edges (avoiding its center,
+// where the play/scrub/fullscreen controls live) purely to capture the swipe.
+function SwipeShield({
+  onPrev,
+  onNext,
+}: {
+  onPrev: () => void;
+  onNext: () => void;
+}) {
+  const startX = React.useRef(0);
+  const movedX = React.useRef(0);
+
+  const handleDown = (e: React.PointerEvent) => {
+    startX.current = e.clientX;
+    movedX.current = 0;
+    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+    e.preventDefault();
+  };
+
+  const handleMove = (e: React.PointerEvent) => {
+    movedX.current = e.clientX - startX.current;
+  };
+
+  const handleUp = (e: React.PointerEvent) => {
+    (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId);
+    if (Math.abs(movedX.current) >= SWIPE_THRESHOLD) {
+      if (movedX.current > 0) onPrev();
+      else onNext();
+    }
+  };
+
+  const handleStyle: React.CSSProperties = {
+    top: "16%",
+    bottom: "16%",
+    width: "clamp(8%, 64px, 12%)",
+    background: "transparent",
+    cursor: "default",
+    touchAction: "none",
+  };
+
+  return (
+    <>
+      {(["left", "right"] as const).map((side) => (
+        <div
+          key={side}
+          className={`absolute ${side}-0 z-10`}
+          style={handleStyle}
+          onPointerDown={handleDown}
+          onPointerMove={handleMove}
+          onPointerUp={handleUp}
+        />
+      ))}
+    </>
+  );
+}
+
 export default function Carousel({ items }: CarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
@@ -58,48 +118,6 @@ export default function Carousel({ items }: CarouselProps) {
     emblaApi.scrollTo((selectedIndex + 1) % count);
   }, [emblaApi, selectedIndex]);
 
-  // Swipe handling on drag handles
-  const isDown = React.useRef(false);
-  const startX = React.useRef(0);
-  const movedX = React.useRef(0);
-  const SWIPE_THRESHOLD = 25;
-
-  const handleDown = (e: React.PointerEvent) => {
-    isDown.current = true;
-    startX.current = e.clientX;
-    movedX.current = 0;
-    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
-    e.preventDefault();
-  };
-
-  const handleMove = (e: React.PointerEvent) => {
-    if (isDown.current) movedX.current = e.clientX - startX.current;
-  };
-
-  const handleUp = (e: React.PointerEvent) => {
-    if (!isDown.current) return;
-    (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId);
-    const dx = movedX.current;
-    if (Math.abs(dx) >= SWIPE_THRESHOLD) {
-      if (dx > 0) {
-        goPrev();
-      } else {
-        goNext();
-      }
-    }
-    isDown.current = false;
-  };
-
-  // Shared handle style
-  const handleStyle: React.CSSProperties = {
-    top: "16%",
-    bottom: "16%",
-    width: "clamp(8%, 64px, 12%)",
-    background: "transparent",
-    cursor: "default",
-    touchAction: "none",
-  };
-
   return (
     <>
       <div
@@ -117,17 +135,7 @@ export default function Carousel({ items }: CarouselProps) {
           >
             {item.video ? (
               <div className="relative w-full h-full rounded-2xl overflow-hidden">
-                {/* Drag handles (left/right) */}
-                {["left", "right"].map((side) => (
-                  <div
-                    key={side}
-                    className={`absolute ${side}-0 z-10`}
-                    style={handleStyle}
-                    onPointerDown={handleDown}
-                    onPointerMove={handleMove}
-                    onPointerUp={handleUp}
-                  />
-                ))}
+                <SwipeShield onPrev={goPrev} onNext={goNext} />
 
                 {/* YouTube Player */}
                 <YoutubePlayer
