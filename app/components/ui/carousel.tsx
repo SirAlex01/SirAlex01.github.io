@@ -63,6 +63,7 @@ function SwipeShield({
       {(["left", "right"] as const).map((side) => (
         <div
           key={side}
+          data-swipe-shield
           className={`absolute ${side}-0 z-10`}
           style={handleStyle}
           onPointerDown={handleDown}
@@ -81,6 +82,12 @@ export default function Carousel({ items }: CarouselProps) {
     containScroll: "trimSnaps",
     dragFree: false,
     skipSnaps: false,
+    // Drags starting on a SwipeShield strip are handled entirely by that
+    // component's own pointer handlers; without this, Embla's native drag
+    // recognition also reacts to the same gesture and the slide can jump
+    // by two instead of one.
+    watchDrag: (_emblaApi, evt) =>
+      !(evt.target as HTMLElement)?.closest?.("[data-swipe-shield]"),
   });
 
   const [selectedIndex, setSelectedIndex] = React.useState(0);
