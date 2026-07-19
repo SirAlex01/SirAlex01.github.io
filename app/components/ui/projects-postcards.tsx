@@ -22,35 +22,41 @@ const mod = (n: number, m: number) => ((n % m) + m) % m;
 
 export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
   const [index, setIndex] = useState(0);
-  const [dragOffset, setDragOffset] = useState(0);
   const startX = useRef<number | null>(null);
+  const dragOffset = useRef(0);
   const dragging = useRef(false);
+  const wasDragged = useRef(false);
 
   const SWIPE_THRESHOLD = 50;
+  const CLICK_TOLERANCE = 5;
 
   // --- Dragging logic ---
+  // dragOffset is a ref (not state): it's only read once in handleEnd, so
+  // tracking it in state would force a full re-render of every card on
+  // each mousemove/touchmove pixel with no visual benefit.
   const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
     dragging.current = true;
+    wasDragged.current = false;
     startX.current = "touches" in e ? e.touches[0].clientX : e.clientX;
   };
 
   const handleMove = (e: React.MouseEvent | React.TouchEvent) => {
     if (!dragging.current || startX.current === null) return;
     const x = "touches" in e ? e.touches[0].clientX : e.clientX;
-    const delta = x - startX.current;
-    setDragOffset(delta);
+    dragOffset.current = x - startX.current;
+    if (Math.abs(dragOffset.current) > CLICK_TOLERANCE) wasDragged.current = true;
   };
 
   const handleEnd = () => {
     if (!dragging.current) return;
     dragging.current = false;
 
-    if (Math.abs(dragOffset) >= SWIPE_THRESHOLD) {
-      if (dragOffset < 0) setIndex((i) => mod(i + 1, projects.length));
+    if (Math.abs(dragOffset.current) >= SWIPE_THRESHOLD) {
+      if (dragOffset.current < 0) setIndex((i) => mod(i + 1, projects.length));
       else setIndex((i) => mod(i - 1, projects.length));
     }
 
-    setDragOffset(0);
+    dragOffset.current = 0;
     startX.current = null;
   };
 
@@ -114,12 +120,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
               priority={baseAbs <= 2}
             />
             {abs > 0.05 && (
-              <div
-                className="absolute inset-0 rounded-xl bg-black/25"
-                style={{
-                  boxShadow: "0 15px 40px rgba(0,0,0,0.45)",
-                }}
-              />
+              <div className="absolute inset-0 rounded-xl bg-black/25" />
             )}
           </div>
         );
@@ -128,6 +129,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
           <motion.div
             key={i}
             onClick={() => {
+              if (wasDragged.current) return; // suppress click after a real drag
               if (clickable) {
                 handleClick(offset);
               } else if (isCenterCard) {
@@ -141,6 +143,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
               maxWidth: "480px",
               zIndex,
               filter: blur,
+              willChange: "transform",
             }}
             animate={{
               scale,
