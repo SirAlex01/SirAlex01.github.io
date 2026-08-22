@@ -31,28 +31,31 @@ const teams = [
   },
 ];
 
-const awards: { icon: ReactNode; tone: string; title: string; body: string }[] = [
+/**
+ * The icons are deliberately monochrome. They previously carried four
+ * different hues, which made them the only colour anywhere on the site and
+ * assigned that colour arbitrarily - there is no reason "best defense" is
+ * blue. The glyphs already distinguish the awards; the tint only broke the
+ * palette.
+ */
+const awards: { icon: ReactNode; title: string; body: string }[] = [
   {
     icon: <FaTrophy />,
-    tone: "text-amber-400",
     title: "National Winner",
     body: "First place at CyberChallenge.IT 2025 finals, defeating 40+ Italian universities in an Attack/Defense competition organized by CINI.",
   },
   {
     icon: <FaDesktop />,
-    tone: "text-emerald-400",
     title: "Best Presentation Award",
     body: "Recognized for delivering a clear, well-structured technical presentation to the national judging panel.",
   },
   {
     icon: <FaShieldAlt />,
-    tone: "text-sky-400",
     title: "Best Defense Award",
     body: "Awarded for implementing robust security measures and demonstrating superior defensive capabilities during the Attack/Defense competition.",
   },
   {
     icon: <FaMedal />,
-    tone: "text-orange-400",
     title: "Top 5% - National Selection",
     body: "Top 5% out of 1000+ participants in the CyberChallenge.IT 2025 national Jeopardy qualification phase.",
   },
@@ -110,9 +113,9 @@ export default function CTFs() {
 
       {/* --- Awards --- */}
       <div className="mt-16">
-        <Reveal className="flex flex-col items-center gap-3 text-center">
+        <Reveal className="flex flex-col items-start">
           <h3 className="title-xl">Awards</h3>
-          <hr className="rule w-40" />
+          <hr className="rule-start mt-5 w-16" />
         </Reveal>
 
         <RevealGroup className="mt-10 grid gap-5 md:grid-cols-2">
@@ -120,7 +123,7 @@ export default function CTFs() {
             <RevealItem key={award.title} className="h-full">
               <article className="card card-interactive group flex h-full gap-4 p-6 text-left">
                 <span
-                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--surface-inset)] text-xl transition-colors duration-300 group-hover:border-[var(--accent-ring)] ${award.tone}`}
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--surface-inset)] text-xl text-[var(--fg-muted)] transition-colors duration-300 group-hover:border-[var(--accent-ring)] group-hover:text-[var(--fg)]"
                   aria-hidden="true"
                 >
                   {award.icon}

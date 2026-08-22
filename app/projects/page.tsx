@@ -7,11 +7,6 @@ import Reveal from "../components/ui/reveal";
 import PrimaryButton from "../components/ui/primary-button";
 import { FiMail } from "react-icons/fi";
 
-// Full span covered by the portfolio, derived from the project periods so it
-// can never drift out of sync with the data.
-const years = projects.flatMap((p) => p.period.match(/\d{4}/g) ?? []).map(Number);
-const yearSpan = `${Math.min(...years)} - ${Math.max(...years)}`;
-
 export default function ProjectsPage() {
   // One ref per card so a `/projects#id` deep link can jump straight to it.
   const projectRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -56,14 +51,6 @@ export default function ProjectsPage() {
             <h1 className="display">{projectsMetadata.title}</h1>
             <hr className="rule w-24" />
             <p className="lead">{projectsMetadata.subtitle}</p>
-
-            <div className="mt-2 flex items-center gap-3 font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-[var(--fg-subtle)]">
-              <span>
-                {String(projects.length).padStart(2, "0")} projects
-              </span>
-              <span aria-hidden="true" className="h-px w-8 bg-[var(--line-strong)]" />
-              <span>{yearSpan}</span>
-            </div>
           </Reveal>
         </div>
       </section>

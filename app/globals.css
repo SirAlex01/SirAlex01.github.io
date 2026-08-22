@@ -171,9 +171,12 @@
   --color-background: var(--bg);
   --color-foreground: var(--fg);
 
+  /* These resolve only because the next/font classes are on <html>; see the
+     note in layout.tsx. --font-display is deliberately absent: next/font
+     already publishes it under that exact name, so mapping it here would be
+     a self-reference and therefore always invalid. */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-display);
 
   --radius-xs: var(--r-xs);
   --radius-sm: var(--r-sm);
@@ -419,12 +422,15 @@
   text-wrap: balance;
 }
 
+/* Card headings sit on the body sans rather than the display face, so the
+   display face stays reserved for section-level moments. */
 .title-sm {
-  font-family: var(--font-display), var(--font-sans), sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 600;
-  font-size: clamp(1.125rem, 1.9vw, 1.375rem);
-  line-height: 1.25;
-  letter-spacing: -0.018em;
+  font-size: clamp(1.0625rem, 1.7vw, 1.25rem);
+  line-height: 1.3;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
 }
 
 /* Small mono label that opens a block. */
@@ -437,6 +443,7 @@
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
   color: var(--fg-subtle);
 }
 
@@ -554,11 +561,20 @@
   opacity: 1;
 }
 
-/* Hairline that fades at both ends. */
+/* Hairline that fades at both ends - for centred contexts. */
 .rule {
   height: 1px;
   border: 0;
   background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+}
+
+/* Start-anchored variant: solid at the left edge, fading out to the right.
+   Under a left-aligned heading this reads as a spine marker; the symmetric
+   `.rule` would look like decoration that had drifted off-centre. */
+.rule-start {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(90deg, var(--line-strong), transparent);
 }
 
 .rule-v {
@@ -691,6 +707,7 @@
   font-size: 0.6875rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Pulsing "live" indicator used by the current role and availability. */

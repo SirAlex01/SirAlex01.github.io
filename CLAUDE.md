@@ -80,12 +80,42 @@ works by re-pointing one set of variables.
 ### Palette is deliberately monochrome
 
 Black, white and greys only. "Accent" in the token names means *ink*, not a
-hue. Emphasis comes from contrast, weight and light. Content-owned colour
-(award icons, company logos) is the only exception.
+hue. Emphasis comes from contrast, weight and light. **Company logos are the
+only colour on the site** - they are content, and recolouring someone's mark
+is not ours to do. Everything else, icons included, is monochrome.
 
 Solid fills intentionally stop short of `#000`/`#fff`. A maximum-luminance
 block against the opposite-extreme canvas is physically glaring; `--accent`
 is `#1c1c20` / `#dededf`. Don't "fix" these back to pure values.
+
+### Typography: three faces, three jobs
+
+| Role | Face | Used by |
+| --- | --- | --- |
+| Display | **Space Grotesk** | `.display`, `.title-xl`, `.title` |
+| Body | **Geist Sans** | running text, `.title-sm`, UI |
+| Data | **Geist Mono** | dates, counters, `.eyebrow`, `.chip-mono` |
+
+The owner has asked for a standard, familiar display face and has explicitly
+rejected a serif alternative. Don't swap it again without being asked.
+
+**Card headings (`.title-sm`) stay on the body sans**, not the display face,
+so the display face stays reserved for section-level moments.
+
+Data-bearing type uses `font-variant-numeric: tabular-nums` so columns of
+years and counters don't wobble.
+
+### Section headers are left-aligned
+
+`SectionHeader` defaults to `align="left"` on purpose. Centring every header
+flattens hierarchy, drags the eye back to the middle on each line, and
+detaches the heading from the grid it introduces. Headers sit on the same
+left spine as the content beneath them, marked by a short `.rule-start`
+hairline (solid at the left, fading right - the symmetric `.rule` is for
+centred contexts and looks like it drifted off-centre when left-anchored).
+
+Centre is reserved for the one place it argues for itself: the closing call
+to action.
 
 ---
 

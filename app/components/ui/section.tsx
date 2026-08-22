@@ -42,11 +42,17 @@ interface SectionHeaderProps {
 /**
  * Title → hairline → lead. Every section opens with this so the page has one
  * predictable entry pattern instead of seven slightly different ones.
+ *
+ * Left-aligned by default, deliberately. Centring every header flattens the
+ * hierarchy, forces the eye back to the middle on each line, and detaches the
+ * heading from the grid it introduces. Anchoring headers to the same left
+ * spine as the content below gives the page a readable structure. Centre is
+ * reserved for the one place it argues for itself: the closing call to action.
  */
 export function SectionHeader({
   title,
   lead,
-  align = "center",
+  align = "left",
   className = "",
 }: SectionHeaderProps) {
   const centered = align === "center";
@@ -58,7 +64,9 @@ export function SectionHeader({
       } ${className}`}
     >
       <h2 className="title">{title}</h2>
-      <hr className={`rule mt-5 w-24 ${centered ? "" : "ml-0"}`} />
+      {/* Short rule reads as a spine marker when it starts at the text edge,
+          rather than as decoration floating under a centred title. */}
+      <hr className={`${centered ? "rule" : "rule-start"} mt-5 w-16`} />
       {lead && <p className={`lead mt-5 ${centered ? "mx-auto" : ""}`}>{lead}</p>}
     </Reveal>
   );

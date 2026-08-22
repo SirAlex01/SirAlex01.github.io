@@ -28,9 +28,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Display face for headlines - technical and distinctive at large sizes.
-// Only the two weights the type scale actually uses, to keep the font
-// payload down.
+// Display face for headlines. Only the two weights the type scale uses, to
+// keep the font payload down.
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-display",
   subsets: ["latin"],
@@ -131,16 +130,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    // The font variables must live on <html>, not <body>. Tailwind's
+    // `@theme inline` maps --font-sans to var(--font-geist-sans) on :root; if
+    // the font class is on <body>, that source variable is undefined at :root,
+    // --font-sans resolves to nothing, and every font-family declaration using
+    // it becomes invalid at computed-value time - silently dropping the whole
+    // type system back to the system stack.
+    //
     // The inline theme script sets `class="dark"` on <html> before hydration,
     // which React would otherwise report as a server/client attribute mismatch.
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable}`}
+    >
       <head>
         <StructuredData />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} antialiased min-h-screen flex flex-col`}
-      >
+      <body className="antialiased min-h-screen flex flex-col">
         <ThemeProvider>
           <ScrollRestorationManager />
           <AmbientBackground />
