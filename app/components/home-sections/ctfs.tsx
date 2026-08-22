@@ -115,7 +115,6 @@ export default function CTFs() {
       <div className="mt-16">
         <Reveal className="flex flex-col items-start">
           <h3 className="title-xl">Awards</h3>
-          <hr className="rule-start mt-5 w-16" />
         </Reveal>
 
         <RevealGroup className="mt-10 grid gap-5 md:grid-cols-2">

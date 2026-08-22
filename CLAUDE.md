@@ -125,12 +125,21 @@ years and counters don't wobble.
 `SectionHeader` defaults to `align="left"` on purpose. Centring every header
 flattens hierarchy, drags the eye back to the middle on each line, and
 detaches the heading from the grid it introduces. Headers sit on the same
-left spine as the content beneath them, marked by a short `.rule-start`
-hairline (solid at the left, fading right - the symmetric `.rule` is for
-centred contexts and looks like it drifted off-centre when left-anchored).
+left spine as the content beneath them.
 
 Centre is reserved for the one place it argues for itself: the closing call
 to action.
+
+**Section headings carry no rule under them.** Each `.section` already draws a
+full-width hairline across the top of its content column, which is the real
+boundary; a second short hairline under the heading repeated that signal
+without encoding anything, since it was the same width regardless of content.
+Spacing separates heading from lead perfectly well.
+
+A short `.rule` under a heading survives in exactly two places - the home
+contact panel and the `/contacts` page - where the heading is centred, has no
+left edge to anchor to, and the rule marks a deliberate closing moment. Don't
+reintroduce it elsewhere.
 
 ---
 

@@ -569,20 +569,11 @@
   opacity: 1;
 }
 
-/* Hairline that fades at both ends - for centred contexts. */
+/* Hairline that fades at both ends. */
 .rule {
   height: 1px;
   border: 0;
   background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
-}
-
-/* Start-anchored variant: solid at the left edge, fading out to the right.
-   Under a left-aligned heading this reads as a spine marker; the symmetric
-   `.rule` would look like decoration that had drifted off-centre. */
-.rule-start {
-  height: 1px;
-  border: 0;
-  background: linear-gradient(90deg, var(--line-strong), transparent);
 }
 
 .rule-v {

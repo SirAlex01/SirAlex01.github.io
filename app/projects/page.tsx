@@ -47,9 +47,8 @@ export default function ProjectsPage() {
       {/* --- Header --- */}
       <section className="section pb-0">
         <div className="page">
-          <Reveal className="flex flex-col items-start gap-5">
+          <Reveal className="flex flex-col items-start gap-6">
             <h1 className="display">{projectsMetadata.title}</h1>
-            <hr className="rule w-24" />
             <p className="lead">{projectsMetadata.subtitle}</p>
           </Reveal>
         </div>

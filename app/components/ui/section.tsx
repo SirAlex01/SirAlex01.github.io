@@ -64,9 +64,6 @@ export function SectionHeader({
       } ${className}`}
     >
       <h2 className="title">{title}</h2>
-      {/* Short rule reads as a spine marker when it starts at the text edge,
-          rather than as decoration floating under a centred title. */}
-      <hr className={`${centered ? "rule" : "rule-start"} mt-5 w-16`} />
       {lead && <p className={`lead mt-5 ${centered ? "mx-auto" : ""}`}>{lead}</p>}
     </Reveal>
   );
