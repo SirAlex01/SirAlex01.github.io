@@ -153,12 +153,22 @@ does.
 transform on it forces a whole-layer re-raster every frame and visibly freezes
 scrolling. It is static on purpose; the drifting blooms supply the motion.
 
-### 5. Project media uses `object-contain`
+### 5. Project media must never use `object-cover`
 
-Source screenshots range from 1.50 to 2.25 aspect against a ~1.86 frame.
-`object-cover` crops up to a quarter off an image (it was cutting the first
-word off a thesis figure); `object-fill` visibly stretches. `contain` letterboxes
-onto the card surface and keeps every image intact.
+Source screenshots range from 1.50 to 2.25 aspect against frames near 1.6-1.86,
+so `cover` crops up to a quarter off an image - it was cutting the first word
+off a thesis figure. Never reach for it on project media.
+
+The two surfaces resolve the remainder differently, both on purpose:
+
+- **`/projects` cards** use `object-fill`. The media block fills edge to edge
+  and every card matches, at the cost of some aspect distortion. This is the
+  owner's explicit preference; don't "correct" it back to `contain`.
+- **Home deck** (`projects-postcards`) uses `object-contain`, letterboxed onto
+  the card surface, so nothing is distorted.
+
+The `/projects` cards also have **no hover zoom** on the media - removed at the
+owner's request. Hover still lifts the card and lights its border.
 
 ### 6. The navbar needs its own opacity
 

@@ -41,14 +41,13 @@ export default function ProjectCard({
       className="card card-interactive spotlight group flex h-full flex-col overflow-hidden p-0"
     >
       {/* --- Media --- */}
-      {/* `contain`, not `cover`: these are screenshots and diagrams whose
-          aspect ratios vary widely, and cropping one loses actual content. */}
+      {/* `object-fill`: the media is stretched to occupy the whole block. That
+          distorts the aspect ratio, which is the accepted trade here - every
+          card's media area fills edge to edge with no letterboxing, and unlike
+          `object-cover` nothing is ever cropped out of a screenshot. */}
       <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-[var(--line)] bg-[var(--bg-sunk)]">
         {video ? (
-          <LazyVideo
-            mp4={video.mp4}
-            className="h-full w-full object-contain transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-105"
-          />
+          <LazyVideo mp4={video.mp4} className="h-full w-full object-fill" />
         ) : (
           src && (
             <Image
@@ -56,7 +55,7 @@ export default function ProjectCard({
               alt={title}
               fill
               sizes="(min-width: 1024px) 45vw, (min-width: 640px) 70vw, 92vw"
-              className="object-contain transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-105"
+              className="object-fill"
             />
           )
         )}
