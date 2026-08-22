@@ -3,34 +3,35 @@
 import { motion } from "framer-motion";
 import TimelineItem from "../../ui/timeline-item";
 import { workData } from "./work-data";
-import { SectionWrapper, SectionTitle, SectionSubtitle } from "../../ui/section-wrapper";
+import { Section, SectionHeader } from "../../ui/section";
 
 export default function Work() {
   return (
-    <SectionWrapper className="px-6 pb-3">
-      <SectionTitle>Work Experience</SectionTitle>
+    <Section id="work">
+      <SectionHeader
+        title="Work Experience"
+        lead="My contributions and what I've learned: designing, building, securing, and shipping systems."
+      />
 
-      <SectionSubtitle className="max-w-none lg:whitespace-nowrap">
-        My contributions and what I&apos;ve learned: designing, building, securing, and shipping systems.
-      </SectionSubtitle>
-
-      <div className="relative w-full max-w-4xl lg:max-w-[68rem] mt-8">
-        {/* Connecting line, drawn on scroll into view */}
+      <div className="relative mt-14">
+        {/* Rail, drawn downwards as the section scrolls into view. */}
         <motion.div
-          className="absolute left-7 sm:left-10 top-7 sm:top-10 bottom-6 sm:bottom-8 w-px -translate-x-1/2
-                     bg-gradient-to-b from-neutral-500 dark:from-neutral-300 to-transparent"
+          className="absolute left-7 top-7 bottom-10 w-px -translate-x-1/2 bg-gradient-to-b from-[var(--accent)] via-[var(--line-strong)] to-transparent sm:left-10 sm:top-10"
           style={{ transformOrigin: "top" }}
           initial={{ scaleY: 0 }}
           whileInView={{ scaleY: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          transition={{ duration: 1.1, ease: "easeOut" }}
         />
 
         {workData.map((item, index) => (
-          <TimelineItem key={`${item.company}-${item.role}`} {...item} index={index} />
+          <TimelineItem
+            key={`${item.company}-${item.role}`}
+            {...item}
+            index={index}
+          />
         ))}
       </div>
-
-    </SectionWrapper>
+    </Section>
   );
 }

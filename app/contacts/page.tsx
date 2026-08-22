@@ -1,117 +1,89 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { FiCheck, FiCopy } from "react-icons/fi";
+import { ArrowUpRight } from "lucide-react";
 import { contacts } from "../components/contact-data";
-import { useState, useEffect, useRef } from "react";
-import FadeInSection from "../components/ui/fadein-section";
+import Reveal, { RevealGroup, RevealItem } from "../components/ui/reveal";
 
 export default function ContactsPage() {
   const [copied, setCopied] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const buttonsRef = useRef<HTMLDivElement>(null);
 
-  // ✅ Scroll to top when page (re)loads
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
-  const handleEmailClick = (e: React.MouseEvent, email: string) => {
-    e.preventDefault();
+  const copyEmail = (email: string) => {
     navigator.clipboard.writeText(email);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.disconnect();
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    if (buttonsRef.current) observer.observe(buttonsRef.current);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section className="flex flex-col items-center px-6 py-16 overflow-hidden">
-      {/* Title - fade in from below */}
-      <FadeInSection delay={0}>
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-800 dark:text-white mb-6 text-center">
-          Let&apos;s connect!
-        </h1>
-      </FadeInSection>
+    // Sized to sit inside the viewport alongside the navbar and footer, so
+    // the whole page reads without scrolling on a normal desktop screen.
+    <section className="flex min-h-full flex-col justify-center py-10">
+      <div className="page-narrow flex flex-col items-center">
+        <Reveal className="flex flex-col items-center text-center">
+          <h1 className="title-xl">Let&apos;s connect!</h1>
+          <hr className="rule mt-5 w-24" />
+          <p className="lead mt-5">
+            I&apos;d love to hear from you! Whether you have a question, want to
+            collaborate, or just want to connect, feel free to reach out through any of
+            the platforms below.
+          </p>
+        </Reveal>
 
-      {/* Description - fade in from below */}
-      <FadeInSection delay={100}>
-        <p className="text-lg text-neutral-700 dark:text-neutral-400 leading-relaxed max-w-2xl text-center mb-12">
-          I&apos;d love to hear from you! Whether you have a question, want to collaborate, 
-          or just want to connect, feel free to reach out through any of the platforms below.
-        </p>
-      </FadeInSection>
+        <RevealGroup className="mt-10 flex w-full max-w-xl flex-col gap-3" stagger={0.1}>
+          {contacts.map((contact) => {
+            const isEmail = contact.href.startsWith("mailto:");
+            const emailAddress = isEmail ? contact.href.replace("mailto:", "") : "";
 
-      {/* Social Buttons - Vertically stacked, horizontally arranged, equal width */}
-      <div ref={buttonsRef} className="flex flex-col gap-4 w-full max-w-md">
-        {contacts.map((contact, index) => {
-          const isEmail = contact.href.startsWith("mailto:");
-          const emailAddress = isEmail ? contact.href.replace("mailto:", "") : "";
-          
-          // First and last from left, middle from right
-          const slideFrom = index === 1 ? "translate-x-20" : "-translate-x-20";
-          const animationDelay = `${200 + index * 150}ms`;
+            return (
+              <RevealItem key={contact.label}>
+                <div className="card card-interactive group flex items-center gap-4 p-4">
+                  <a
+                    href={contact.href}
+                    {...(isEmail ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+                    className="flex min-w-0 flex-1 items-center gap-4"
+                  >
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--surface-inset)] text-lg text-[var(--fg-muted)] transition-colors duration-300 group-hover:border-[var(--accent-ring)] group-hover:text-[var(--fg)]">
+                      {contact.icon}
+                    </span>
 
-          return isEmail ? (
-            <div
-              key={contact.label}
-              style={{ transitionDelay: animationDelay }}
-              className={`transform transition-all duration-700 ease-out ${
-                isVisible ? "opacity-100 translate-x-0" : `opacity-0 ${slideFrom}`
-              }`}
-            >
-              <div className="flex flex-col sm:flex-row items-stretch w-full">
-                {/* Email button - same as others */}
-                <a
-                  href={contact.href}
-                  className="flex items-center justify-center gap-4 px-8 py-4 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none transition-all duration-300 shadow-md hover:shadow-lg font-medium text-lg"
-                >
-                  <span className="text-2xl">{contact.icon}</span>
-                  <span>{contact.label}</span>
-                </a>
-                
-                {/* Copyable email address with background - attached to button */}
-                <button
-                  onClick={(e) => handleEmailClick(e, emailAddress)}
-                  className="flex-1 px-4 py-4 bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-neutral-900 dark:text-white rounded-b-lg sm:rounded-r-lg sm:rounded-bl-none transition-all duration-300 shadow-md hover:shadow-lg font-medium text-lg cursor-pointer break-all overflow-hidden"
-                >
-                  {copied ? "✓ Copied!" : emailAddress}
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div
-              key={contact.label}
-              style={{ transitionDelay: animationDelay }}
-              className={`transform transition-all duration-700 ease-out ${
-                isVisible ? "opacity-100 translate-x-0" : `opacity-0 ${slideFrom}`
-              }`}
-            >
-              <a
-                href={contact.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-4 px-8 py-4 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white rounded-lg transition-all duration-300 shadow-md hover:shadow-lg font-medium text-lg w-full"
-              >
-                <span className="text-2xl">{contact.icon}</span>
-                <span>{contact.label}</span>
-              </a>
-            </div>
-          );
-        })}
+                    <span className="min-w-0">
+                      <span className="block font-semibold text-[var(--fg)]">
+                        {contact.label}
+                      </span>
+                      <span className="block truncate font-mono text-xs text-[var(--fg-subtle)]">
+                        {isEmail
+                          ? emailAddress
+                          : contact.href.replace(/^https?:\/\/(www\.)?/, "")}
+                      </span>
+                    </span>
+                  </a>
+
+                  {isEmail ? (
+                    <button
+                      type="button"
+                      onClick={() => copyEmail(emailAddress)}
+                      aria-label={copied ? "Email copied" : "Copy email address"}
+                      className="btn btn-secondary btn-sm shrink-0"
+                    >
+                      {copied ? <FiCheck /> : <FiCopy />}
+                      <span className="hidden sm:inline">{copied ? "Copied" : "Copy"}</span>
+                    </button>
+                  ) : (
+                    <ArrowUpRight
+                      aria-hidden="true"
+                      className="h-5 w-5 shrink-0 text-[var(--fg-subtle)] transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--fg)]"
+                    />
+                  )}
+                </div>
+              </RevealItem>
+            );
+          })}
+        </RevealGroup>
       </div>
     </section>
   );

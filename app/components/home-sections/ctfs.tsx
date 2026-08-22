@@ -1,7 +1,9 @@
 import Image from "next/image";
+import type { ReactNode } from "react";
 import { FaTrophy, FaDesktop, FaShieldAlt, FaMedal } from "react-icons/fa";
 import Carousel from "../ui/carousel";
-import { SectionWrapper, SectionTitle } from "../ui/section-wrapper";
+import { Section, SectionHeader } from "../ui/section";
+import Reveal, { RevealGroup, RevealItem } from "../ui/reveal";
 
 const ctfItems = [
   { src: "/cc/IMG_3661.webp" },
@@ -14,148 +16,126 @@ const ctfItems = [
   { video: { id: "WapZTAImkdQ", start: 2125 } },
 ];
 
+const teams = [
+  {
+    href: "https://theromanxpl0.it/members/siralex/",
+    src: "/trx.webp",
+    alt: "TRX Team Logo",
+    imgClass: "dark:invert",
+  },
+  {
+    href: "https://cyberchallenge.it/halloffame/2025",
+    src: "/ccit.webp",
+    alt: "CyberChallenge Logo",
+    imgClass: "invert dark:invert-0",
+  },
+];
+
+const awards: { icon: ReactNode; tone: string; title: string; body: string }[] = [
+  {
+    icon: <FaTrophy />,
+    tone: "text-amber-400",
+    title: "National Winner",
+    body: "First place at CyberChallenge.IT 2025 finals, defeating 40+ Italian universities in an Attack/Defense competition organized by CINI.",
+  },
+  {
+    icon: <FaDesktop />,
+    tone: "text-emerald-400",
+    title: "Best Presentation Award",
+    body: "Recognized for delivering a clear, well-structured technical presentation to the national judging panel.",
+  },
+  {
+    icon: <FaShieldAlt />,
+    tone: "text-sky-400",
+    title: "Best Defense Award",
+    body: "Awarded for implementing robust security measures and demonstrating superior defensive capabilities during the Attack/Defense competition.",
+  },
+  {
+    icon: <FaMedal />,
+    tone: "text-orange-400",
+    title: "Top 5% - National Selection",
+    body: "Top 5% out of 1000+ participants in the CyberChallenge.IT 2025 national Jeopardy qualification phase.",
+  },
+];
+
+function TeamLogo({ team }: { team: (typeof teams)[number] }) {
+  return (
+    <a
+      href={team.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex h-24 w-24 shrink-0 items-center justify-center rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-4 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-[var(--accent-ring)] hover:shadow-[var(--shadow-lg)] sm:h-28 sm:w-28"
+    >
+      <Image
+        src={team.src}
+        alt={team.alt}
+        width={112}
+        height={112}
+        className={`h-full w-full object-contain transition-transform duration-300 group-hover:scale-110 ${team.imgClass}`}
+      />
+    </a>
+  );
+}
+
 export default function CTFs() {
   return (
-    <SectionWrapper>
-      <SectionTitle>
-        CTF Experience
-      </SectionTitle>
+    <Section id="ctfs" tinted>
+      <SectionHeader title="CTF Experience" />
 
-      {/* --- Intro paragraph with responsive logos --- */}
-      <div className="mt-4 mb-10 w-full max-w-5xl flex flex-col md:flex-row items-center justify-between gap-6">
-        {/* Two logos side-by-side on small screens */}
-        <div className="flex md:hidden flex-row items-center justify-center gap-4 mb-2">
-          <a
-            href="https://theromanxpl0.it/members/siralex/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="transition-transform hover:scale-110"
-          >
-            <Image
-              src="/trx.webp"
-              alt="TRX Team Logo"
-              width={140}
-              height={140}
-              className="w-22 h-22 sm:w-26 sm:h-26 object-contain dark:invert"
-            />
-          </a>
-          <a
-            href="https://cyberchallenge.it/halloffame/2025"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="transition-transform hover:scale-110"
-          >
-            <Image
-              src="/ccit.webp"
-              alt="CyberChallenge Logo"
-              width={128}
-              height={128}
-              className="w-20 h-20 sm:w-24 sm:h-24 object-contain invert dark:invert-0"
-            />
-          </a>
+      {/* --- Teams + intro --- */}
+      <Reveal className="mt-12">
+        <div className="card flex flex-col items-center gap-7 p-6 sm:p-8 md:flex-row md:gap-10">
+          <div className="flex shrink-0 gap-4">
+            {teams.map((team) => (
+              <TeamLogo key={team.alt} team={team} />
+            ))}
+          </div>
+
+          <p className="prose-body text-center md:text-left">
+            I am a CTF player for the TRX team. With them, I have participated in several
+            Capture The Flag competitions and contributed to our victories in the 2025
+            editions of CrewCTF, SnakeCTF, and LITCTF.
+            <br />
+            I also took part in the University Program CyberChallenge.IT 2025, where I
+            represented Team Sapienza and achieved victory in the final national
+            competition against 40 other universities.
+          </p>
         </div>
+      </Reveal>
 
-        {/* Left logo on medium and larger screens */}
-        <a
-          href="https://theromanxpl0.it/members/siralex/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden md:block transition-transform hover:scale-110"
-        >
-          <Image
-            src="/trx.webp"
-            alt="TRX Team Logo"
-            width={192}
-            height={192}
-            className="w-36 h-36 object-contain dark:invert"
-          />
-        </a>
+      {/* --- Gallery --- */}
+      <Reveal className="mt-12" delay={0.05}>
+        <Carousel items={ctfItems} />
+      </Reveal>
 
-        {/* Main text */}
-        <p className="text-lg text-neutral-700 dark:text-neutral-400 leading-relaxed max-w-3xl text-center md:text-justify">
-          I am a CTF player for the TRX team. With them, I have participated in several Capture The Flag competitions and contributed to our victories in the 2025 editions of CrewCTF, SnakeCTF, and LITCTF.
-          <br />
-          I also took part in the University Program CyberChallenge.IT 2025, where I represented Team Sapienza and achieved victory in the final national competition against 40 other universities.
-        </p>
+      {/* --- Awards --- */}
+      <div className="mt-16">
+        <Reveal className="flex flex-col items-center gap-3 text-center">
+          <h3 className="title-xl">Awards</h3>
+          <hr className="rule w-40" />
+        </Reveal>
 
-        {/* Right logo on medium and larger screens */}
-        <a
-          href="https://cyberchallenge.it/halloffame/2025"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden md:block transition-transform hover:scale-110"
-        >
-          <Image
-            src="/ccit.webp"
-            alt="CyberChallenge Logo"
-            width={176}
-            height={176}
-            className="w-32 h-32 object-contain invert dark:invert-0"
-          />
-        </a>
+        <RevealGroup className="mt-10 grid gap-5 md:grid-cols-2">
+          {awards.map((award) => (
+            <RevealItem key={award.title} className="h-full">
+              <article className="card card-interactive group flex h-full gap-4 p-6 text-left">
+                <span
+                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--surface-inset)] text-xl transition-colors duration-300 group-hover:border-[var(--accent-ring)] ${award.tone}`}
+                  aria-hidden="true"
+                >
+                  {award.icon}
+                </span>
+                <div>
+                  <h4 className="title-sm text-[var(--fg)]">{award.title}</h4>
+                  <p className="mt-2 text-sm leading-relaxed text-[var(--fg-muted)]">
+                    {award.body}
+                  </p>
+                </div>
+              </article>
+            </RevealItem>
+          ))}
+        </RevealGroup>
       </div>
-
-      {/* --- Carousel --- */}
-      <Carousel items={ctfItems} />
-
-      {/* --- Awards Section --- */}
-      <div className="mt-6 mb-4 space-y-7 w-full max-w-3xl text-left">
-        <h3 className="text-xl lg:text-2xl font-semibold text-neutral-800 dark:text-neutral-200 mb-2 text-center">
-          Awards
-        </h3>
-
-        {/* 1. National Winner */}
-        <div className="flex items-start gap-3">
-          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-background flex items-center justify-center">
-            <FaTrophy className="text-yellow-400 text-base w-6 h-6" />
-          </div>
-          <div>
-            <p className="font-medium text-base sm:text-lg lg:text-xl text-neutral-800 dark:text-neutral-200">National Winner</p>
-            <p className="text-sm sm:text-base lg:text-lg text-neutral-600 dark:text-neutral-400">
-              First place at CyberChallenge.IT 2025 finals, defeating 40+ Italian universities in an Attack/Defense competition organized by CINI.
-            </p>
-          </div>
-        </div>
-
-        {/* 2. Best Presentation Award */}
-        <div className="flex items-start gap-3">
-          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-background flex items-center justify-center">
-            <FaDesktop className="text-green-400 text-base w-6 h-6" />
-          </div>
-          <div>
-            <p className="font-medium text-base sm:text-lg lg:text-xl text-neutral-800 dark:text-neutral-200">Best Presentation Award</p>
-            <p className="text-sm sm:text-base lg:text-lg text-neutral-600 dark:text-neutral-400">
-              Recognized for delivering a clear, well-structured technical presentation to the national judging panel.
-            </p>
-          </div>
-        </div>
-
-        {/* 3. Best Defense Award */}
-        <div className="flex items-start gap-3">
-          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-background flex items-center justify-center">
-            <FaShieldAlt className="text-blue-400 text-base w-6 h-6" />
-          </div>
-          <div>
-            <p className="font-medium text-base sm:text-lg lg:text-xl text-neutral-800 dark:text-neutral-200">Best Defense Award</p>
-            <p className="text-sm sm:text-base lg:text-lg text-neutral-600 dark:text-neutral-400">
-              Awarded for implementing robust security measures and demonstrating superior defensive capabilities during the Attack/Defense competition.
-            </p>
-          </div>
-        </div>
-
-        {/* 4. Top 5% – Jeopardy Competition */}
-        <div className="flex items-start gap-3">
-          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-background flex items-center justify-center">
-            <FaMedal className="text-orange-400 text-base w-6 h-6" />
-          </div>
-          <div>
-            <p className="font-medium text-base sm:text-lg lg:text-xl text-neutral-800 dark:text-neutral-200">Top 5% – National Selection</p>
-            <p className="text-sm sm:text-base lg:text-lg text-neutral-600 dark:text-neutral-400">
-              Top 5% out of 1000+ participants in the CyberChallenge.IT 2025 national Jeopardy qualification phase.
-            </p>
-          </div>
-        </div>
-      </div>
-    </SectionWrapper>
+    </Section>
   );
 }

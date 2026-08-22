@@ -3,6 +3,7 @@
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { FiArrowUpRight, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import LazyVideo from "./lazy-video";
 
 type Project = {
@@ -32,7 +33,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
   const dragging = useRef(false);
   const wasDragged = useRef(false);
   // While a card is mid-transition, its logical position (index/offset)
-  // has already updated but its visual position hasn't caught up yet —
+  // has already updated but its visual position hasn't caught up yet -
   // so a rapid click can land on what looks like a side card but is
   // already, logically, the center one. This only guards the "open
   // project" click below; rotation clicks still queue up freely so
@@ -103,8 +104,12 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
   };
 
   return (
+    <>
+    {/* stack-local keeps the cards' internal z-index range (78-100) from
+        competing with the navbar and the mobile drawer, which are painted
+        in the root stacking context. */}
     <div
-      className="relative w-full h-[60vw] sm:h-[46vw] md:h-[38vw] lg:h-[34vw] xl:h-[30vw] max-h-[560px]
+      className="stack-local relative w-full h-[56vw] sm:h-[46vw] md:h-[38vw] lg:h-[34vw] xl:h-[30vw] max-h-[560px]
       flex items-center justify-center overflow-hidden select-none"
       onMouseDown={handleStart}
       onMouseMove={handleMove}
@@ -134,25 +139,53 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
           abs > 0.3 && abs <= 2.1; // side cards only, not the center one
         const isCenterCard = abs < 0.3; // center card can link to projects page
 
+        // Every card is a "postcard": media on top, a solid label strip
+        // below. Rendering the strip on all of them (not just the focused
+        // one) keeps the geometry identical as cards rotate through, and a
+        // solid token-coloured strip reads far more cleanly than a black
+        // gradient burned over screenshots of wildly varying brightness.
         const cardContent = (
-          <div className="relative w-full h-full">
-            {p.video ? (
-              <LazyVideo mp4={p.video.mp4} className="w-full h-full object-fill rounded-xl" />
-            ) : (
-              p.src && (
-                <Image
-                  src={p.src}
-                  alt={p.title}
-                  fill
-                  sizes="(min-width: 1280px) 35vw, (min-width: 1024px) 45vw, (min-width: 768px) 60vw, 80vw"
-                  className="object-fill rounded-xl"
-                  draggable={false}
-                  priority={abs <= 2}
-                />
-              )
-            )}
+          <div className="relative flex h-full w-full flex-col bg-[var(--surface-solid)]">
+            {/* Source images run from 1.50 to 2.25 aspect against a ~1.86
+                frame, so `cover` would crop up to a quarter off a screenshot
+                and `fill` would visibly stretch it. `contain` keeps every
+                one of them intact and legible; the letterbox is the card's
+                own surface colour, so it reads as matting. */}
+            <div className="relative min-h-0 flex-1 overflow-hidden">
+              {p.video ? (
+                <LazyVideo mp4={p.video.mp4} className="h-full w-full object-contain" />
+              ) : (
+                p.src && (
+                  <Image
+                    src={p.src}
+                    alt={p.title}
+                    fill
+                    sizes="(min-width: 1024px) 45vw, (min-width: 640px) 58vw, 76vw"
+                    className="object-contain"
+                    draggable={false}
+                    // The deck sits well below the fold, so nothing here is
+                    // preloaded; only the focused card loads eagerly.
+                    loading={isCenterCard ? "eager" : "lazy"}
+                  />
+                )
+              )}
+            </div>
+
+            <div className="flex flex-none items-center gap-2 border-t border-[var(--line)] px-3 py-2 sm:px-4 sm:py-2.5">
+              <p className="line-clamp-1 flex-1 text-left text-[0.6875rem] font-semibold text-[var(--fg)] sm:text-xs md:text-sm">
+                {p.title}
+              </p>
+              <FiArrowUpRight
+                aria-hidden="true"
+                className={`h-3.5 w-3.5 flex-none transition-opacity duration-300 sm:h-4 sm:w-4 ${
+                  isCenterCard ? "text-[var(--fg-muted)]" : "opacity-0"
+                }`}
+              />
+            </div>
+
+            {/* Side cards recede behind a scrim so the centre one reads first. */}
             {abs > 0.05 && (
-              <div className="absolute inset-0 rounded-xl bg-black/25" />
+              <div className="pointer-events-none absolute inset-0 bg-[var(--bg)]/45" />
             )}
           </div>
         );
@@ -169,11 +202,14 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
                 window.location.href = `/projects#${p.id}`;
               }
             }}
-            className={`absolute aspect-[16/10] rounded-xl overflow-hidden shadow-2xl
+            // Width is a class, not an inline style, so it can scale down the
+            // breakpoints: at 45vw a phone card is only ~175px wide, far too
+            // small to carry the caption.
+            className={`absolute aspect-[16/10] w-[76vw] max-w-[480px] overflow-hidden rounded-[var(--r-xl)]
+              border border-[var(--line-strong)] shadow-[var(--shadow-xl)] transition-shadow duration-300
+              sm:w-[58vw] lg:w-[45vw]
               ${clickable || isCenterCard ? "cursor-pointer hover:scale-[1.03]" : "cursor-default"}`}
             style={{
-              width: "45vw",
-              maxWidth: "480px",
               zIndex,
               filter: blur,
               willChange: "transform",
@@ -197,5 +233,33 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
         );
       })}
     </div>
+
+    {/* Position in the deck */}
+    <div className="mt-6 flex items-center justify-center gap-4">
+      <button
+        type="button"
+        onClick={() => step(-1)}
+        aria-label="Previous project"
+        className="btn-icon border border-[var(--line)]"
+      >
+        <FiChevronLeft />
+      </button>
+
+      <span className="font-mono text-xs tabular-nums tracking-[0.16em] text-[var(--fg-subtle)]">
+        {String(index + 1).padStart(2, "0")}
+        <span className="mx-1 text-[var(--line-strong)]">/</span>
+        {String(projects.length).padStart(2, "0")}
+      </span>
+
+      <button
+        type="button"
+        onClick={() => step(1)}
+        aria-label="Next project"
+        className="btn-icon border border-[var(--line)]"
+      >
+        <FiChevronRight />
+      </button>
+    </div>
+    </>
   );
 }

@@ -1,41 +1,57 @@
-import { useRef } from "react";
-import { LottieRefCurrentProps } from "lottie-react";
-import PrimaryButton from "../ui/primary-button";
 import { FiMail } from "react-icons/fi";
-import { SectionWrapper, SectionTitle, SectionSubtitle } from "../ui/section-wrapper";
-import LazyLottie from "../ui/lazy-lottie";
+import { Section } from "../ui/section";
+import PrimaryButton from "../ui/primary-button";
+import Reveal from "../ui/reveal";
+import { contacts } from "../contact-data";
 
 export default function Contact() {
-  const lottieRef = useRef<LottieRefCurrentProps>(null);
-
   return (
-    <SectionWrapper className="px-6">
-      <SectionTitle>
-        Let&apos;s keep in touch
-      </SectionTitle>
+    <Section id="contact">
+      <Reveal>
+        <div className="relative overflow-hidden rounded-[var(--r-2xl)] border border-[var(--line)] bg-[var(--surface)] px-6 py-16 text-center backdrop-blur-xl sm:px-12">
+          {/* Accent bloom behind the panel */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-40 left-1/2 h-80 w-[36rem] -translate-x-1/2 rounded-full bg-[var(--accent-glow)] blur-[80px]"
+          />
 
-      <SectionSubtitle className="max-w-lg">
-        Whether you have a question, a project idea or just want to say hi, feel free to reach out!
-      </SectionSubtitle>
+          <div className="relative flex flex-col items-center">
+            <span className="conic-ring relative flex h-16 w-16 items-center justify-center rounded-full p-[2px]">
+              <span className="flex h-full w-full items-center justify-center rounded-full bg-[var(--surface-solid)] text-2xl text-[var(--accent-text)]">
+                <FiMail />
+              </span>
+            </span>
 
-      {/* ✅ Controlled speed animation */}
-      <div className="w-[240px] sm:w-[280px] md:w-[320px] lg:w-[360px]">
-        <LazyLottie
-          loader={() => import("@/public/animations/contact-email.json")}
-          lottieRef={lottieRef}
-          onDOMLoaded={() => lottieRef.current?.setSpeed(0.5)} // ✅ Slow down animation
-          loop
-        />
-      </div>
+            <h2 className="title mt-8">Let&apos;s keep in touch</h2>
 
-      {/* ✅ Button */}
-      <div className="mt-6">
-        <PrimaryButton 
-          label="Contact Me"
-          icon={<FiMail className="text-xl" />}
-          href="/contacts"
-        />
-      </div>
-    </SectionWrapper>
+            <hr className="rule mt-5 w-24" />
+
+            <p className="lead mt-5 max-w-lg">
+              Whether you have a question, a project idea or just want to say hi, feel
+              free to reach out!
+            </p>
+
+            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+              <PrimaryButton label="Contact Me" icon={<FiMail />} href="/contacts" />
+            </div>
+
+            <div className="mt-10 flex items-center gap-3">
+              {contacts.map(({ label, href, icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="btn-icon border border-[var(--line)] text-lg"
+                >
+                  {icon}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Reveal>
+    </Section>
   );
 }

@@ -4,7 +4,7 @@ export interface WorkItem {
   location: string;
   period: string;
   current?: boolean;
-  icon: string; // lucide icon name, e.g. "building-2" — used until a company logo is provided
+  icon: string; // lucide icon name, e.g. "building-2" - used until a company logo is provided
   logo?: string; // optional path to a company logo under /public
   bullets: string[];
   link?: string;

@@ -1,32 +1,32 @@
 import { projects, projectsMetadata } from "../projects-data";
 import ProjectPostcards from "../ui/projects-postcards";
-import { SectionWrapper, SectionTitle, SectionSubtitle } from "../ui/section-wrapper";
+import { Section, SectionHeader } from "../ui/section";
 import PrimaryButton from "../ui/primary-button";
+import Reveal from "../ui/reveal";
 import { FaFolderOpen } from "react-icons/fa";
 
 export default function Projects() {
   return (
-    <SectionWrapper>
-      <SectionTitle>
-        {projectsMetadata.title}
-      </SectionTitle>
+    <Section id="projects">
+      <SectionHeader
+        title={projectsMetadata.title}
+        lead={projectsMetadata.subtitle}
+      />
 
-      <SectionSubtitle>
-        {projectsMetadata.subtitle}
-      </SectionSubtitle>
-
-      <div className="mt-0 w-full max-w-6xl">
+      <Reveal className="mt-12">
         <ProjectPostcards projects={projects} />
-      </div>
+      </Reveal>
 
-      {/* Button to view all projects */}
-      <div className="mt-2">
-        <PrimaryButton 
+      <Reveal className="mt-10 flex flex-col items-center gap-3" delay={0.1}>
+        <PrimaryButton
           label="View All Projects"
-          icon={<FaFolderOpen className="text-xl" />}
+          icon={<FaFolderOpen />}
           href="/projects"
         />
-      </div>
-    </SectionWrapper>
+        <p className="font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-[var(--fg-subtle)]">
+          Drag or click the deck to browse
+        </p>
+      </Reveal>
+    </Section>
   );
 }

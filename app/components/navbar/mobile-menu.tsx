@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { X } from "lucide-react";
 import MobileMenuLink from "./mobile-menu-link";
+import { contacts } from "../contact-data";
 
 interface MobileMenuProps {
   links: { name: string; path: string; icon: React.ReactNode }[];
@@ -11,64 +13,101 @@ interface MobileMenuProps {
 export default function MobileMenu({ links, onClose }: MobileMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+
   const handleClose = useCallback(() => {
     setVisible(false);
-    setTimeout(onClose, 400);
+    setTimeout(onClose, 320);
   }, [onClose]);
 
-  // Animate drawer opening
+  // Animate the drawer in on mount.
   useEffect(() => setVisible(true), []);
 
-  // Close when clicking outside
+  // Close on outside click or Escape.
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         handleClose();
       }
     };
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") handleClose();
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKey);
+    };
   }, [handleClose]);
 
+  // Lock body scroll while the drawer is open.
+  useEffect(() => {
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, []);
+
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
-    {/* Overlay that starts below the navbar */}
+    <div
+      className="fixed inset-0 z-[var(--z-overlay)] flex justify-end"
+      role="dialog"
+      aria-modal="true"
+    >
       <div
-        className={`absolute left-0 right-0 top-[70px] bottom-0 transition-opacity duration-400 ease-in-out
-          bg-black/5 dark:bg-black/30
-          ${visible ? "opacity-100" : "opacity-0"}
-        `}
+        className={`absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300
+          ${visible ? "opacity-100" : "opacity-0"}`}
       />
 
-      {/* Drawer */}
       <div
         ref={menuRef}
-        className={`relative z-50 w-72 h-full flex flex-col p-6 transform transition-transform duration-400 ease-in-out
-          bg-white/80 text-neutral-900 dark:bg-black/80 dark:text-white
-          backdrop-blur-lg border-l border-neutral-200 dark:border-neutral-800
-          transition-colors duration-500
-          ${visible ? "translate-x-0" : "translate-x-full"}
-        `}
+        className={`relative z-10 flex h-full w-[min(20rem,85vw)] flex-col border-l border-[var(--line)]
+          bg-[var(--surface-solid)]/95 p-6 backdrop-blur-xl transition-transform duration-300 ease-[var(--ease-out)]
+          ${visible ? "translate-x-0" : "translate-x-full"}`}
       >
-        {/* Header */}
-        <div className="flex flex-col items-center mb-4 transition-colors duration-500">
-          <h3 className="text-neutral-700 dark:text-neutral-300 font-semibold text-xl transition-colors duration-500">
-            Menu
-          </h3>
-          <div className="w-full border-b border-neutral-300 dark:border-neutral-700 mt-2 transition-colors duration-500" />
+        <div className="mb-8 flex items-center justify-between">
+          <span className="eyebrow">Menu</span>
+          <button onClick={handleClose} className="btn-icon" aria-label="Close menu">
+            <X size={20} />
+          </button>
         </div>
 
-        {/* Links */}
-        <div className="flex flex-col gap-3 mt-2">
-          {links.map((link) => (
-            <MobileMenuLink
+        <nav className="flex flex-col gap-2">
+          {links.map((link, i) => (
+            <div
               key={link.path}
-              name={link.name}
-              path={link.path}
-              icon={link.icon}
-              onClick={handleClose}
-            />
+              style={{ transitionDelay: `${visible ? 80 + i * 60 : 0}ms` }}
+              className={`transition-all duration-500 ease-[var(--ease-out)]
+                ${visible ? "translate-x-0 opacity-100" : "translate-x-6 opacity-0"}`}
+            >
+              <MobileMenuLink
+                name={link.name}
+                path={link.path}
+                icon={link.icon}
+                onClick={handleClose}
+              />
+            </div>
           ))}
+        </nav>
+
+        <div className="mt-auto">
+          <hr className="rule mb-5" />
+          <div className="flex items-center gap-2">
+            {contacts.map(({ label, href, icon }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="btn-icon text-lg"
+              >
+                {icon}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </div>

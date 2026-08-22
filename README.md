@@ -27,11 +27,14 @@ This portfolio showcases my journey, projects, and technical skills.
 ## ✨ Features
 
 ### 🎨 Design & UX
-- **Modern, responsive design** with Tailwind CSS 4
-- **Dark/Light mode** support with smooth transitions
-- **Interactive animations** using Framer Motion
-- **Smooth scrolling** with custom navigation
-- **Accessible** with semantic HTML and ARIA labels
+- **Monochrome design system** - every colour, radius, shadow, easing and
+  type step is a token in `app/globals.css`; components never hardcode values
+- **Dark/Light mode** driven by the same tokens, no duplicated styles
+- **Pure-CSS ambient backdrop** (wave fronts + grain + vignette), no image
+- **Interactive animations** using Framer Motion, with a shared `Reveal`
+  primitive so scroll entrances are consistent site-wide
+- **Accessible**: semantic HTML, ARIA labels, a single focus treatment,
+  skip-to-content link, and full `prefers-reduced-motion` support
 
 ### 🚀 Technical Highlights
 - Built with **Next.js 16** (App Router)
@@ -60,8 +63,7 @@ This portfolio showcases my journey, projects, and technical skills.
 | **Styling** | Tailwind CSS 4 |
 | **Animation** | Framer Motion 12 |
 | **Carousel** | Embla Carousel |
-| **Icons** | React Icons |
-| **Media** | Lottie React |
+| **Icons** | React Icons, Lucide |
 | **Deployment** | GitHub Pages, GitHub Actions |
 
 ---

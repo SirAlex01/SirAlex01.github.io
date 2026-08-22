@@ -127,21 +127,25 @@ export default function Carousel({ items }: CarouselProps) {
 
   return (
     <>
+      {/* The frame (border, inset, shadow) is a separate element from the
+          Embla viewport. If the viewport itself carried the padding, its
+          overflow would clip at the padding edge and let a sliver of the
+          neighbouring slide show through. */}
       <div
-      ref={emblaRef}
-      className="group relative mx-auto overflow-hidden rounded-2xl shadow-lg bg-transparent
-                 aspect-[16/9] w-[90vw] md:w-[80vw] lg:w-[60vw] xl:w-[50vw]
-                 max-h-[620px]"
+        className="group relative mx-auto aspect-[16/9] max-h-[620px] w-full max-w-4xl
+                   rounded-[var(--r-xl)] border border-[var(--line)] bg-[var(--surface-inset)]
+                   p-1.5 shadow-[var(--shadow-lg)]"
       >
+      <div ref={emblaRef} className="h-full w-full overflow-hidden rounded-[var(--r-lg)]">
       {/* --- Slides --- */}
       <div className="flex h-full">
         {items.map((item, i) => (
           <div
             key={i}
-            className="flex-[0_0_100%] relative flex items-center justify-center select-none"
+            className="relative flex min-w-0 flex-[0_0_100%] select-none items-center justify-center"
           >
             {item.video ? (
-              <div className="relative w-full h-full rounded-2xl overflow-hidden">
+              <div className="relative h-full w-full overflow-hidden rounded-[var(--r-lg)]">
                 <SwipeShield onPrev={goPrev} onNext={goNext} />
 
                 {/* YouTube Player */}
@@ -154,72 +158,80 @@ export default function Carousel({ items }: CarouselProps) {
                 />
               </div>
             ) : (
-              <div className="relative w-full h-full">
+              <div className="relative h-full w-full overflow-hidden rounded-[var(--r-lg)]">
                 <Image
                   src={item.src!}
                   alt={`CyberChallenge.IT slide ${i + 1}`}
                   fill
-                  sizes="(min-width: 1024px) 50vw, (min-width: 768px) 80vw, 90vw"
-                  className="object-cover rounded-2xl select-none"
+                  sizes="(min-width: 1024px) 55vw, (min-width: 768px) 80vw, 90vw"
+                  className="select-none object-cover"
                   draggable={false}
-                  priority={i === 0}
+                  loading={i === 0 ? "eager" : "lazy"}
                 />
               </div>
             )}
           </div>
         ))}
       </div>
+      </div>
 
       {/* --- Navigation (hidden until hover / hidden on small screens) --- */}
       <button
         onClick={goPrev}
-        className="hidden sm:flex opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all
-                   absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full
-                   bg-neutral-200/70 dark:bg-neutral-800/70 hover:bg-neutral-300
-                   dark:hover:bg-neutral-700 z-20"
+        aria-label="Previous slide"
+        className="absolute left-4 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-[var(--line)]
+                   bg-[var(--surface-solid)]/80 p-2.5 text-[var(--fg)] opacity-0 shadow-[var(--shadow-md)]
+                   backdrop-blur-md transition-all duration-300 pointer-events-none
+                   hover:border-[var(--accent-ring)] hover:bg-[var(--surface-solid)]
+                   group-hover:pointer-events-auto group-hover:opacity-100 sm:flex"
       >
         <HiOutlineChevronLeft className="w-6 h-6" />
       </button>
             
       <button
         onClick={goNext}
-        className="hidden sm:flex opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all
-                   absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full
-                   bg-neutral-200/70 dark:bg-neutral-800/70 hover:bg-neutral-300
-                   dark:hover:bg-neutral-700 z-20"
+        aria-label="Next slide"
+        className="absolute right-4 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-[var(--line)]
+                   bg-[var(--surface-solid)]/80 p-2.5 text-[var(--fg)] opacity-0 shadow-[var(--shadow-md)]
+                   backdrop-blur-md transition-all duration-300 pointer-events-none
+                   hover:border-[var(--accent-ring)] hover:bg-[var(--surface-solid)]
+                   group-hover:pointer-events-auto group-hover:opacity-100 sm:flex"
       >
         <HiOutlineChevronRight className="w-6 h-6" />
       </button>
             
-      {/* --- Dots (hidden on small screens + fade on hover) --- */}
+      {/* --- Dots (desktop: floating over the slide, on hover) --- */}
       <div
-        className="hidden md:flex opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all
-                   absolute bottom-3 left-0 right-0 justify-center gap-2 z-20"
+        className="pointer-events-none absolute bottom-4 left-0 right-0 z-20 hidden justify-center
+                   opacity-0 transition-all duration-300 group-hover:pointer-events-auto
+                   group-hover:opacity-100 md:flex"
       >
-        {items.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => emblaApi?.scrollTo(i)}
-            className={`w-3 h-3 rounded-full transition ${
-              i === selectedIndex
-                ? "bg-neutral-800 dark:bg-white scale-110"
-                : "bg-neutral-400 dark:bg-neutral-600 hover:opacity-80"
-            }`}
-          />
-        ))}
+        <div className="flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[var(--surface-solid)]/75 px-3 py-2 backdrop-blur-md">
+          {items.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => emblaApi?.scrollTo(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === selectedIndex
+                  ? "w-6 bg-[var(--accent)]"
+                  : "w-1.5 bg-[var(--line-strong)] hover:bg-[var(--fg-subtle)]"
+              }`}
+            />
+          ))}
+        </div>
       </div>
       </div>
 
       {/* Mobile dots placed below the carousel */}
-      <div className="flex md:hidden justify-center gap-1.5 mt-3">
+      <div className="mt-4 flex justify-center gap-1.5 md:hidden">
         {items.map((_, i) => (
           <button
             key={`mobile-${i}`}
             onClick={() => emblaApi?.scrollTo(i)}
-            className={`w-2.5 h-2.5 rounded-full transition ${
-              i === selectedIndex
-                ? "bg-neutral-800 dark:bg-white scale-110"
-                : "bg-neutral-400 dark:bg-neutral-600"
+            aria-label={`Go to slide ${i + 1}`}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              i === selectedIndex ? "w-5 bg-[var(--accent)]" : "w-1.5 bg-[var(--line-strong)]"
             }`}
           />
         ))}

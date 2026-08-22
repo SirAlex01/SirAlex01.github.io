@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
 import { FaGithub } from "react-icons/fa";
+import { FiExternalLink } from "react-icons/fi";
 import LazyVideo from "./lazy-video";
+import useSpotlight from "./use-spotlight";
 
 interface ProjectCardProps {
   title: string;
@@ -16,6 +16,13 @@ interface ProjectCardProps {
   period: string;
 }
 
+/**
+ * Project card for the /projects grid.
+ *
+ * Everything is visible without interaction - a recruiter scanning the page
+ * shouldn't have to hover each card to discover what it is. Hover only adds
+ * emphasis (lift, accent border, a slow image push-in).
+ */
 export default function ProjectCard({
   title,
   src,
@@ -23,233 +30,76 @@ export default function ProjectCard({
   links,
   description,
   skills,
+  period,
 }: ProjectCardProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const skillsRef = useRef<HTMLDivElement>(null);
-  const isDraggingSkills = useRef(false);
-
-  useEffect(() => {
-    const skillsElement = skillsRef.current;
-    if (!skillsElement) return;
-
-    const isOverflowing = () => {
-      return skillsElement.scrollWidth > skillsElement.clientWidth;
-    };
-
-    // Set initial cursor
-    skillsElement.style.cursor = isOverflowing() ? 'grab' : 'default';
-
-    // Mouse wheel scrolling
-    const handleWheel = (e: WheelEvent) => {
-      if (isOverflowing()) {
-        e.preventDefault();
-        skillsElement.scrollLeft += e.deltaY;
-      }
-    };
-
-    // Mouse drag scrolling
-    let isDown = false;
-    let startX = 0;
-    let scrollStart = 0;
-    let hasMoved = false;
-
-    const handleMouseDown = (e: MouseEvent) => {
-      if (!isOverflowing()) return;
-      isDown = true;
-      hasMoved = false;
-      isDraggingSkills.current = false;
-      startX = e.pageX - skillsElement.offsetLeft;
-      scrollStart = skillsElement.scrollLeft;
-      skillsElement.style.cursor = 'grabbing';
-      e.stopPropagation();
-    };
-
-    const resetDraggingFlag = () => {
-      if (isDraggingSkills.current) {
-        setTimeout(() => {
-          isDraggingSkills.current = false;
-        }, 0);
-      }
-    };
-
-    const handleMouseLeave = () => {
-      if (!isDown && !hasMoved) {
-        return;
-      }
-      isDown = false;
-      resetDraggingFlag();
-      if (isOverflowing()) {
-        skillsElement.style.cursor = 'grab';
-      }
-    };
-
-    const handleMouseUp = (e: MouseEvent) => {
-      if (!isDown && !hasMoved) {
-        return;
-      }
-      isDown = false;
-      if (hasMoved) {
-        e.stopPropagation();
-        isDraggingSkills.current = true;
-        resetDraggingFlag();
-      } else {
-        isDraggingSkills.current = false;
-      }
-      hasMoved = false;
-      if (isOverflowing()) {
-        skillsElement.style.cursor = 'grab';
-      }
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!isDown) return;
-      e.preventDefault();
-      e.stopPropagation();
-      const currentX = e.pageX - skillsElement.offsetLeft;
-      const delta = currentX - startX;
-      if (!hasMoved && Math.abs(delta) > 3) {
-        hasMoved = true;
-        isDraggingSkills.current = true;
-      }
-      skillsElement.scrollLeft = scrollStart - delta;
-    };
-
-    skillsElement.addEventListener('wheel', handleWheel, { passive: false });
-    skillsElement.addEventListener('mousedown', handleMouseDown);
-    skillsElement.addEventListener('mouseleave', handleMouseLeave);
-    skillsElement.addEventListener('mouseup', handleMouseUp);
-    skillsElement.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      skillsElement.removeEventListener('wheel', handleWheel);
-      skillsElement.removeEventListener('mousedown', handleMouseDown);
-      skillsElement.removeEventListener('mouseleave', handleMouseLeave);
-      skillsElement.removeEventListener('mouseup', handleMouseUp);
-      skillsElement.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, [isExpanded]);
-
-  const handleToggle = (e: React.MouseEvent) => {
-    if (isDraggingSkills.current) {
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
-    if (isExpanded) {
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
-    setIsExpanded(true);
-  };
+  const spotlight = useSpotlight();
+  const isGitHub = (url: string) => url.includes("github.com");
 
   return (
-    <div
-      className="relative w-full min-h-[360px] rounded-xl overflow-hidden shadow-lg cursor-pointer group"
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
-      onClick={handleToggle}
+    <article
+      {...spotlight}
+      className="card card-interactive spotlight group flex h-full flex-col overflow-hidden p-0"
     >
-      {/* Background media - Fits above the title card */}
-      <div className="absolute inset-0 pb-[45px]">
-        <div className="relative h-full w-full">
-          {video ? (
-            <LazyVideo mp4={video.mp4} className="object-fill w-full h-full" />
-          ) : (
-            src && (
-              <Image
-                src={src}
-                alt={title}
-                fill
-                sizes="(min-width: 1024px) 40vw, (min-width: 768px) 60vw, 90vw"
-                className="object-fill"
-                priority={false}
-              />
-            )
-          )}
-        </div>
+      {/* --- Media --- */}
+      {/* `contain`, not `cover`: these are screenshots and diagrams whose
+          aspect ratios vary widely, and cropping one loses actual content. */}
+      <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-[var(--line)] bg-[var(--bg-sunk)]">
+        {video ? (
+          <LazyVideo
+            mp4={video.mp4}
+            className="h-full w-full object-contain transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-105"
+          />
+        ) : (
+          src && (
+            <Image
+              src={src}
+              alt={title}
+              fill
+              sizes="(min-width: 1024px) 45vw, (min-width: 640px) 70vw, 92vw"
+              className="object-contain transition-transform duration-700 ease-[var(--ease-out)] group-hover:scale-105"
+            />
+          )
+        )}
+
+        <span className="absolute left-3 top-3 rounded-full border border-white/20 bg-black/55 px-2.5 py-1 font-mono text-[0.625rem] uppercase tracking-[0.12em] text-white backdrop-blur-md">
+          {period}
+        </span>
       </div>
 
-      {/* Bottom Card - Always visible with title, expands on hover/click */}
-      <motion.div
-        initial={{ height: "45px" }}
-        animate={{ height: isExpanded ? "75%" : "45px" }}
-        transition={{ type: "spring", stiffness: 200, damping: 32 }}
-        className="absolute bottom-0 left-0 right-0 bg-background/90 dark:bg-background/80 backdrop-blur-md flex flex-col rounded-b-xl"
-      >
-        {/* Title - Always visible */}
-        <div className="px-4 py-2 flex-shrink-0">
-          <h3 className={`text-base font-bold text-foreground ${isExpanded ? 'line-clamp-none' : 'line-clamp-1'}`}>
-            {title}
-          </h3>
+      {/* --- Body --- */}
+      <div className="flex flex-1 flex-col gap-4 p-6">
+        <h3 className="title-sm text-[var(--fg)]">{title}</h3>
+
+        <p className="text-sm leading-relaxed text-[var(--fg-muted)]">{description}</p>
+
+        <div className="flex flex-wrap gap-2">
+          {skills.map((skill) => (
+            <span key={skill} className="chip">
+              {skill}
+            </span>
+          ))}
         </div>
 
-        {/* Content that appears on hover/click */}
-        {isExpanded && (
-          <div className="flex flex-col flex-1 overflow-hidden px-4 pb-4 min-h-0">
-            {/* Skills - Scrollable horizontal row with mouse wheel and drag */}
-            <div 
-              ref={skillsRef}
-              className="flex gap-2 mb-2 flex-shrink-0 overflow-x-auto scrollbar-hide select-none"
+        {/* --- Links, pinned to the bottom so cards line up --- */}
+        <div className="mt-auto flex flex-wrap gap-2 pt-2">
+          {links.map((link, index) => (
+            <a
+              key={link}
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-secondary btn-sm flex-1 justify-center"
             >
-              {skills.map((skill, index) => (
-                <SkillBadge key={index}>{skill}</SkillBadge>
-              ))}
-            </div>
-
-            {/* Description - Scrollable */}
-            <div
-              className="flex-1 overflow-y-auto mb-3 pr-2 custom-scrollbar min-h-0"
-              style={{ scrollbarGutter: "stable both-edges" }}
-            >
-              <ProjectDescription>
-                {description}
-              </ProjectDescription>
-            </div>
-
-            {/* GitHub Buttons - One for each link, arranged horizontally with wrap */}
-            <div className="flex flex-wrap gap-2 flex-shrink-0">
-              {links.map((link, index) => (
-                <a
-                  key={index}
-                  href={link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 min-w-[200px] inline-flex items-center justify-center gap-2 px-4 py-2 bg-white/90 dark:bg-white/20 text-neutral-800 dark:text-foreground rounded-lg hover:bg-neutral-200 dark:hover:bg-white/35 hover:shadow-md transition-all duration-300 font-semibold backdrop-blur-sm border border-neutral-300 dark:border-neutral-500/30 hover:border-neutral-400 dark:hover:border-neutral-400/50 shadow-sm"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <FaGithub className="text-lg" />
-                  {links.length > 1 ? `View repository ${index + 1}` : 'View on GitHub'}
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-      </motion.div>
-    </div>
+              {isGitHub(link) ? <FaGithub /> : <FiExternalLink />}
+              {links.length > 1
+                ? `Repository ${index + 1}`
+                : isGitHub(link)
+                  ? "View on GitHub"
+                  : "View project"}
+            </a>
+          ))}
+        </div>
+      </div>
+    </article>
   );
 }
-
-/**
- * Reusable skill badge component for project cards
- */
-function SkillBadge({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="px-3 py-1 text-xs font-medium bg-neutral-300 dark:bg-neutral-600 text-neutral-900 dark:text-white rounded-full whitespace-nowrap">
-      {children}
-    </span>
-  );
-}
-
-/**
- * Reusable project description component
- */
-function ProjectDescription({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed mb-4 overflow-y-auto flex-1 font-medium">
-      {children}
-    </p>
-  );
-}
-
-export { SkillBadge, ProjectDescription };
