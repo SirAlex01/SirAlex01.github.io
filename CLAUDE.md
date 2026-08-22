@@ -88,6 +88,8 @@ Solid fills intentionally stop short of `#000`/`#fff`. A maximum-luminance
 block against the opposite-extreme canvas is physically glaring; `--accent`
 is `#1c1c20` / `#dededf`. Don't "fix" these back to pure values.
 
+### Typography: three faces
+
 | Role | Face | Used by |
 | --- | --- | --- |
 | Headings | **Ubuntu Mono** 700 | `.display`, `.title-xl`, `.title` |
