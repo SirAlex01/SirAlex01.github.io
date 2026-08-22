@@ -172,9 +172,8 @@
   --color-foreground: var(--fg);
 
   /* These resolve only because the next/font classes are on <html>; see the
-     note in layout.tsx. --font-display is deliberately absent: next/font
-     already publishes it under that exact name, so mapping it here would be
-     a self-reference and therefore always invalid. */
+     note in layout.tsx. There is no --font-display: headings are set in the
+     mono face, so `--font-mono` covers both roles. */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
@@ -395,30 +394,39 @@
    TYPOGRAPHY
    ========================================================================== */
 
+/* Headings are set in the mono face. It suits the subject (a security and CTF
+   engineer), it costs nothing because the mono is already loaded for dates and
+   labels, and monospace designs disambiguate glyphs by construction - which is
+   what the previous display face got wrong.
+
+   Two consequences to respect: a monospace advance width is much wider than a
+   proportional one, so the display sizes are smaller than a sans equivalent to
+   keep long lines on one row; and the naturally loose fit wants negative
+   tracking to stop headlines looking gappy. */
 .display {
-  font-family: var(--font-display), var(--font-sans), sans-serif;
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   font-weight: 700;
-  font-size: clamp(2.5rem, 6.4vw, 4.75rem);
-  line-height: 0.98;
-  letter-spacing: -0.035em;
+  font-size: clamp(1.75rem, 5.2vw, 4rem);
+  line-height: 1.04;
+  letter-spacing: -0.045em;
   text-wrap: balance;
 }
 
 .title-xl {
-  font-family: var(--font-display), var(--font-sans), sans-serif;
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   font-weight: 700;
-  font-size: clamp(2rem, 4.4vw, 3.25rem);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.625rem, 3.6vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
   text-wrap: balance;
 }
 
 .title {
-  font-family: var(--font-display), var(--font-sans), sans-serif;
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   font-weight: 700;
-  font-size: clamp(1.75rem, 3.4vw, 2.625rem);
-  line-height: 1.1;
-  letter-spacing: -0.028em;
+  font-size: clamp(1.5rem, 2.9vw, 2.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.038em;
   text-wrap: balance;
 }
 

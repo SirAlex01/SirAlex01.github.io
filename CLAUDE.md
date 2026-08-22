@@ -88,19 +88,34 @@ Solid fills intentionally stop short of `#000`/`#fff`. A maximum-luminance
 block against the opposite-extreme canvas is physically glaring; `--accent`
 is `#1c1c20` / `#dededf`. Don't "fix" these back to pure values.
 
-### Typography: three faces, three jobs
+### Typography: two faces
+
+There is no separate display font.
 
 | Role | Face | Used by |
 | --- | --- | --- |
-| Display | **Space Grotesk** | `.display`, `.title-xl`, `.title` |
-| Body | **Geist Sans** | running text, `.title-sm`, UI |
+| Headings | **Geist Mono** | `.display`, `.title-xl`, `.title` |
+| Everything else | **Geist Sans** | running text, `.title-sm`, UI |
 | Data | **Geist Mono** | dates, counters, `.eyebrow`, `.chip-mono` |
 
-The owner has asked for a standard, familiar display face and has explicitly
-rejected a serif alternative. Don't swap it again without being asked.
+Headings are set in the mono face. It suits the subject (a security and CTF
+engineer), it costs nothing because the mono is already loaded for dates and
+labels, and monospace designs disambiguate glyphs by construction. That last
+point is why it is here: Space Grotesk was tried and rejected specifically
+over its `g` and `y`, and a serif was tried and rejected before that. **Do not
+introduce a third face without being asked.**
 
-**Card headings (`.title-sm`) stay on the body sans**, not the display face,
-so the display face stays reserved for section-level moments.
+Two consequences of a monospace heading, easy to undo by accident:
+
+- **The display sizes are smaller than a proportional equivalent** (`4rem`
+  max, not `4.75rem`). A monospace advance width is much wider, so the old
+  sizes pushed long headlines past the column.
+- **Tracking is strongly negative** (`-0.045em` at display size). Monospace
+  fits loosely by design and looks gappy at large sizes without it.
+
+**Card headings (`.title-sm`) stay on the sans.** The mono/sans split is what
+separates section-level headings from card-level ones; setting both in mono
+collapses that distinction.
 
 Data-bearing type uses `font-variant-numeric: tabular-nums` so columns of
 years and counters don't wobble.
