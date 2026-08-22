@@ -183,13 +183,11 @@ Source screenshots range from 1.50 to 2.25 aspect against frames near 1.6-1.86,
 so `cover` crops up to a quarter off an image - it was cutting the first word
 off a thesis figure. Never reach for it on project media.
 
-The two surfaces resolve the remainder differently, both on purpose:
-
-- **`/projects` cards** use `object-fill`. The media block fills edge to edge
-  and every card matches, at the cost of some aspect distortion. This is the
-  owner's explicit preference; don't "correct" it back to `contain`.
-- **Home deck** (`projects-postcards`) uses `object-contain`, letterboxed onto
-  the card surface, so nothing is distorted.
+Both surfaces - the `/projects` cards and the home deck
+(`projects-postcards`) - use **`object-fill`**. The media block fills edge to
+edge with no letterbox bars and every card matches, at the cost of some aspect
+distortion. This is the owner's explicit preference on both; don't "correct"
+it back to `contain`.
 
 The `/projects` cards also have **no hover zoom** on the media - removed at the
 owner's request. Hover still lifts the card and lights its border.

@@ -146,14 +146,14 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
         // gradient burned over screenshots of wildly varying brightness.
         const cardContent = (
           <div className="relative flex h-full w-full flex-col bg-[var(--surface-solid)]">
-            {/* Source images run from 1.50 to 2.25 aspect against a ~1.86
-                frame, so `cover` would crop up to a quarter off a screenshot
-                and `fill` would visibly stretch it. `contain` keeps every
-                one of them intact and legible; the letterbox is the card's
-                own surface colour, so it reads as matting. */}
+            {/* `object-fill`: the media is stretched to occupy the whole
+                block, so no card shows letterbox bars. This distorts aspect
+                ratio, which is the accepted trade - unlike `object-cover` it
+                still never crops content out of a screenshot. Matches the
+                /projects cards. */}
             <div className="relative min-h-0 flex-1 overflow-hidden">
               {p.video ? (
-                <LazyVideo mp4={p.video.mp4} className="h-full w-full object-contain" />
+                <LazyVideo mp4={p.video.mp4} className="h-full w-full object-fill" />
               ) : (
                 p.src && (
                   <Image
@@ -161,7 +161,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
                     alt={p.title}
                     fill
                     sizes="(min-width: 1024px) 45vw, (min-width: 640px) 58vw, 76vw"
-                    className="object-contain"
+                    className="object-fill"
                     draggable={false}
                     // The deck sits well below the fold, so nothing here is
                     // preloaded; only the focused card loads eagerly.
