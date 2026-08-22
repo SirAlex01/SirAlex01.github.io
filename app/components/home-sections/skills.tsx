@@ -77,8 +77,11 @@ export default function Skills() {
                     >
                       {/* Indented to line up with the title on ≥sm; full width
                           on phones, where the extra indent would squeeze the
-                          longer skill lines into unreadable columns. */}
-                      <ul className="grid gap-x-8 gap-y-2.5 px-4 pb-5 sm:grid-cols-2 sm:px-6 sm:pb-6 sm:pl-[4.5rem]">
+                          longer skill lines into unreadable columns.
+                          The top padding keeps the first row clear of the
+                          row button's hover highlight, which ends flush at
+                          this element's top edge. */}
+                      <ul className="grid gap-x-8 gap-y-2.5 px-4 pb-5 pt-2 sm:grid-cols-2 sm:px-6 sm:pb-6 sm:pl-[4.5rem] sm:pt-3">
                         {cat.skills.map((skill) => (
                           <li
                             key={skill}
