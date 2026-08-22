@@ -41,7 +41,7 @@ export default function RotatingLogo() {
             <Face
               src="/logo.webp"
               alt="Alessio Maiola logo"
-              imgClass="object-contain p-[22%] dark:invert"
+              imgClass="object-contain p-[5%] dark:invert"
               priority
             />
             {/* BACK - photo */}
