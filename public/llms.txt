@@ -1,0 +1,53 @@
+# Alessio Maiola
+
+> Software Engineer specialized in Artificial Intelligence, Machine Learning
+> and Cybersecurity. Master's graduate in Engineering in Computer Science from
+> Sapienza University of Rome (110/110 cum laude). CTF player with team TRX and
+> winner of CyberChallenge.IT 2025.
+
+Personal portfolio at https://siralex01.github.io. Based in Rome, Italy.
+
+## Profile
+
+- Role: Cyber Technology Researcher at Leonardo (Rome, Italy), from June 2026.
+- Previously: Software Engineer at Daikin Applied Europe (Sep 2025 - Jun 2026).
+- Education: MSc Engineering in Computer Science, Sapienza University of Rome
+  (2023-2025, 110/110 cum laude); BSc Computer and Automation Engineering,
+  Sapienza (2020-2023, 110/110 cum laude); IELTS Academic C1 (7.5/9.0).
+- Master's thesis: An AI framework for Linear B translation into Ancient Greek
+  and English.
+- Bachelor's thesis: Change detection on satellite images using neural networks.
+
+## Focus areas
+
+- Artificial Intelligence and Machine Learning: reinforcement learning, deep
+  learning architectures (CNN, RNN, LSTM, Transformers), computer vision,
+  natural language processing, PyTorch, TensorFlow, scikit-learn.
+- Cybersecurity and ethical hacking: CTF challenges across crypto, pwn, web and
+  reverse engineering; binary exploitation; cryptanalysis; web exploitation.
+- Software engineering and DevOps: system design, distributed systems, Docker,
+  Kubernetes, Jenkins, CI/CD.
+- Data and database systems, networking, and full stack web engineering.
+
+## Competitive results
+
+- First place, CyberChallenge.IT 2025 national finals (Attack/Defense, CINI),
+  against 40+ Italian universities, representing Team Sapienza.
+- Best Presentation Award and Best Defense Award, CyberChallenge.IT 2025.
+- Top 5% of 1000+ participants in the CyberChallenge.IT 2025 Jeopardy
+  qualification phase.
+- Team wins with TRX in the 2025 editions of CrewCTF, SnakeCTF and LITCTF.
+
+## Pages
+
+- [Home](https://siralex01.github.io): profile, education, work experience, CTF
+  experience and awards, featured projects, skills.
+- [Projects](https://siralex01.github.io/projects): full catalogue of academic
+  and personal projects with descriptions, technologies and source links.
+- [Contacts](https://siralex01.github.io/contacts): email, LinkedIn, GitHub.
+
+## Elsewhere
+
+- GitHub: https://github.com/SirAlex01
+- LinkedIn: https://www.linkedin.com/in/alessio-maiola-275718331
+- TRX team profile: https://theromanxpl0.it/members/siralex/

@@ -1,11 +1,14 @@
+import type { IconName } from "../../ui/icon-registry";
+
 export interface EducationItem {
   title: string;
   school: string;
   years: string;
   mark: string;
-  icon: string; // e.g. "graduation-cap"
+  /** Must be registered in `ui/icon-registry` - see the note there on why. */
+  icon: IconName;
   thesis?: string; // only this one is optional
-  link?: string; // ✅ optional external link
+  link?: string; // optional external link
 }
 
 export const educationData: EducationItem[] = [

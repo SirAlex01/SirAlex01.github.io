@@ -1,12 +1,23 @@
 import { Metadata } from "next";
 
+const title = "Contact Alessio Maiola - Software Engineer in Rome";
+const description =
+  "Get in touch with Alessio Maiola. Connect via email, LinkedIn, GitHub, or other platforms.";
+
 export const metadata: Metadata = {
-  title: "Contact | Alessio Maiola",
-  description: "Get in touch with Alessio Maiola. Connect via email, LinkedIn, GitHub, or other platforms.",
+  title,
+  description,
+  alternates: {
+    canonical: "/contacts",
+  },
   openGraph: {
-    title: "Contact | Alessio Maiola",
-    description: "Get in touch with Alessio Maiola. Connect via email, LinkedIn, GitHub, or other platforms.",
+    title,
+    description,
     url: "https://siralex01.github.io/contacts",
+  },
+  twitter: {
+    title,
+    description,
   },
 };
 

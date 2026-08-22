@@ -1,10 +1,10 @@
 "use client";
 
-import * as Icons from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { WorkItem } from "../home-sections/work/work-data";
+import { getIcon } from "./icon-registry";
 import useSpotlight from "./use-spotlight";
 
 interface TimelineItemProps extends WorkItem {
@@ -24,15 +24,7 @@ export default function TimelineItem({
   index,
 }: TimelineItemProps) {
   const spotlight = useSpotlight();
-
-  const iconName = icon
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join("") as keyof typeof Icons;
-
-  const IconComponent = (Icons[iconName] ?? Icons.Briefcase) as React.ComponentType<{
-    className?: string;
-  }>;
+  const IconComponent = getIcon(icon, "briefcase");
 
   return (
     <div className="relative flex gap-5 sm:gap-8">

@@ -38,13 +38,12 @@ export default function Navbar() {
     <>
       <header className="fixed inset-x-0 top-0 z-[var(--z-nav)]">
         <div
-          className={`mx-auto flex items-center justify-between transition-all duration-500 ease-[var(--ease-out)]
+          className={`mx-auto flex w-[calc(100%-1.5rem)] items-center justify-between transition-all duration-500 ease-[var(--ease-out)]
             ${
               scrolled
                 ? "mt-2 max-w-5xl rounded-full border border-[var(--line-strong)] bg-[var(--surface-nav)] px-3 py-2 shadow-[var(--shadow-md)] backdrop-blur-xl sm:px-4"
                 : "mt-0 max-w-6xl rounded-none border border-transparent bg-transparent px-5 py-3 shadow-none sm:px-8"
             }`}
-          style={{ width: "calc(100% - 1.5rem)" }}
         >
           <Link
             href="/"

@@ -40,8 +40,27 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://siralex01.github.io"),
-  title: "Alessio Maiola - Portfolio",
+  // Kept in the 50-60 character band search engines display without
+  // truncating, and carrying the primary keywords rather than just the name.
+  title: "Alessio Maiola - AI & Cybersecurity Software Engineer",
   description: "Software Engineer specialized in AI, Machine Learning, and Cybersecurity. Master's graduate from Sapienza University of Rome, CTF player with TRX.",
+  applicationName: "Alessio Maiola Portfolio",
+  authors: [{ name: "Alessio Maiola", url: "https://siralex01.github.io" }],
+  creator: "Alessio Maiola",
+  publisher: "Alessio Maiola",
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   keywords: [
     "Alessio Maiola",
     "Maiola",
@@ -76,7 +95,7 @@ export const metadata: Metadata = {
     icon: [{ url: "/logo_colored.webp", type: "image/png" }],
   },
   openGraph: {
-    title: "Alessio Maiola - Portfolio",
+    title: "Alessio Maiola - AI & Cybersecurity Software Engineer",
     description: "Software Engineer specialized in AI, Machine Learning, and Cybersecurity. Master's graduate from Sapienza University of Rome, CTF player with TRX.",
     url: "https://siralex01.github.io",
     siteName: "Alessio Maiola Portfolio",
@@ -93,7 +112,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Alessio Maiola - Portfolio",
+    title: "Alessio Maiola - AI & Cybersecurity Software Engineer",
     description: "Software Engineer specialized in AI, Machine Learning, and Cybersecurity. Master's graduate from Sapienza University of Rome, CTF player with TRX.",
     images: ["/logo_colored.webp"],
   },

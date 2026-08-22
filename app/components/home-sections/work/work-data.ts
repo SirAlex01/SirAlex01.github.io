@@ -1,10 +1,16 @@
+import type { IconName } from "../../ui/icon-registry";
+
 export interface WorkItem {
   role: string;
   company: string;
   location: string;
   period: string;
   current?: boolean;
-  icon: string; // lucide icon name, e.g. "building-2" - used until a company logo is provided
+  /**
+   * Shown only until a company logo is provided. Must be registered in
+   * `ui/icon-registry` - see the note there on why.
+   */
+  icon: IconName;
   logo?: string; // optional path to a company logo under /public
   bullets: string[];
   link?: string;

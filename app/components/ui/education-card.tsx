@@ -1,9 +1,9 @@
 "use client";
 
-import * as Icons from "lucide-react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { EducationItem } from "../home-sections/education/education-data";
+import { getIcon } from "./icon-registry";
 import useSpotlight from "./use-spotlight";
 
 export default function EducationCard({
@@ -16,16 +16,7 @@ export default function EducationCard({
   link,
 }: EducationItem) {
   const spotlight = useSpotlight();
-
-  // Map the kebab-case icon name in the data onto a Lucide component.
-  const iconName = icon
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join("") as keyof typeof Icons;
-
-  const IconComponent = (Icons[iconName] ?? Icons.GraduationCap) as React.ComponentType<{
-    className?: string;
-  }>;
+  const IconComponent = getIcon(icon, "graduation-cap");
 
   const Card = (
     <article
