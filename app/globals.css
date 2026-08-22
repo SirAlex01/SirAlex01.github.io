@@ -172,8 +172,9 @@
   --color-foreground: var(--fg);
 
   /* These resolve only because the next/font classes are on <html>; see the
-     note in layout.tsx. There is no --font-display: headings are set in the
-     mono face, so `--font-mono` covers both roles. */
+     note in layout.tsx. --font-display is published directly by next/font
+     under that exact name, so it must NOT be mapped here - a self-reference
+     is always invalid. */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
@@ -394,39 +395,38 @@
    TYPOGRAPHY
    ========================================================================== */
 
-/* Headings are set in the mono face. It suits the subject (a security and CTF
-   engineer), it costs nothing because the mono is already loaded for dates and
-   labels, and monospace designs disambiguate glyphs by construction - which is
-   what the previous display face got wrong.
+/* Headings are set in Ubuntu Mono - the font Ubuntu ships as its terminal
+   default, requested by name for its letterforms.
 
-   Two consequences to respect: a monospace advance width is much wider than a
-   proportional one, so the display sizes are smaller than a sans equivalent to
-   keep long lines on one row; and the naturally loose fit wants negative
-   tracking to stop headlines looking gappy. */
+   Sizes stay smaller than a proportional face would need: monospace advance
+   widths are wide, and these values keep the long headline on one line.
+   Ubuntu Mono is narrower than the mono it replaced, so it carries less
+   negative tracking - the tighter values tuned for the previous face made it
+   look cramped. */
 .display {
-  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-display), var(--font-mono), ui-monospace, monospace;
   font-weight: 700;
   font-size: clamp(1.75rem, 5.2vw, 4rem);
   line-height: 1.04;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
 
 .title-xl {
-  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-display), var(--font-mono), ui-monospace, monospace;
   font-weight: 700;
   font-size: clamp(1.625rem, 3.6vw, 2.75rem);
   line-height: 1.1;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.028em;
   text-wrap: balance;
 }
 
 .title {
-  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-display), var(--font-mono), ui-monospace, monospace;
   font-weight: 700;
   font-size: clamp(1.5rem, 2.9vw, 2.25rem);
   line-height: 1.15;
-  letter-spacing: -0.038em;
+  letter-spacing: -0.025em;
   text-wrap: balance;
 }
 

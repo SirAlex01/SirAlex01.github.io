@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Ubuntu_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/navbar/navbar";
 import Footer from "./components/footer/footer";
@@ -26,6 +26,18 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+/**
+ * Heading face. Ubuntu Mono is the font Ubuntu ships as its terminal default,
+ * requested by name for its letterforms. Only the 700 weight is loaded, since
+ * every heading class uses it - the 400 would be dead payload.
+ */
+const ubuntuMono = Ubuntu_Mono({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -121,8 +133,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // Headings use the mono face, so there is no separate display font to
-    // load - see the typography note in globals.css.
+    // Headings use Ubuntu Mono; body and data use Geist. See the typography
+    // note in globals.css.
     //
     // The font variables must live on <html>, not <body>. Tailwind's
     // `@theme inline` maps --font-sans to var(--font-geist-sans) on :root; if
@@ -136,7 +148,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} ${ubuntuMono.variable}`}
     >
       <head>
         <StructuredData />

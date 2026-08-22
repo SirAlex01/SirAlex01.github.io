@@ -88,30 +88,28 @@ Solid fills intentionally stop short of `#000`/`#fff`. A maximum-luminance
 block against the opposite-extreme canvas is physically glaring; `--accent`
 is `#1c1c20` / `#dededf`. Don't "fix" these back to pure values.
 
-### Typography: two faces
-
-There is no separate display font.
-
 | Role | Face | Used by |
 | --- | --- | --- |
-| Headings | **Geist Mono** | `.display`, `.title-xl`, `.title` |
-| Everything else | **Geist Sans** | running text, `.title-sm`, UI |
+| Headings | **Ubuntu Mono** 700 | `.display`, `.title-xl`, `.title` |
+| Body / UI | **Geist Sans** | running text, `.title-sm`, controls |
 | Data | **Geist Mono** | dates, counters, `.eyebrow`, `.chip-mono` |
 
-Headings are set in the mono face. It suits the subject (a security and CTF
-engineer), it costs nothing because the mono is already loaded for dates and
-labels, and monospace designs disambiguate glyphs by construction. That last
-point is why it is here: Space Grotesk was tried and rejected specifically
-over its `g` and `y`, and a serif was tried and rejected before that. **Do not
-introduce a third face without being asked.**
+Headings use **Ubuntu Mono** - the font Ubuntu ships as its terminal default -
+chosen by the owner by name, for its letterforms. Only the 700 weight is
+loaded; every heading class uses it and the 400 would be dead payload.
+
+The heading face has been through several rounds. Do not change it again
+without being asked: a serif (Fraunces) was rejected, and Space Grotesk was
+rejected specifically over the shapes of its `g` and `y`.
 
 Two consequences of a monospace heading, easy to undo by accident:
 
-- **The display sizes are smaller than a proportional equivalent** (`4rem`
-  max, not `4.75rem`). A monospace advance width is much wider, so the old
-  sizes pushed long headlines past the column.
-- **Tracking is strongly negative** (`-0.045em` at display size). Monospace
-  fits loosely by design and looks gappy at large sizes without it.
+- **Display sizes are smaller than a proportional face would need** (`4rem`
+  max, not `4.75rem`). Monospace advance widths are wide; the larger sizes
+  pushed the long headline past its column.
+- **Tracking is negative but modest** (`-0.03em` at display size). Ubuntu Mono
+  is narrower than Geist Mono, so the tighter `-0.045em` tuned for Geist made
+  it look cramped.
 
 **Card headings (`.title-sm`) stay on the sans.** The mono/sans split is what
 separates section-level headings from card-level ones; setting both in mono
