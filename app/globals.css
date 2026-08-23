@@ -17,11 +17,18 @@
   --bg-sunk: #efeff1;
   /* Shared by every glass surface: `.card`, `.surface`, `.btn-secondary`, the
      contact panel and the CTF team tiles.
-     The surface must stay a *lighter* veil than the ground it sits on - that
-     contrast is what makes it read as glass. Tinting it toward the background
-     colour instead (a dark panel in dark mode) kills the effect completely,
-     at any alpha, because there is no longer any visible layering. Adjust the
-     alpha, never the hue. */
+     The two themes are deliberate mirrors. A card is a near-canvas tone at
+     high alpha, lifted just enough off the background to read as its own
+     plane: light is near-white on a near-white canvas (+6 lightness, 70%
+     occlusion), dark is near-black on a near-black canvas (+10, 72%). Dark
+     must NOT be a pale grey slab on a near-black ground - a light veil there
+     raises lightness far faster than it occludes, so it ends up both washed
+     out and still see-through, and the two themes stop looking related.
+
+     What defines a card is therefore its border, its shadow and the
+     `--surface-edge` rim, not its fill. The high alpha keeps text on it
+     readable; the small lift keeps it reading as glass rather than a panel.
+     Move alpha and lift together, and keep the themes symmetric. */
   --surface: #ffffffb3;
   --surface-solid: #ffffff;
   --surface-raised: #fffffff2;
@@ -122,7 +129,7 @@
 
   --bg: #08090a;
   --bg-sunk: #050506;
-  --surface: #ffffff36;
+  --surface: #16171bb8;
   --surface-solid: #121315;
   --surface-raised: #ffffff12;
   --surface-inset: #ffffff08;
