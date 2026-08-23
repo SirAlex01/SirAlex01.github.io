@@ -86,7 +86,7 @@ export default function CTFs() {
       <SectionHeader title="CTF Experience" />
 
       {/* --- Teams + intro --- */}
-      <Reveal className="mt-12">
+      <Reveal className="mt-9">
         <div className="card flex flex-col items-center gap-7 p-6 sm:p-8 md:flex-row md:gap-10">
           <div className="flex shrink-0 gap-4">
             {teams.map((team) => (
@@ -107,17 +107,17 @@ export default function CTFs() {
       </Reveal>
 
       {/* --- Gallery --- */}
-      <Reveal className="mt-12" delay={0.05}>
+      <Reveal className="mt-9" delay={0.05}>
         <Carousel items={ctfItems} />
       </Reveal>
 
       {/* --- Awards --- */}
-      <div className="mt-16">
+      <div className="mt-12">
         <Reveal className="flex flex-col items-start">
-          <h3 className="title-xl">Awards</h3>
+          <h3 className="title-sub">Awards</h3>
         </Reveal>
 
-        <RevealGroup className="mt-10 grid gap-5 md:grid-cols-2">
+        <RevealGroup className="mt-8 grid gap-5 md:grid-cols-2">
           {awards.map((award) => (
             <RevealItem key={award.title} className="h-full">
               <article className="card card-interactive group flex h-full gap-4 p-6 text-left">

@@ -192,12 +192,30 @@ it back to `contain`.
 The `/projects` cards also have **no hover zoom** on the media - removed at the
 owner's request. Hover still lifts the card and lights its border.
 
-### 6. The navbar needs its own opacity
+### 6. The project deck is deliberately cheap on phones
+
+`projects-postcards` animates five large, transformed cards at once. Three
+things dominate its cost, and all three are throttled below `sm` by the
+`.deck-card` rules in `globals.css`:
+
+- **`filter: blur()`** puts each card on its own layer and re-rasterises it
+  whenever the radius changes. Disabled entirely on phones (`!important`,
+  because the value arrives as an inline style).
+- **The two-layer `--shadow-xl`** is reduced to `--shadow-md`.
+- **The two outermost cards** get `display: none` via `.deck-card--far`. They
+  are mostly off-screen on a phone but still cost a layer and a paint;
+  `visibility`/`opacity` would not reclaim that.
+
+Also: don't put `transition-shadow` or a `hover:scale-*` on these cards. The
+shadow never changes, and a CSS scale fights the transform Framer Motion
+writes inline every frame.
+
+### 7. The navbar needs its own opacity
 
 It uses `--surface-nav` (~95-97% opaque), not the `--surface` cards use. At
 card opacity, page headings are legible straight through the bar.
 
-### 7. Anything clipped to the navbar pill needs a rounded clip parent
+### 8. Anything clipped to the navbar pill needs a rounded clip parent
 
 The pill is `rounded-full`, but a child like the progress bar is a rectangle.
 Without a `rounded-full overflow-hidden` wrapper it draws across the full

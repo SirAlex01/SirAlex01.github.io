@@ -19,7 +19,7 @@ export default function Skills() {
     <Section id="skills" tinted>
       <SectionHeader title="Skills & Expertise" />
 
-      <Reveal className="mt-14">
+      <Reveal className="mt-10">
         <div className="card overflow-hidden p-0">
           {skillCategories.map((cat, i) => {
             const isOpen = openItems.includes(i);

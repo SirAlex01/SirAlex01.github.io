@@ -11,7 +11,7 @@ export default function Education() {
         lead="A journey of growth, learning, and discovery - shaping who I am today."
       />
 
-      <RevealGroup className="mt-14 grid gap-5 md:grid-cols-2">
+      <RevealGroup className="mt-10 grid gap-5 md:grid-cols-2">
         {educationData.map((item) => (
           <RevealItem key={item.title} className="h-full">
             <EducationCard {...item} />

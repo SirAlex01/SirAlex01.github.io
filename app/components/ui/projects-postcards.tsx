@@ -42,7 +42,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
   // that callback waits for strict physical rest (near-zero velocity),
   // which for this spring lags well behind the point where the card
   // already looks settled on screen.
-  const SETTLE_MS = 250;
+  const SETTLE_MS = 160;
   const isAnimating = useRef(false);
   const settleTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -131,8 +131,12 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
         const x = offset * 24;
         const y = abs * 4;
         const opacity = 1 - abs * 0.35;
+        // Kept small on purpose: `filter: blur()` forces the card onto its own
+        // layer and re-rasterises it whenever the radius changes, so a large
+        // radius on a large card is expensive. Dropped entirely below `sm`
+        // by the `.deck-card` rule.
         const blur =
-          abs > 1.5 ? "blur(3px)" : abs > 0.75 ? "blur(1.5px)" : "none";
+          abs > 1.5 ? "blur(2px)" : abs > 0.75 ? "blur(1px)" : "none";
         const zIndex = 100 - Math.round(abs * 10);
 
         const clickable =
@@ -160,7 +164,7 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
                     src={p.src}
                     alt={p.title}
                     fill
-                    sizes="(min-width: 1024px) 45vw, (min-width: 640px) 58vw, 76vw"
+                    sizes="(min-width: 1024px) 45vw, (min-width: 640px) 58vw, 70vw"
                     className="object-fill"
                     draggable={false}
                     // The deck sits well below the fold, so nothing here is
@@ -205,10 +209,15 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
             // Width is a class, not an inline style, so it can scale down the
             // breakpoints: at 45vw a phone card is only ~175px wide, far too
             // small to carry the caption.
-            className={`absolute aspect-[16/10] w-[76vw] max-w-[480px] overflow-hidden rounded-[var(--r-xl)]
-              border border-[var(--line-strong)] shadow-[var(--shadow-xl)] transition-shadow duration-300
+            // No `transition-shadow` and no `hover:scale`: the shadow never
+            // changes, and a CSS scale fights the transform Framer Motion
+            // writes inline every frame. Both cost style recalculation for
+            // nothing.
+            className={`deck-card absolute aspect-[16/10] w-[70vw] max-w-[480px] overflow-hidden
+              rounded-[var(--r-xl)] border border-[var(--line-strong)]
               sm:w-[58vw] lg:w-[45vw]
-              ${clickable || isCenterCard ? "cursor-pointer hover:scale-[1.03]" : "cursor-default"}`}
+              ${abs > 1.5 ? "deck-card--far" : ""}
+              ${clickable || isCenterCard ? "cursor-pointer" : "cursor-default"}`}
             style={{
               zIndex,
               filter: blur,
@@ -223,9 +232,9 @@ export default function ProjectPostcards({ projects }: ProjectPostcardsProps) {
             }}
             transition={{
               type: "spring",
-              stiffness: 140,
-              damping: 20,
-              mass: 0.5,
+              stiffness: 300,
+              damping: 30,
+              mass: 0.35,
             }}
           >
             {cardContent}

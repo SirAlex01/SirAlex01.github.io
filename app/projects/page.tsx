@@ -57,10 +57,13 @@ export default function ProjectsPage() {
       {/* --- Grid --- */}
       <section className="section pt-12">
         <div className="page">
-          {/* auto-rows-fr makes every row as tall as the tallest card, and the
-              h-full chain below passes that height down to the card itself, so
-              the whole grid stays on one baseline. */}
-          <div className="grid auto-rows-fr gap-6 lg:grid-cols-2">
+          {/* No `auto-rows-fr`. Grid items stretch by default, so the two
+              cards in a row already match each other via the h-full chain
+              below - but each row sizes to its own content. Forcing every row
+              to the tallest card in the whole grid left short cards padded
+              with dead space, which is most obvious in the single-column
+              mobile layout where a row is one card. */}
+          <div className="grid gap-6 lg:grid-cols-2">
             {projects.map((project, index) => (
               <div
                 key={project.id}

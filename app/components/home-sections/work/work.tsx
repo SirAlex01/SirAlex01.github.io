@@ -13,7 +13,7 @@ export default function Work() {
         lead="My contributions and what I've learned: designing, building, securing, and shipping systems."
       />
 
-      <div className="relative mt-14">
+      <div className="relative mt-10">
         {/* Rail, drawn downwards as the section scrolls into view. */}
         <motion.div
           className="absolute left-7 top-7 bottom-10 w-px -translate-x-1/2 bg-gradient-to-b from-[var(--accent)] via-[var(--line-strong)] to-transparent sm:left-10 sm:top-10"

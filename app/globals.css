@@ -361,7 +361,7 @@
    at both ends - a legible boundary without a hard band. */
 .section {
   position: relative;
-  padding-block: clamp(2.75rem, 5.5vw, 4.75rem);
+  padding-block: clamp(2.25rem, 4.4vw, 3.75rem);
   background-image: linear-gradient(
     90deg,
     transparent,
@@ -427,6 +427,18 @@
   font-size: clamp(1.5rem, 2.9vw, 2.25rem);
   line-height: 1.15;
   letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+/* Sub-section heading (e.g. "Awards" inside CTF Experience). Deliberately
+   smaller than `.title` so a heading nested inside a section never competes
+   with the section's own title. */
+.title-sub {
+  font-family: var(--font-display), var(--font-mono), ui-monospace, monospace;
+  font-weight: 700;
+  font-size: clamp(1.25rem, 2.1vw, 1.625rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
   text-wrap: balance;
 }
 
@@ -567,6 +579,30 @@
 
 .spotlight:hover::before {
   opacity: 1;
+}
+
+/* Project deck cards. The depth-of-field blur and the deep two-layer shadow
+   are by far the most expensive things this component paints, and on a phone
+   the cards are large enough that both cost real frames during the spring.
+   Below `sm` the blur is dropped entirely and the shadow is reduced - the deck
+   still reads from scale, offset and the scrim. `!important` is required
+   because the blur arrives as an inline style. */
+.deck-card {
+  box-shadow: var(--shadow-xl);
+}
+
+@media (max-width: 639px) {
+  .deck-card {
+    filter: none !important;
+    box-shadow: var(--shadow-md);
+  }
+
+  /* The two outermost cards sit mostly off-screen on a phone but still cost a
+     compositor layer and a paint each. `display: none` actually removes that
+     work; visibility/opacity would not. */
+  .deck-card--far {
+    display: none;
+  }
 }
 
 /* Hairline that fades at both ends. */

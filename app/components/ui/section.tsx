@@ -64,7 +64,7 @@ export function SectionHeader({
       } ${className}`}
     >
       <h2 className="title">{title}</h2>
-      {lead && <p className={`lead mt-5 ${centered ? "mx-auto" : ""}`}>{lead}</p>}
+      {lead && <p className={`lead mt-4 ${centered ? "mx-auto" : ""}`}>{lead}</p>}
     </Reveal>
   );
 }

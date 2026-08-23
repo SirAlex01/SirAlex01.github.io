@@ -13,11 +13,11 @@ export default function Projects() {
         lead={projectsMetadata.subtitle}
       />
 
-      <Reveal className="mt-12">
+      <Reveal className="mt-9">
         <ProjectPostcards projects={projects} />
       </Reveal>
 
-      <Reveal className="mt-10 flex flex-col items-center gap-3" delay={0.1}>
+      <Reveal className="mt-8 flex flex-col items-center gap-3" delay={0.1}>
         <PrimaryButton
           label="View All Projects"
           icon={<FaFolderOpen />}
