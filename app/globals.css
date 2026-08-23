@@ -22,7 +22,7 @@
      colour instead (a dark panel in dark mode) kills the effect completely,
      at any alpha, because there is no longer any visible layering. Adjust the
      alpha, never the hue. */
-  --surface: #ffffff61;
+  --surface: #ffffffb3;
   --surface-solid: #ffffff;
   --surface-raised: #fffffff2;
   --surface-inset: #0a0a0b06;
@@ -122,7 +122,7 @@
 
   --bg: #08090a;
   --bg-sunk: #050506;
-  --surface: #ffffff0f;
+  --surface: #ffffff24;
   --surface-solid: #121315;
   --surface-raised: #ffffff12;
   --surface-inset: #ffffff08;
@@ -553,8 +553,8 @@
 .surface {
   background: var(--surface);
   border: 1px solid var(--line);
-  backdrop-filter: blur(16px) saturate(165%);
-  -webkit-backdrop-filter: blur(16px) saturate(165%);
+  backdrop-filter: blur(12px) saturate(145%);
+  -webkit-backdrop-filter: blur(12px) saturate(145%);
 }
 
 .card {
@@ -565,8 +565,8 @@
   /* A strong, saturated backdrop is what actually reads as frosted glass -
      more so than lowering the surface alpha, which just makes the card
      disappear into a near-featureless background. */
-  backdrop-filter: blur(16px) saturate(165%);
-  -webkit-backdrop-filter: blur(16px) saturate(165%);
+  backdrop-filter: blur(12px) saturate(145%);
+  -webkit-backdrop-filter: blur(12px) saturate(145%);
   /* The inset top rim is what sells the glass once the fill is this
      transparent: a real frosted panel catches light along its top edge. With
      it, the card stays legible as an object without needing an opaque fill
