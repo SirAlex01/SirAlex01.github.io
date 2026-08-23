@@ -22,7 +22,7 @@
      colour instead (a dark panel in dark mode) kills the effect completely,
      at any alpha, because there is no longer any visible layering. Adjust the
      alpha, never the hue. */
-  --surface: #ffffffa8;
+  --surface: #ffffff61;
   --surface-solid: #ffffff;
   --surface-raised: #fffffff2;
   --surface-inset: #0a0a0b06;
@@ -59,16 +59,12 @@
      it inverts to a soft shade instead. Kept separate from --accent-soft,
      which also fills chips and the nav pill. */
   --spotlight: #8a8a9340;
+  --surface-edge: #ffffffe6;
   --accent-ring: #0a0a0b38;
   --accent-glow: #0a0a0b14;
 
   /* --- Ambient background ----------------------------------------------- */
-  /* Stronger than the dark-theme counterpart on purpose. Both themes' cards
-     pass a very different amount of what is behind them - the dark card is a
-     6% veil (94% passes through), the light one is 66% white (only 34%
-     passes) - so an identical wave strength is nearly invisible behind light
-     glass. This compensates so the backdrop reads in both. */
-  --amb-rule: #0a0a0b21;
+  --amb-rule: #0a0a0b0f;
   --amb-glow-1: #ffffffe6;   /* a white stage-light bloom on the grey canvas */
   --amb-glow-2: #ffffff99;
   --amb-noise: 0.03;
@@ -147,6 +143,7 @@
   --accent-on: #131316;
   --accent-soft: #ffffff0f;
   --spotlight: #ffffff1a;
+  --surface-edge: #ffffff1f;
   --accent-ring: #ffffff40;
   --accent-glow: #ffffff1a;
 
@@ -570,7 +567,11 @@
      disappear into a near-featureless background. */
   backdrop-filter: blur(16px) saturate(165%);
   -webkit-backdrop-filter: blur(16px) saturate(165%);
-  box-shadow: var(--shadow-sm);
+  /* The inset top rim is what sells the glass once the fill is this
+     transparent: a real frosted panel catches light along its top edge. With
+     it, the card stays legible as an object without needing an opaque fill
+     that would hide the backdrop. */
+  box-shadow: var(--shadow-sm), inset 0 1px 0 0 var(--surface-edge);
   transition: border-color var(--t-base) var(--ease-out),
     box-shadow var(--t-base) var(--ease-out),
     transform var(--t-base) var(--ease-out),
@@ -580,7 +581,7 @@
 .card-interactive:hover {
   transform: translateY(-3px);
   border-color: var(--accent-ring);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-lg), inset 0 1px 0 0 var(--surface-edge);
 }
 
 /* Cursor-tracked highlight. A parent sets --mx/--my (in %) on pointermove;
