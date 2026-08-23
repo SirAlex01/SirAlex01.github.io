@@ -8,7 +8,9 @@ import { Section, SectionHeader } from "../ui/section";
 import Reveal from "../ui/reveal";
 
 export default function Skills() {
-  const [openItems, setOpenItems] = useState<number[]>([0]);
+  // Every panel starts collapsed: the section is a list to scan, and opening
+  // one row by default makes it the odd one out for no real gain.
+  const [openItems, setOpenItems] = useState<number[]>([]);
 
   const toggleOpen = (i: number) =>
     setOpenItems((prev) =>

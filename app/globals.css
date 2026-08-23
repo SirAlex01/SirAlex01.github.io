@@ -15,7 +15,15 @@
   /* --- Canvas ----------------------------------------------------------- */
   --bg: #f7f7f8;
   --bg-sunk: #efeff1;
-  --surface: #ffffffd9;
+  /* Shared by every glass surface on the site: `.card`, `.surface`,
+     `.btn-secondary`, the contact panel and the CTF team tiles. Both themes
+     use the same alpha and differ only in the ground beneath it - white on
+     the light canvas, a lifted dark on the dark one - so the glass reads the
+     same either way. The dark theme used to be a thin 4% white film, which
+     let the ambient waves read straight through a card and fought small text.
+     Tune this value in both themes together; it was pushed to 94/75% first
+     and both read too heavy. */
+  --surface: #ffffff99;
   --surface-solid: #ffffff;
   --surface-raised: #fffffff2;
   --surface-inset: #0a0a0b06;
@@ -109,7 +117,7 @@
 
   --bg: #08090a;
   --bg-sunk: #050506;
-  --surface: #ffffff0a;
+  --surface: #13141799;
   --surface-solid: #121315;
   --surface-raised: #ffffff12;
   --surface-inset: #ffffff08;
