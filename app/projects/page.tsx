@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { projectsMetadata, projects } from "../components/projects-data";
 import ProjectCard from "../components/ui/project-card";
 import Reveal from "../components/ui/reveal";
@@ -12,35 +12,32 @@ export default function ProjectsPage() {
   const projectRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const [hasHashNavigation, setHasHashNavigation] = useState(false);
 
-  useEffect(() => {
-    const hash = window.location.hash.slice(1);
+  /**
+   * Places the page: at the named card if the URL carries a hash, at the top
+   * otherwise.
+   *
+   * This used to live in an effect with no dependency array, which meant it
+   * re-ran after *every* render and re-scrolled the page each time - so any
+   * state change on this route yanked the reader back to the anchored card.
+   * Refs are attached before effects run, so once on mount is enough.
+   */
+  const placeView = useCallback(() => {
+    const hash = decodeURIComponent(window.location.hash.slice(1));
     setHasHashNavigation(Boolean(hash));
 
     if (!hash) {
       window.scrollTo({ top: 0, behavior: "auto" });
+      return;
     }
+
+    projectRefs.current[hash]?.scrollIntoView({ behavior: "auto", block: "center" });
   }, []);
 
-  // Runs on every render so the jump happens as soon as the ref is attached.
   useEffect(() => {
-    const hash = window.location.hash.slice(1);
-
-    if (hash) {
-      const element = projectRefs.current[hash];
-      if (element) {
-        element.scrollIntoView({
-          behavior: "instant" as ScrollBehavior,
-          block: "center",
-        });
-      }
-    }
-  });
-
-  useEffect(() => {
-    const handleHashChange = () => setHasHashNavigation(Boolean(window.location.hash));
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
-  }, []);
+    placeView();
+    window.addEventListener("hashchange", placeView);
+    return () => window.removeEventListener("hashchange", placeView);
+  }, [placeView]);
 
   return (
     <>

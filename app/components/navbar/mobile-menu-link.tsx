@@ -27,7 +27,7 @@ export default function MobileMenuLink({
       onClick={onClick}
       aria-current={isActive ? "page" : undefined}
       className={`group flex items-center gap-3 rounded-[var(--r-md)] border px-4 py-3 text-base font-medium
-        transition-all duration-300 ease-[var(--ease-out)]
+        transition-all duration-[var(--t-base)] ease-[var(--ease-out)]
         ${
           isActive
             ? "border-[var(--accent-ring)] bg-[var(--accent-soft)] text-[var(--fg)]"
@@ -35,7 +35,7 @@ export default function MobileMenuLink({
         }`}
     >
       <span
-        className={`transition-colors duration-300 ${
+        className={`transition-colors duration-[var(--t-base)] ${
           isActive ? "text-[var(--accent-text)]" : "text-[var(--fg-subtle)] group-hover:text-[var(--fg)]"
         }`}
       >

@@ -1,6 +1,3 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
 import { FaGithub } from "react-icons/fa";
 import { FiFolder, FiMail } from "react-icons/fi";
 import RotatingLogo from "../ui/rotating-logo";
@@ -8,45 +5,44 @@ import PrimaryButton from "../ui/primary-button";
 
 const headline = ["Software Engineer.", "AI Enthusiast.", "CTF Player."];
 
-const ease = [0.22, 1, 0.36, 1] as const;
-
+/**
+ * Hero.
+ *
+ * A server component with no JavaScript of its own: the staggered entrance is
+ * the `.enter` keyframe from globals.css, timed by a `--enter-delay` custom
+ * property. It used to be nine animated components from the animation
+ * library, which was the first JavaScript the page had to hydrate and run -
+ * on the one block that is already on screen when the page opens.
+ */
 export default function Presentation() {
-  const reduced = useReducedMotion();
-
   return (
     <section id="presentation" className="relative">
       <div className="page flex min-h-[calc(100svh-var(--nav-h)-2rem)] flex-col justify-center py-12">
         <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-10">
           {/* ---------------- Left: identity ---------------- */}
           <div className="order-2 flex flex-col items-center text-center lg:order-1 lg:col-span-8 lg:items-start lg:text-left">
-            <motion.span
-              className="eyebrow"
-              initial={reduced ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease }}
-            >
-              Alessio Maiola · Rome, Italy
-            </motion.span>
+            <span className="eyebrow enter">Alessio Maiola · Rome, Italy</span>
 
             <h1 className="display mt-6">
               {headline.map((line, i) => (
-                <motion.span
+                <span
                   key={line}
-                  className="block"
-                  initial={reduced ? false : { opacity: 0, y: 26 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.12 + i * 0.11, ease }}
+                  className="enter block"
+                  style={
+                    {
+                      "--enter-y": "1.625rem",
+                      "--enter-delay": `${120 + i * 110}ms`,
+                    } as React.CSSProperties
+                  }
                 >
                   {line}
-                </motion.span>
+                </span>
               ))}
             </h1>
 
-            <motion.div
-              className="mt-8 max-w-xl space-y-5"
-              initial={reduced ? false : { opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5, ease }}
+            <div
+              className="enter mt-8 max-w-xl space-y-5"
+              style={{ "--enter-delay": "500ms" } as React.CSSProperties}
             >
               <p className="prose-body">
                 Hi, I&apos;m <b>Alessio Maiola</b>, and I&apos;m a Master&apos;s graduate in{" "}
@@ -66,13 +62,11 @@ export default function Presentation() {
                 and determined, I love projects where <b>innovation</b>, <b>teamwork</b>,
                 and <b>technical precision</b> come together to create meaningful results.
               </p>
-            </motion.div>
+            </div>
 
-            <motion.div
-              className="mt-10 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
-              initial={reduced ? false : { opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.62, ease }}
+            <div
+              className="enter mt-10 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
+              style={{ "--enter-delay": "620ms" } as React.CSSProperties}
             >
               <PrimaryButton label="View Projects" icon={<FiFolder />} href="/projects" />
               <PrimaryButton
@@ -88,20 +82,26 @@ export default function Presentation() {
                 variant="ghost"
                 external
               />
-            </motion.div>
+            </div>
           </div>
 
           {/* ---------------- Right: portrait ---------------- */}
-          <motion.div
-            className="order-1 flex justify-center lg:order-2 lg:col-span-4"
-            initial={reduced ? false : { opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.15, ease }}
+          <div
+            className="enter order-1 flex justify-center lg:order-2 lg:col-span-4"
+            style={
+              {
+                "--enter-y": "0px",
+                "--enter-scale": "0.9",
+                "--enter-delay": "150ms",
+              } as React.CSSProperties
+            }
           >
-            <div className={reduced ? "relative" : "float relative"}>
+            {/* The float is on an inner element so its transform never fights
+                the entrance keyframe's. */}
+            <div className="float relative">
               <RotatingLogo />
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

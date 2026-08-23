@@ -13,9 +13,10 @@ const Skills = dynamic(() => import("./components/home-sections/skills"));
 const Contact = dynamic(() => import("./components/home-sections/contact"));
 
 export default function Home() {
-  // Always open at the top, regardless of restored scroll position.
+  // Open at the top, regardless of restored scroll position - unless the URL
+  // asks for a specific section, which forcing the scroll would override.
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "auto" });
+    if (!window.location.hash) window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
   // Each section owns its own id, spacing and tint - the alternating rhythm

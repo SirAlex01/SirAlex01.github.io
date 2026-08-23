@@ -1,33 +1,69 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+
+/** Time a face stays up before the medallion flips. */
+const FLIP_EVERY_MS = 5000;
 
 /**
  * Portrait medallion: an animated conic accent ring around a glass disc that
  * flips every few seconds between the SA monogram and Alessio's photo.
+ *
+ * The flip is a 3D transform of a preserve-3d subtree carrying two images and
+ * a deep shadow, so it is the most expensive repeating animation on the site.
+ * It therefore runs only while the medallion is actually on screen: the timer
+ * used to keep firing forever, flipping a disc several sections above the
+ * reader for as long as the tab stayed open.
  */
 export default function RotatingLogo() {
   const [flipped, setFlipped] = useState(false);
+  const hostRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // First flip shortly after mount, then keep alternating.
-    const kickoff = setTimeout(() => setFlipped(true), 900);
-    const interval = setInterval(() => setFlipped((prev) => !prev), 5000);
+    const host = hostRef.current;
+    if (!host) return;
+
+    // Honour the reader's motion preference: no flipping at all.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let kickoff: ReturnType<typeof setTimeout> | null = null;
+    let interval: ReturnType<typeof setInterval> | null = null;
+
+    const stop = () => {
+      if (kickoff) clearTimeout(kickoff);
+      if (interval) clearInterval(interval);
+      kickoff = null;
+      interval = null;
+    };
+
+    const start = () => {
+      if (interval || kickoff) return;
+      // First flip shortly after arriving, then keep alternating.
+      kickoff = setTimeout(() => {
+        kickoff = null;
+        setFlipped(true);
+        interval = setInterval(() => setFlipped((prev) => !prev), FLIP_EVERY_MS);
+      }, 900);
+    };
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) start();
+      else stop();
+    });
+    observer.observe(host);
 
     return () => {
-      clearTimeout(kickoff);
-      clearInterval(interval);
+      observer.disconnect();
+      stop();
     };
   }, []);
 
   return (
-    <div className="relative">
-      {/* Ambient bloom behind the medallion */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 scale-125 rounded-full bg-[var(--accent-glow)] blur-3xl"
-      />
+    <div ref={hostRef} className="relative">
+      {/* Ambient bloom behind the medallion. A gradient, not a blurred solid -
+          see `.bloom` in globals.css. */}
+      <div aria-hidden="true" className="bloom absolute inset-0 -z-10 scale-125" />
 
       <div className="conic-ring relative aspect-square w-[clamp(10rem,17vw,13.5rem)] rounded-full p-[2px]">
         <div className="relative h-full w-full [perspective:1200px]">
