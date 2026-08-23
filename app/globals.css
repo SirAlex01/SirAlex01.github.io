@@ -169,13 +169,35 @@
   --amb-noise: 0.045;
   --amb-vignette: #00000066;
 
-  --shadow-xs: 0 1px 2px #00000059;
-  --shadow-sm: 0 2px 4px -1px #00000066, 0 1px 2px -1px #0000004d;
-  --shadow-md: 0 8px 20px -6px #00000080, 0 2px 6px -2px #00000059;
-  --shadow-lg: 0 24px 48px -16px #00000099, 0 8px 18px -8px #00000066;
-  --shadow-xl: 0 40px 80px -24px #000000b3, 0 12px 28px -12px #00000080;
-  /* A dark drop shadow under a light fill on a dark canvas just reads as
-     mud, so the dark-mode variant is barely there. */
+  /* Dark-mode elevation is carried by LIGHT, not by shade.
+     A black shadow has almost no room to work here: the canvas is
+     rgb(8,9,10), so even at full opacity a black shadow can only travel 8
+     units down, and the blurred falloff lands within 1-2 units of the
+     canvas - under the threshold of what a screen resolves. Measured, the
+     old `--shadow-sm` reached rgb(5,5,6) against a rgb(8,9,10) ground while
+     the card fill sits at rgb(18,19,22). The shadows were, correctly,
+     invisible. In light mode the same shadow has 247 units of headroom.
+
+     So each level pairs two layers:
+
+     - A black layer, kept because it still does real work wherever an
+       element overlaps something lighter than the canvas - the deck cards
+       over each other, the navbar over content, the drawer over the page.
+     - A light layer, which is what actually separates an element from the
+       flat canvas. Held tight to the element by a large negative spread, so
+       it reads as a halo hugging the edge rather than a cloud, and kept
+       dimmer at its core than the card fill it surrounds - a halo brighter
+       than the thing it lifts looks like fog, not elevation. */
+  --shadow-xs: 0 1px 2px #00000059, 0 1px 3px -1px #ffffff1c;
+  --shadow-sm: 0 2px 4px -1px #00000066, 0 2px 6px -2px #ffffff2b;
+  --shadow-md: 0 8px 20px -6px #00000080, 0 6px 18px -5px #ffffff33;
+  --shadow-lg: 0 24px 48px -16px #00000099, 0 14px 34px -12px #ffffff42;
+  --shadow-xl: 0 40px 80px -24px #000000b3, 0 22px 50px -18px #ffffff4d;
+  /* The one exception, and the one place black was always right: the primary
+     button is a near-white fill, so it is already the brightest thing in its
+     own neighbourhood. A halo around it would bloom rather than lift, and a
+     dark shadow under a light fill on a dark canvas just reads as mud - so
+     this level stays barely there. */
   --shadow-accent: 0 6px 16px -10px #00000073;
 }
 

@@ -95,6 +95,35 @@ Solid fills intentionally stop short of `#000`/`#fff`. A maximum-luminance
 block against the opposite-extreme canvas is physically glaring; `--accent`
 is `#1c1c20` / `#dededf`. Don't "fix" these back to pure values.
 
+### Elevation is shade in light mode and light in dark mode
+
+Each `--shadow-*` level is two layers, and in dark mode one of them is
+**white**. That is not a mistake, and it must not be "corrected" to black.
+
+A black shadow has no room to work on a dark canvas. `--bg` is `#08090a`, i.e.
+`rgb(8, 9, 10)`, so a black shadow can travel at most 8 units down even at full
+opacity - and the blurred falloff lands within 1-2 units of the canvas, below
+what a screen resolves. Measured: the old dark `--shadow-sm` bottomed out at
+`rgb(5, 5, 6)` against a `rgb(8, 9, 10)` ground, while the card fill sits at
+`rgb(18, 19, 22)`. The shadows were invisible, correctly so. The same shadow in
+light mode has 247 units of headroom.
+
+So the dark levels pair:
+
+- a **black** layer, kept because it still does real work wherever an element
+  overlaps something lighter than the canvas - the deck cards over each other,
+  the navbar over content, the drawer over the page;
+- a **white** layer, which is what actually lifts an element off the flat
+  canvas. Held tight by a large negative spread so it reads as a halo hugging
+  the edge rather than a cloud, and kept dimmer at its core than the card fill
+  it surrounds. A halo brighter than the thing it lifts looks like fog.
+
+One exception: `--shadow-accent`, under the primary button. In dark mode that
+button is a near-white fill and is already the brightest thing around, so a
+halo would bloom rather than lift. It stays a barely-there dark shadow.
+
+Light-mode shadows contain no white at all. Keep it that way.
+
 ### Typography: three faces
 
 | Role | Face | Used by |
