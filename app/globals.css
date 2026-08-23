@@ -1041,10 +1041,20 @@
 }
 
 /* The navbar condensing into its pill.
-   The properties are listed rather than transitioned with `all`: this element
+
+   `position: relative` is load-bearing, not decoration: the progress hairline
+   below is `position: absolute; inset: 0`, so it needs this element to be its
+   containing block or it resolves against the fixed, full-width <header> and
+   draws right across the viewport. It used to be contained only as a side
+   effect of `backdrop-filter` creating a containing block - which stopped
+   being true the moment `--glass` could be `none`, i.e. on every touch device.
+   State it explicitly instead of relying on a filter being present.
+
+   The transitioned properties are listed rather than using `all`: this element
    swaps class every time the reader crosses the scroll threshold, and `all`
    makes the browser check every animatable property on it each time. */
 .navbar-shell {
+  position: relative;
   transition:
     max-width var(--t-base) var(--ease-out),
     margin-top var(--t-base) var(--ease-out),

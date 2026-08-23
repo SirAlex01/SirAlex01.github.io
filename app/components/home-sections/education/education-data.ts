@@ -36,7 +36,7 @@ export const educationData: EducationItem[] = [
     years: "2015 - 2020",
     mark: "100/100 cum laude",
     icon: "school",
-    link: "https://www.istitutoapollinare.org"
+    link: "https://www.istitutoapollinare.edu.it/"
   },
   {
     title: "Certified C1 Advanced (IELTS Academic) - English",

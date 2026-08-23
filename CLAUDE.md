@@ -247,13 +247,32 @@ each card for the duration of its transition.
 It uses `--surface-nav` (~95-97% opaque), not the `--surface` cards use. At
 card opacity, page headings are legible straight through the bar.
 
-### 8. Anything clipped to the navbar pill needs a rounded clip parent
+### 8. Anything clipped to the navbar pill needs *both* a rounded clip parent and a containing block
 
-The pill is `rounded-full`, but a child like the progress bar is a rectangle.
-Without a `rounded-full overflow-hidden` wrapper it draws across the full
-bounding box and the whole thing reads as a square. Clip inside the child
-component, not by putting `overflow-hidden` on the navbar - that would also
+Two separate requirements, and the progress hairline needs both.
+
+**Rounded clip.** The pill is `rounded-full`, but a child like the progress bar
+is a rectangle. Without a `rounded-full overflow-hidden` wrapper it draws
+across the full bounding box and the whole thing reads as a square. Clip inside
+the child, not by putting `overflow-hidden` on the navbar - that would also
 clip the logo's intentional hover glow.
+
+**Containing block.** `.navbar-shell` carries `position: relative`, and it is
+load-bearing. The hairline is `position: absolute; inset: 0`, so without it the
+bar resolves against the fixed, full-width `<header>` and stretches across the
+entire viewport instead of the pill.
+
+This bit once already, in a way that only showed on phones. The bar was
+originally contained purely as a *side effect* of the pill's `backdrop-filter`,
+which creates a containing block for absolutely positioned descendants. That
+held while the filter was unconditional - but `--glass` is `none` on every
+touch device (note 9), so the containing block vanished exactly where nobody
+was looking. Measured: with glass the bar spanned the pill's 1024px; without
+it, 1692px, the full viewport.
+
+The lesson generalises: `backdrop-filter`, `filter`, `transform` and
+`will-change` all silently create containing blocks. Never let layout depend on
+one being present - say `position: relative` and mean it.
 
 ### 9. Every backdrop filter goes through `--glass`
 
