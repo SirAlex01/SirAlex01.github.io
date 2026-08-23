@@ -24,5 +24,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly',
       priority: 0.5,
     },
+    // The CV is a real destination on the domain, and PDFs are crawled and
+    // ranked like any other document.
+    {
+      url: `${baseUrl}/Alessio-Maiola-CV.pdf`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
   ]
 }

@@ -1,6 +1,7 @@
 import { educationData } from "../home-sections/education/education-data";
 import { workData } from "../home-sections/work/work-data";
 import { skillCategories } from "../skills-data";
+import { CV_PATH } from "../cv";
 
 const SITE = "https://siralex01.github.io";
 
@@ -55,6 +56,16 @@ export default function StructuredData() {
       "https://github.com/SirAlex01",
       "https://theromanxpl0.it/members/siralex/",
     ],
+    // `subjectOf`, not `sameAs`: the CV is a document *about* the person, while
+    // `sameAs` is reserved for other profiles *of* the same person. Pointing
+    // one at the other is the usual way this gets written wrong.
+    subjectOf: {
+      "@type": "DigitalDocument",
+      name: "Alessio Maiola - Curriculum Vitae",
+      url: `${SITE}${CV_PATH}`,
+      encodingFormat: "application/pdf",
+      inLanguage: "en",
+    },
   };
 
   const website = {

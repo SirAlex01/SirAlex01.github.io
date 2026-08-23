@@ -1,6 +1,8 @@
 export const projectsMetadata = {
   title: "Projects",
-  subtitle: "A collection of my academic and personal projects, showcasing my journey through AI, machine learning, cybersecurity, and software engineering."
+  // Kept under ~80 characters so it sits on one line inside the 68ch `.lead`
+  // measure rather than breaking mid-phrase.
+  subtitle: "AI pipelines and research, security tooling and full-stack builds, from thesis to CTF work."
 };
 
 export const projects = [

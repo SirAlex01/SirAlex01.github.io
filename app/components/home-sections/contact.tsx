@@ -28,8 +28,8 @@ export default function Contact() {
             <hr className="rule mt-5 w-24" />
 
             <p className="lead mt-5 max-w-lg">
-              Whether you have a question, a project idea or just want to say hi, feel
-              free to reach out!
+              Open to roles, collaborations, and questions about anything you have seen
+              here.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">

@@ -8,7 +8,7 @@ export default function Education() {
     <Section id="education" tinted>
       <SectionHeader
         title="Education"
-        lead="A journey of growth, learning, and discovery - shaping who I am today."
+        lead="Both Sapienza degrees finished at 110/110 cum laude, the Bachelor's ranked first in its faculty."
       />
 
       <RevealGroup className="mt-10 grid gap-5 md:grid-cols-2">

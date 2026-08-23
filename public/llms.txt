@@ -13,7 +13,8 @@ Personal portfolio at https://siralex01.github.io. Based in Rome, Italy.
 - Previously: Software Engineer at Daikin Applied Europe (Sep 2025 - Jun 2026).
 - Education: MSc Engineering in Computer Science, Sapienza University of Rome
   (2023-2025, 110/110 cum laude); BSc Computer and Automation Engineering,
-  Sapienza (2020-2023, 110/110 cum laude); IELTS Academic C1 (7.5/9.0).
+  Sapienza (2020-2023, 110/110 cum laude, ranked first in the faculty); IELTS
+  Academic C1 (7.5/9.0).
 - Master's thesis: An AI framework for Linear B translation into Ancient Greek
   and English.
 - Bachelor's thesis: Change detection on satellite images using neural networks.
@@ -45,6 +46,8 @@ Personal portfolio at https://siralex01.github.io. Based in Rome, Italy.
 - [Projects](https://siralex01.github.io/projects): full catalogue of academic
   and personal projects with descriptions, technologies and source links.
 - [Contacts](https://siralex01.github.io/contacts): email, LinkedIn, GitHub.
+- [Curriculum Vitae](https://siralex01.github.io/Alessio-Maiola-CV.pdf): PDF CV
+  covering work experience, education, projects, skills and awards.
 
 ## Elsewhere
 

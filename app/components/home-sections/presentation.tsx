@@ -1,5 +1,6 @@
 import { FaGithub } from "react-icons/fa";
-import { FiFolder, FiMail } from "react-icons/fi";
+import { FiFileText, FiFolder, FiMail } from "react-icons/fi";
+import { CV_PATH } from "../cv";
 import RotatingLogo from "../ui/rotating-logo";
 import PrimaryButton from "../ui/primary-button";
 
@@ -45,22 +46,20 @@ export default function Presentation() {
               style={{ "--enter-delay": "500ms" } as React.CSSProperties}
             >
               <p className="prose-body">
-                Hi, I&apos;m <b>Alessio Maiola</b>, and I&apos;m a Master&apos;s graduate in{" "}
-                <b>Engineering in Computer Science</b> from{" "}
-                <b>Sapienza University of Rome</b>, with a strong focus on{" "}
-                <b>artificial intelligence</b>, <b>machine learning</b>, and{" "}
-                <b>data engineering</b>.
+                Hi, I&apos;m <b>Alessio Maiola</b>, a Master&apos;s graduate in Engineering
+                in Computer Science from Sapienza University of Rome, where I focused on
+                artificial intelligence, machine learning and data engineering.
               </p>
               <p className="prose-body">
-                I&apos;m also passionate about <b>cybersecurity</b>: I actively compete in
-                CTFs with <b>TRX</b> and was proud to be among the{" "}
-                <b>winners of CyberChallenge.IT 2025</b>.
+                I work in security too. I play CTFs with <b>TRX</b>, and I was part of
+                the Sapienza team that won the national final of{" "}
+                <b>CyberChallenge.IT 2025</b>.
               </p>
               <p className="prose-body">
-                I enjoy solving complex problems, building intelligent systems, and
-                collaborating in <b>dynamic, knowledge-sharing environments</b>. Curious
-                and determined, I love projects where <b>innovation</b>, <b>teamwork</b>,
-                and <b>technical precision</b> come together to create meaningful results.
+                What I enjoy most is work whose result can be measured: reverse-engineering
+                a proprietary industrial protocol with LLMs, redesigning a production
+                database to cut duplicate records by 90%, rebuilding a deployment pipeline
+                to cut its overhead by 86%.
               </p>
             </div>
 
@@ -69,6 +68,13 @@ export default function Presentation() {
               style={{ "--enter-delay": "620ms" } as React.CSSProperties}
             >
               <PrimaryButton label="View Projects" icon={<FiFolder />} href="/projects" />
+              <PrimaryButton
+                label="Curriculum Vitae"
+                icon={<FiFileText />}
+                href={CV_PATH}
+                variant="secondary"
+                external
+              />
               <PrimaryButton
                 label="Get in touch"
                 icon={<FiMail />}

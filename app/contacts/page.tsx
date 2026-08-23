@@ -1,10 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FiCheck, FiCopy } from "react-icons/fi";
+import { FiCheck, FiCopy, FiFileText } from "react-icons/fi";
 import { ArrowUpRight } from "lucide-react";
 import { contacts } from "../components/contact-data";
 import Reveal, { RevealGroup, RevealItem } from "../components/ui/reveal";
+import PrimaryButton from "../components/ui/primary-button";
+import { CV_PATH } from "../components/cv";
 
 /** How long the "Copied" confirmation stays up. */
 const COPIED_FOR_MS = 2000;
@@ -40,9 +42,8 @@ export default function ContactsPage() {
           <h1 className="title-xl">Let&apos;s connect!</h1>
           <hr className="rule mt-5 w-24" />
           <p className="lead mt-5">
-            I&apos;d love to hear from you! Whether you have a question, want to
-            collaborate, or just want to connect, feel free to reach out through any of
-            the platforms below.
+            Email is the surest way to reach me - about a role, a collaboration, or
+            anything on this site you would like to know more about.
           </p>
         </Reveal>
 
@@ -96,6 +97,16 @@ export default function ContactsPage() {
             );
           })}
         </RevealGroup>
+
+        <Reveal className="mt-10 flex flex-col items-center gap-3" delay={0.1}>
+          <PrimaryButton
+            label="Curriculum Vitae"
+            icon={<FiFileText />}
+            href={CV_PATH}
+            variant="secondary"
+            external
+          />
+        </Reveal>
       </div>
     </section>
   );
