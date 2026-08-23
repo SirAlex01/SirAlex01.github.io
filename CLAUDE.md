@@ -55,14 +55,21 @@ over hardcoding strings into components.
 | --- | --- |
 | `section.tsx` | `<Section>` + `<SectionHeader>` - the shell every section uses |
 | `reveal.tsx` | `<Reveal>`, `<RevealGroup>`/`<RevealItem>` - scroll entrances |
+| `use-in-view.ts` | the site's single IntersectionObserver; `useInView()` |
 | `primary-button.tsx` | the only button; variants `primary`/`secondary`/`ghost` |
 | `icon-registry.ts` | name → Lucide component map (**read the note in it**) |
 | `ambient-background.tsx` | fixed CSS backdrop |
 | `use-spotlight.ts` | cursor-tracked card glow, pairs with `.spotlight` |
-| `scroll-progress.tsx` | navbar reading-progress bar |
+| `youtube-embed.tsx` | click-to-load YouTube facade (**read note 11**) |
 
 Use these rather than re-implementing. If a section needs a one-off entrance,
-extend `Reveal` instead of adding another IntersectionObserver.
+extend `Reveal` instead of adding another IntersectionObserver - and if it
+needs its own observer for something else, take it from `use-in-view.ts`
+rather than constructing one.
+
+**There is no animation library.** Framer Motion was removed; see note 12.
+Do not reintroduce it, or any other JS animation runtime, for an effect CSS
+can perform.
 
 ---
 
@@ -171,11 +178,26 @@ in the **root** stacking context and cover the navbar and the drawer.
 `position: relative` alone does *not* contain them - only a stacking context
 does.
 
-### 4. Don't animate the ambient background
+### 4. The ambient background is static, and carries no `filter: blur()`
+
+Two separate rules, both about the same layer.
 
 `.ambient__waves` is a full-viewport `repeating-radial-gradient`. Animating a
 transform on it forces a whole-layer re-raster every frame and visibly freezes
-scrolling. It is static on purpose; the drifting blooms supply the motion.
+scrolling. It is static on purpose.
+
+The two `.ambient__glow` blooms used to carry `filter: blur(100px)`. A blur
+allocates an offscreen buffer the size of the element plus the blur radius and
+runs a two-pass convolution over it on every paint - and these are ~1400x760
+elements. Their fill is already a `radial-gradient`, i.e. a smooth falloff the
+GPU paints directly, so the blur was buying almost nothing for the most
+expensive paint on the page. Extending the gradient's own falloff to the full
+radius replaces it for free.
+
+This matters twice over: **every `backdrop-filter` on the site samples this
+layer**, so an expensive ambient layer makes every frosted surface expensive
+too. The same rule applies to the accent blooms in the hero and the contact
+panel - use `.bloom`, never `blur-3xl` on a solid block.
 
 ### 5. Project media must never use `object-cover`
 
@@ -192,11 +214,19 @@ it back to `contain`.
 The `/projects` cards also have **no hover zoom** on the media - removed at the
 owner's request. Hover still lifts the card and lights its border.
 
-### 6. The project deck is deliberately cheap on phones
+### 6. The project deck is a CSS transition, and cheap on phones
 
-`projects-postcards` animates five large, transformed cards at once. Three
-things dominate its cost, and all three are throttled below `sm` by the
-`.deck-card` rules in `globals.css`:
+`projects-postcards` moves five large, transformed cards at once.
+
+The rotation is a **CSS transition on `transform` and `opacity`**, which the
+compositor runs on its own thread. It used to be a JS physics spring, which
+woke the main thread every frame to recompute five cards and write five inline
+styles. Don't put that back: the spring it replaced was overdamped (no
+overshoot at all), so `var(--ease-out)` at 380ms is a faithful match, and
+`SETTLE_MS` in the component must stay in step with that duration.
+
+Three things dominate what is left of its cost, and all three are throttled on
+touch devices by the `.deck-card` rules in `globals.css`:
 
 - **`filter: blur()`** puts each card on its own layer and re-rasterises it
   whenever the radius changes. Disabled entirely on phones (`!important`,
@@ -206,9 +236,11 @@ things dominate its cost, and all three are throttled below `sm` by the
   are mostly off-screen on a phone but still cost a layer and a paint;
   `visibility`/`opacity` would not reclaim that.
 
-Also: don't put `transition-shadow` or a `hover:scale-*` on these cards. The
-shadow never changes, and a CSS scale fights the transform Framer Motion
-writes inline every frame.
+Also: don't put `transition-shadow`, a `hover:scale-*` or a standing
+`will-change` on these cards. The shadow never changes, a CSS scale would
+fight the inline transform, and `will-change` would keep five compositor
+layers alive for as long as the page is open - the browser already promotes
+each card for the duration of its transition.
 
 ### 7. The navbar needs its own opacity
 
@@ -223,22 +255,32 @@ bounding box and the whole thing reads as a square. Clip inside the child
 component, not by putting `overflow-hidden` on the navbar - that would also
 clip the logo's intentional hover glow.
 
-### 9. A card that resizes cannot keep its backdrop filter
+### 9. Every backdrop filter goes through `--glass`
 
-`.card` carries `backdrop-filter: blur(12px)`. That is fine while the card is
-a fixed size: the browser samples the backdrop once. The moment the card's own
-geometry animates, it has to re-sample and re-blur everything behind it on
-every frame - and the backdrop here includes an ambient glow layer with
-`filter: blur(100px)`.
+`backdrop-filter` is the most expensive thing any surface here paints: it
+re-samples and re-blurs everything behind the element. So **no component
+declares one.** They all read a single token:
 
-The skills accordion is the only card on the site whose height animates, so it
-carries `.card--resizes`, which sets `backdrop-filter: none`. Don't remove the
+```css
+backdrop-filter: var(--glass);
+```
+
+`:root` sets `--glass: blur(12px) saturate(145%)`, and one media query -
+`@media (max-width: 639px), (hover: none)` - sets it to `none`. That single
+declaration switches off the navbar, the cards, the drawer, the contact panel,
+the carousel controls, the team tiles and the secondary buttons on every touch
+device. Never write `backdrop-blur-*` (the Tailwind utility) or a literal
+`backdrop-filter` in a component: it escapes the switch. Use the `.glass`
+class, or `.card`/`.surface`, which already do this.
+
+`(hover: none)` rather than a width alone, because a phone in landscape or a
+tablet is just as unable to afford the effect as a narrow viewport.
+
+A card whose **own geometry animates** must opt out on desktop too: it would
+otherwise re-sample and re-blur the whole backdrop on every frame of the size
+change. The skills accordion is the only such card, and it carries
+`.card--resizes`, which sets `--glass: none` on itself. Don't remove the
 modifier, and add it to any new card that animates its own size.
-
-Separately, phones drop the backdrop filter on `.card` and `.surface`
-altogether, at the same 639px breakpoint the deck uses. It is the most
-expensive thing a card paints and the surface alpha carries the look without
-it. So on desktop only the accordion is exempt; on a phone nothing has it.
 
 ### 10. Accordion easing must be pure ease-out
 
@@ -251,6 +293,68 @@ Measured cost of the open/close is ~0.3 ms of style+layout on a 269-node
 subtree, i.e. nothing. Any "it feels slow" here is the curve, not the work.
 Keep it on `var(--ease-out)` (`cubic-bezier(0.22, 1, 0.36, 1)`), which leaves
 at full speed and decelerates into place.
+
+### 11. Third-party embeds are facades until clicked
+
+`youtube-embed.tsx` renders a thumbnail and a play button. The `<iframe>` is
+created on the first click, and only then.
+
+The player used to be mounted for every video slide as soon as the CTF section
+rendered. Each one pulls YouTube's iframe API and a full embedded player -
+hundreds of kilobytes of third-party JavaScript, several network round trips
+and a live iframe with its own event loop - for a slide most readers scroll
+straight past. There are two of them.
+
+Consequences to preserve:
+
+- The embed host is `youtube-nocookie.com`, and nothing contacts Google until
+  the reader asks for the video (the thumbnail is `loading="lazy"`).
+- `enablejsapi=1` plus the `origin` parameter is what lets the carousel pause
+  a playing video by `postMessage` when the reader swipes away. Both are
+  required; dropping either silently breaks the pause.
+- There is no `react-youtube` dependency any more. Don't add one back for
+  this - the wrapper was ~35 KB to do what four lines of `postMessage` do.
+
+Apply the same shape to any embed added later (maps, gists, tweets).
+
+### 12. Motion is CSS; there is no animation library
+
+Every entrance, transition and decorative loop on the site is a CSS
+transition or keyframe. Framer Motion used to drive all of it and was removed.
+Two reasons:
+
+- **Per frame.** A JS animation library computes values on the main thread and
+  writes inline styles every frame. CSS transitions on `opacity` and
+  `transform` run on the compositor, so they stay smooth while the main thread
+  is busy - which on a phone it usually is.
+- **Per byte.** It was ~130 KB in the first load of *every* page, for effects
+  the browser performs natively.
+
+The pieces, all in the MOTION section of `globals.css`:
+
+| Class | For |
+| --- | --- |
+| `.reveal` | scroll entrance; `--rv-x/y/scale/delay` |
+| `.reveal-group` / `.reveal-item` | staggered list; `--rv-stagger`, `--rv-i` |
+| `.enter` | load-time entrance, hero only |
+| `.rail` | the work timeline's rail |
+
+The trigger is `use-in-view.ts`: **one** IntersectionObserver for the whole
+site, whose callback only adds a class. It never sets React state, so
+scrolling the page never renders a component. A group is observed as a single
+target rather than one per card.
+
+Two rules that are easy to break:
+
+- **The hidden states are gated on `html.js`**, which the inline boot script
+  adds before first paint. Without it a client that does not run JS gets a
+  wall of `opacity: 0`. This is also why the exported HTML now contains no
+  hidden content at all - keep it that way.
+- **Tailwind v4 compiles `translate-*`, `scale-*` and `rotate-*` to the
+  standalone `translate` / `scale` / `rotate` properties, not to `transform`.**
+  So a hand-written `transition-[...]` list must name `translate`, not
+  `transform`, or the utility simply will not animate. (This is also why
+  `.rail`'s `transform: scaleY()` composes cleanly with `-translate-x-1/2`.)
 
 ---
 
@@ -287,11 +391,10 @@ above-the-fold images `priority`.
   a privacy decision for the site owner, not a technical default. Ask first.
 - **No street address or phone number**, and therefore no LocalBusiness
   schema. This is a personal site; that is a privacy call.
-- **Reveal animations still use Framer Motion**, so scroll-animated blocks are
-  server-rendered with `opacity: 0`. Auditors flag this as "rendered content".
-  The text *is* in the static HTML and is crawlable - verified - and rewriting
-  the reveals to be visible-by-default risks a visible flash on hydration for
-  a low-priority metric. Revisit only with a no-flash approach.
+- **No JS animation library.** See note 12. This also resolved the old
+  "rendered content" audit finding: the exported HTML no longer contains a
+  single `opacity: 0` block, because the hidden state is gated on `html.js`
+  and applied before first paint rather than baked into the markup.
 
 ---
 

@@ -8,11 +8,12 @@ export default function Contact() {
   return (
     <Section id="contact">
       <Reveal>
-        <div className="relative overflow-hidden rounded-[var(--r-2xl)] border border-[var(--line)] bg-[var(--surface)] px-6 py-16 text-center backdrop-blur-xl sm:px-12">
-          {/* Accent bloom behind the panel */}
+        <div className="glass relative overflow-hidden rounded-[var(--r-2xl)] border border-[var(--line)] bg-[var(--surface)] px-6 py-16 text-center sm:px-12">
+          {/* Accent bloom behind the panel. A gradient, not a blurred block -
+              see `.bloom` in globals.css. */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -top-40 left-1/2 h-80 w-[36rem] -translate-x-1/2 rounded-full bg-[var(--accent-glow)] blur-[80px]"
+            className="bloom pointer-events-none absolute -top-40 left-1/2 h-80 w-[36rem] -translate-x-1/2"
           />
 
           <div className="relative flex flex-col items-center">

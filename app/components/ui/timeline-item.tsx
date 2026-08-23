@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { WorkItem } from "../home-sections/work/work-data";
 import { getIcon } from "./icon-registry";
 import useSpotlight from "./use-spotlight";
+import Reveal from "./reveal";
 
 interface TimelineItemProps extends WorkItem {
   index: number;
@@ -31,18 +31,16 @@ export default function TimelineItem({
       {/* --- Node on the rail --- */}
       <div className="relative flex w-14 shrink-0 justify-center sm:w-20">
         {current && (
-          <motion.span
-            className="absolute top-0 h-14 w-14 rounded-full bg-[var(--accent)] sm:h-20 sm:w-20"
-            animate={{ scale: [1, 1.55, 1], opacity: [0.35, 0, 0.35] }}
-            transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+          <span
+            aria-hidden="true"
+            className="node-pulse absolute top-0 h-14 w-14 rounded-full bg-[var(--accent)] sm:h-20 sm:w-20"
           />
         )}
 
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          whileInView={{ scale: 1, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: index * 0.12, type: "spring", stiffness: 190 }}
+        <Reveal
+          from="none"
+          scale={0.4}
+          delay={index * 0.1}
           className={`relative z-10 h-14 w-14 rounded-full p-[1.5px] shadow-[var(--shadow-md)] sm:h-20 sm:w-20
             ${current ? "bg-[var(--accent)]" : "bg-[var(--line-strong)]"}`}
         >
@@ -59,15 +57,13 @@ export default function TimelineItem({
               <IconComponent className="h-6 w-6 text-[var(--accent-text)] sm:h-8 sm:w-8" />
             )}
           </div>
-        </motion.div>
+        </Reveal>
       </div>
 
       {/* --- Card --- */}
-      <motion.div
-        initial={{ opacity: 0, x: 24 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.6, delay: index * 0.12 + 0.08, ease: [0.22, 1, 0.36, 1] }}
+      <Reveal
+        from="right"
+        delay={index * 0.1 + 0.08}
         className="min-w-0 flex-1 pb-8 sm:pb-12"
       >
         <article
@@ -90,7 +86,7 @@ export default function TimelineItem({
                 href={link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 font-medium text-[var(--fg)] transition-colors duration-300 hover:text-[var(--accent-text)]"
+                className="inline-flex items-center gap-1 font-medium text-[var(--fg)] transition-colors duration-[var(--t-base)] hover:text-[var(--accent-text)]"
               >
                 {company}
                 <ArrowUpRight className="h-3.5 w-3.5" />
@@ -125,7 +121,7 @@ export default function TimelineItem({
             ))}
           </ul>
         </article>
-      </motion.div>
+      </Reveal>
     </div>
   );
 }

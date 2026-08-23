@@ -24,7 +24,7 @@ export default function EducationCard({
       className="card card-interactive spotlight group flex h-full flex-col gap-4 p-6"
     >
       <div className="flex items-start justify-between gap-3">
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--surface-inset)] text-[var(--accent-text)] transition-colors duration-300 group-hover:border-[var(--accent-ring)] group-hover:bg-[var(--accent-soft)]">
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--surface-inset)] text-[var(--accent-text)] transition-colors duration-[var(--t-base)] group-hover:border-[var(--accent-ring)] group-hover:bg-[var(--accent-soft)]">
           <IconComponent className="h-6 w-6" />
         </span>
 
@@ -54,9 +54,9 @@ export default function EducationCard({
       </div>
 
       {link && (
-        <span className="mt-auto inline-flex items-center gap-1 text-xs font-medium text-[var(--fg-subtle)] transition-colors duration-300 group-hover:text-[var(--accent-text)]">
+        <span className="mt-auto inline-flex items-center gap-1 text-xs font-medium text-[var(--fg-subtle)] transition-colors duration-[var(--t-base)] group-hover:text-[var(--accent-text)]">
           Visit
-          <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-[var(--t-base)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </span>
       )}
     </article>

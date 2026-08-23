@@ -94,6 +94,15 @@
   --r-2xl: 2rem;
   --r-pill: 999px;
 
+  /* --- Glass ------------------------------------------------------------ *
+   * One switch for every backdrop filter on the site. `backdrop-filter` is
+   * the single most expensive thing any surface here paints: it has to
+   * re-sample and re-blur whatever sits behind the element. Routing every
+   * frosted surface through this variable means the whole site can drop the
+   * effect in one place - which is what the media query further down does for
+   * touch devices, where the surface alpha carries the look on its own. */
+  --glass: blur(12px) saturate(145%);
+
   /* --- Motion ----------------------------------------------------------- */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
@@ -168,6 +177,22 @@
   /* A dark drop shadow under a light fill on a dark canvas just reads as
      mud, so the dark-mode variant is barely there. */
   --shadow-accent: 0 6px 16px -10px #00000073;
+}
+
+/* Touch devices get no backdrop filter, anywhere.
+   It is the single most expensive thing any surface here paints, phones are
+   the devices least able to afford it, and the surface alpha is high enough
+   that the panels look all but identical without it. Because every frosted
+   surface reads `--glass`, switching it off here switches off the navbar, the
+   cards, the drawer, the contact panel, the carousel controls and the
+   secondary buttons in one declaration.
+
+   `(hover: none)` rather than a width alone: a phone held in landscape, or a
+   tablet, is just as unable to afford the effect as a narrow viewport. */
+@media (max-width: 639px), (hover: none) {
+  :root {
+    --glass: none;
+  }
 }
 
 /* Expose the tokens to Tailwind so `bg-surface`, `text-muted`,
@@ -309,25 +334,29 @@
     -webkit-mask-image: radial-gradient(ellipse 85% 70% at 50% 40%, #000 15%, transparent 82%);
   }
 
+  /* No `filter: blur()`. These are ~1400x760 elements, and a blur that size
+     allocates an offscreen buffer as large as the element plus the blur
+     radius and re-runs a two-pass convolution over it on every paint. The
+     fill is already a radial-gradient, i.e. a smooth falloff the GPU paints
+     directly - blurring a gradient buys almost nothing visually and costs the
+     most expensive paint on the page. Extending the gradient's own falloff to
+     the full radius restores the softness for free.
+
+     It matters twice over: every `backdrop-filter` on the site samples this
+     layer, so a cheap ambient layer makes every frosted surface cheap too. */
   .ambient__glow {
     position: absolute;
     border-radius: 999px;
-    filter: blur(100px);
   }
 
-  /* Static, like the wave layer above and for the same reason. These are
-     1400x760 elements carrying `filter: blur(100px)`; the old animation also
-     scaled them, which forces the browser to re-blur that whole surface on
-     every step rather than just compositing it. It also meant anything using
-     `backdrop-filter` was sampling a backdrop that never stopped changing, so
-     those filters recomputed forever too. */
+  /* Static, deliberately - see the wave layer above. */
   .ambient__glow--a {
     top: -28vh;
     left: 50%;
     width: min(140vw, 1400px);
     height: min(80vh, 760px);
     margin-left: min(-70vw, -700px);
-    background: radial-gradient(closest-side, var(--amb-glow-1), transparent 72%);
+    background: radial-gradient(closest-side, var(--amb-glow-1), transparent);
   }
 
   .ambient__glow--b {
@@ -335,7 +364,7 @@
     right: -14vw;
     width: min(100vw, 900px);
     height: min(64vh, 560px);
-    background: radial-gradient(closest-side, var(--amb-glow-2), transparent 72%);
+    background: radial-gradient(closest-side, var(--amb-glow-2), transparent);
   }
 
   .ambient__noise {
@@ -498,14 +527,6 @@
   flex: none;
 }
 
-.eyebrow--center::after {
-  content: "";
-  width: 1.75rem;
-  height: 1px;
-  background: linear-gradient(90deg, var(--line-strong), transparent);
-  flex: none;
-}
-
 .lead {
   color: var(--fg-muted);
   font-size: clamp(1rem, 1.15vw, 1.125rem);
@@ -526,35 +547,21 @@
   font-weight: 600;
 }
 
-/* Slow metallic sheen - the only "colour" in the palette is light itself. */
-.text-gradient {
-  background: linear-gradient(
-    100deg,
-    var(--fg) 0%,
-    var(--fg-subtle) 42%,
-    var(--fg) 62%,
-    var(--fg) 100%
-  );
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: sheen 8s linear infinite;
-}
-
-@keyframes sheen {
-  to { background-position: -200% 0; }
-}
-
 /* ==========================================================================
    SURFACES
    ========================================================================== */
 
+/* Every frosted surface on the site reads its filter from `--glass` rather
+   than declaring one, so the effect has exactly one on/off switch. */
+.glass,
+.surface {
+  backdrop-filter: var(--glass);
+  -webkit-backdrop-filter: var(--glass);
+}
+
 .surface {
   background: var(--surface);
   border: 1px solid var(--line);
-  backdrop-filter: blur(12px) saturate(145%);
-  -webkit-backdrop-filter: blur(12px) saturate(145%);
 }
 
 .card {
@@ -565,8 +572,8 @@
   /* A strong, saturated backdrop is what actually reads as frosted glass -
      more so than lowering the surface alpha, which just makes the card
      disappear into a near-featureless background. */
-  backdrop-filter: blur(12px) saturate(145%);
-  -webkit-backdrop-filter: blur(12px) saturate(145%);
+  backdrop-filter: var(--glass);
+  -webkit-backdrop-filter: var(--glass);
   /* The inset top rim is what sells the glass once the fill is this
      transparent: a real frosted panel catches light along its top edge. With
      it, the card stays legible as an object without needing an opaque fill
@@ -580,30 +587,23 @@
 
 /* A card whose own height animates opts out of the backdrop filter. A
    backdrop filter has to re-sample and re-blur everything behind the element
-   for every frame of a size change, and the backdrop here includes a
-   blur(100px) glow layer. Only the skills accordion resizes, so only it needs
-   this; every other card keeps its glass. */
+   for every frame of a size change. Only the skills accordion resizes, so
+   only it needs this; every other card keeps its glass. */
 .card--resizes {
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  --glass: none;
 }
 
-/* Phones drop the backdrop filter on every card. It is the single most
-   expensive thing a card paints, the surface alpha is high enough that the
-   cards look nearly identical without it, and scrolling gets cheaper across
-   the whole site. Desktop keeps the glass. */
-@media (max-width: 639px) {
-  .card,
-  .surface {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+/* Hover effects are gated on a device that actually has a pointer. On a
+   touchscreen `:hover` sticks after a tap, so an untapped card stays lifted
+   and lit until something else is touched - and the browser still has to
+   evaluate and composite the transition. Tailwind's own `hover:` variant is
+   already gated this way in v4; this keeps the hand-written rules in step. */
+@media (hover: hover) {
+  .card-interactive:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-ring);
+    box-shadow: var(--shadow-lg), inset 0 1px 0 0 var(--surface-edge);
   }
-}
-
-.card-interactive:hover {
-  transform: translateY(-3px);
-  border-color: var(--accent-ring);
-  box-shadow: var(--shadow-lg), inset 0 1px 0 0 var(--surface-edge);
 }
 
 /* Cursor-tracked highlight. A parent sets --mx/--my (in %) on pointermove;
@@ -629,8 +629,10 @@
   transition: opacity var(--t-base) var(--ease-out);
 }
 
-.spotlight:hover::before {
-  opacity: 1;
+@media (hover: hover) {
+  .spotlight:hover::before {
+    opacity: 1;
+  }
 }
 
 /* Accordion panel.
@@ -662,25 +664,37 @@
   pointer-events: auto;
 }
 
-/* Project deck cards. The depth-of-field blur and the deep two-layer shadow
-   are by far the most expensive things this component paints, and on a phone
-   the cards are large enough that both cost real frames during the spring.
-   Below `sm` the blur is dropped entirely and the shadow is reduced - the deck
-   still reads from scale, offset and the scrim. `!important` is required
-   because the blur arrives as an inline style. */
+/* Project deck cards.
+   The rotation is a plain CSS transition on `transform`, not a JS spring: the
+   compositor can run transform and opacity on its own thread, whereas a
+   physics spring has to wake the main thread, recompute five cards and write
+   five inline styles on every frame. That per-frame main-thread work is what
+   made the deck feel heavy on a phone. The easing below is tuned to the
+   spring it replaced, which was overdamped (no overshoot) and settled in
+   roughly this time. */
 .deck-card {
   box-shadow: var(--shadow-xl);
+  transition: transform 380ms var(--ease-out),
+    opacity 260ms linear,
+    filter 260ms linear;
 }
 
-@media (max-width: 639px) {
+/* The depth-of-field blur and the deep two-layer shadow are the most
+   expensive things this component paints, and on a touch device the cards are
+   large relative to the screen. Both are throttled there; the deck still
+   reads from scale, offset and the scrim. `!important` is required because
+   the blur arrives as an inline style. */
+@media (max-width: 639px), (hover: none) {
   .deck-card {
     filter: none !important;
     box-shadow: var(--shadow-md);
   }
+}
 
-  /* The two outermost cards sit mostly off-screen on a phone but still cost a
-     compositor layer and a paint each. `display: none` actually removes that
-     work; visibility/opacity would not. */
+/* The two outermost cards sit mostly off-screen on a phone but still cost a
+   compositor layer and a paint each. `display: none` actually removes that
+   work; visibility/opacity would not. */
+@media (max-width: 639px) {
   .deck-card--far {
     display: none;
   }
@@ -691,11 +705,6 @@
   height: 1px;
   border: 0;
   background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
-}
-
-.rule-v {
-  width: 1px;
-  background: linear-gradient(180deg, transparent, var(--line-strong), transparent);
 }
 
 /* ==========================================================================
@@ -733,23 +742,12 @@
   box-shadow: var(--shadow-accent);
 }
 
-.btn-primary:hover {
-  background: var(--accent-hover);
-  transform: translateY(-2px);
-}
-
 .btn-secondary {
   background: var(--surface);
   color: var(--fg);
   border-color: var(--line-strong);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.btn-secondary:hover {
-  border-color: var(--accent-ring);
-  background: var(--surface-raised);
-  transform: translateY(-2px);
+  backdrop-filter: var(--glass);
+  -webkit-backdrop-filter: var(--glass);
 }
 
 .btn-ghost {
@@ -758,9 +756,22 @@
   padding-inline: 0.875rem;
 }
 
-.btn-ghost:hover {
-  color: var(--fg);
-  background: var(--surface-inset);
+@media (hover: hover) {
+  .btn-primary:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent-ring);
+    background: var(--surface-raised);
+    transform: translateY(-2px);
+  }
+
+  .btn-ghost:hover {
+    color: var(--fg);
+    background: var(--surface-inset);
+  }
 }
 
 .btn-sm {
@@ -785,10 +796,12 @@
     border-color var(--t-base) var(--ease-out);
 }
 
-.btn-icon:hover {
-  color: var(--fg);
-  background: var(--surface-inset);
-  border-color: var(--line);
+@media (hover: hover) {
+  .btn-icon:hover {
+    color: var(--fg);
+    background: var(--surface-inset);
+    border-color: var(--line);
+  }
 }
 
 /* ==========================================================================
@@ -852,6 +865,97 @@
 }
 
 /* ==========================================================================
+   MOTION
+   Every entrance on the site is a CSS transition or keyframe, driven either
+   by one shared IntersectionObserver (`use-in-view.ts`, which only adds a
+   class) or by nothing at all. Nothing here needs a JS animation library.
+
+   That is a deliberate replacement of Framer Motion, which used to drive all
+   of this. Two reasons, both measured:
+
+   1. Cost per frame. A JS animation library computes values on the main
+      thread and writes inline styles every frame. CSS transitions on
+      `opacity` and `transform` run on the compositor, so they keep animating
+      smoothly even while the main thread is busy - which on a phone it
+      usually is.
+   2. Cost per byte. It was ~130 KB of JavaScript in the first load of every
+      page, for effects the browser performs natively.
+
+   The hidden states are gated on `html.js`, set by the inline script in the
+   document head before first paint. Without JS - or for a crawler that does
+   not run it - the page is simply fully visible, rather than a wall of
+   `opacity: 0` waiting for an observer that will never fire.
+   ========================================================================== */
+
+/* Scroll entrance. `use-in-view` adds `.is-in` once the element crosses into
+   the viewport, and never touches it again.
+   Direction and distance come from custom properties, so one rule covers
+   every variant the site uses instead of a class per direction. */
+.js .reveal {
+  opacity: 0;
+  transform: translate3d(var(--rv-x, 0px), var(--rv-y, 1.5rem), 0)
+    scale(var(--rv-scale, 1));
+  transition:
+    opacity var(--t-slow) var(--ease-out) var(--rv-delay, 0ms),
+    transform var(--t-slow) var(--ease-out) var(--rv-delay, 0ms);
+}
+
+.js .reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Staggered list. The *group* is what gets observed - one observer entry for
+   a whole grid rather than one per card - and the children stagger off their
+   own index, which the group writes as `--rv-i`. */
+.js .reveal-group .reveal-item {
+  opacity: 0;
+  transform: translate3d(0, 1.375rem, 0);
+  transition:
+    opacity var(--t-slow) var(--ease-out),
+    transform var(--t-slow) var(--ease-out);
+  transition-delay: calc(
+    var(--rv-delay, 0ms) + var(--rv-i, 0) * var(--rv-stagger, 70ms)
+  );
+}
+
+.js .reveal-group.is-in .reveal-item {
+  opacity: 1;
+  transform: none;
+}
+
+/* Load-time entrance, for the hero only. Everything else waits to be scrolled
+   to; the hero is already on screen, so it animates from a keyframe the
+   moment the document paints rather than a frame later, once an observer has
+   had a chance to run. */
+.js .enter {
+  animation: enter var(--t-slow) var(--ease-out) var(--enter-delay, 0ms) both;
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--enter-y, 1rem), 0)
+      scale(var(--enter-scale, 1));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The work timeline's rail, drawn downwards as the section arrives. */
+.js .rail {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 900ms var(--ease-out);
+}
+
+.js .rail.is-in {
+  transform: scaleY(1);
+}
+
+/* ==========================================================================
    DECORATIVE MOTION
    ========================================================================== */
 
@@ -887,40 +991,95 @@
   to   { transform: translateY(6px); }
 }
 
-/* ==========================================================================
-   SCROLLBARS
-   ========================================================================== */
-
-.scrollbar-slim {
-  scrollbar-width: thin;
-  scrollbar-color: var(--line-strong) transparent;
+/* Halo around the timeline node of the current role. Transform and opacity
+   only, so it composites without ever touching layout or paint. */
+.node-pulse {
+  animation: node-pulse 2.6s var(--ease-in-out) infinite;
 }
 
-.scrollbar-slim::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+@keyframes node-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.35; }
+  50%      { transform: scale(1.55); opacity: 0; }
 }
 
-.scrollbar-slim::-webkit-scrollbar-track {
-  background: transparent;
+/* Soft light bloom behind a panel or a portrait.
+   A gradient, never `filter: blur()` on a solid block: a blur allocates an
+   offscreen buffer the size of the element plus the blur radius and runs a
+   two-pass convolution over it on every paint, while a radial-gradient is one
+   cheap paint that, at these alphas, is indistinguishable. */
+.bloom {
+  background: radial-gradient(closest-side, var(--accent-glow), transparent);
 }
 
-.scrollbar-slim::-webkit-scrollbar-thumb {
-  background: var(--line-strong);
-  border-radius: 999px;
+/* Sun/moon crossfade in the theme toggle. Driven entirely by the `.dark`
+   class on <html>, so the button holds no animation state of its own and
+   nothing re-renders when the theme changes. */
+.theme-toggle__icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity var(--t-base) var(--ease-out),
+    transform var(--t-base) var(--ease-out);
 }
 
-.scrollbar-slim::-webkit-scrollbar-thumb:hover {
-  background: var(--fg-subtle);
+.theme-toggle__icon--dark {
+  opacity: 0;
+  transform: translateY(0.875rem) rotate(-40deg);
 }
 
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.dark .theme-toggle__icon--dark {
+  opacity: 1;
+  transform: none;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+.dark .theme-toggle__icon--light {
+  opacity: 0;
+  transform: translateY(-0.875rem) rotate(40deg);
+}
+
+/* The navbar condensing into its pill.
+   The properties are listed rather than transitioned with `all`: this element
+   swaps class every time the reader crosses the scroll threshold, and `all`
+   makes the browser check every animatable property on it each time. */
+.navbar-shell {
+  transition:
+    max-width var(--t-base) var(--ease-out),
+    margin-top var(--t-base) var(--ease-out),
+    padding var(--t-base) var(--ease-out),
+    border-radius var(--t-base) var(--ease-out),
+    border-color var(--t-base) var(--ease-out),
+    background-color var(--t-base) var(--ease-out),
+    box-shadow var(--t-base) var(--ease-out);
+}
+
+/* Reading-progress hairline on the navbar's bottom edge.
+   Scaled from a custom property that one rAF-throttled scroll listener
+   writes, so scrolling never re-renders React and never animates in JS.
+
+   The clipping wrapper is what makes it fit the pill: the bar is a rectangle,
+   so without a rounded parent that clips it, the line runs straight past the
+   navbar's rounded caps and the whole thing reads as a square box. */
+.nav-progress {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: var(--r-pill);
+  pointer-events: none;
+}
+
+.nav-progress::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent) 45%, var(--accent));
+  transform: scaleX(var(--scroll-progress, 0));
+  transform-origin: 0 50%;
 }
 
 }
@@ -941,5 +1100,30 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* The entrances start from `opacity: 0` and are transitioned in. Killing
+     the transition alone would leave them hidden until the observer fires -
+     and hidden forever for anything already on screen. They are simply on
+     from the start instead. */
+  .js .reveal,
+  .js .reveal-group .reveal-item,
+  .js .enter {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .js .rail {
+    transform: scaleY(1) !important;
+  }
+
+  /* The drift, the conic sweep and the pulse are decoration with no resting
+     state worth landing on; they simply stop. */
+  .float,
+  .conic-ring::before,
+  .node-pulse,
+  .status-dot::after {
+    animation: none !important;
   }
 }

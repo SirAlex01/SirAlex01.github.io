@@ -1,23 +1,35 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FiCheck, FiCopy } from "react-icons/fi";
 import { ArrowUpRight } from "lucide-react";
 import { contacts } from "../components/contact-data";
 import Reveal, { RevealGroup, RevealItem } from "../components/ui/reveal";
 
+/** How long the "Copied" confirmation stays up. */
+const COPIED_FOR_MS = 2000;
+
 export default function ContactsPage() {
   const [copied, setCopied] = useState(false);
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
+    return () => {
+      if (resetTimer.current) clearTimeout(resetTimer.current);
+    };
   }, []);
 
-  const copyEmail = (email: string) => {
-    navigator.clipboard.writeText(email);
+  // The reset is cancellable so that neither a second click nor navigating
+  // away mid-confirmation leaves a timer running against a gone component.
+  const copyEmail = useCallback((email: string) => {
+    navigator.clipboard.writeText(email).catch(() => {
+      // Clipboard access can be refused; the address is on screen either way.
+    });
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+    if (resetTimer.current) clearTimeout(resetTimer.current);
+    resetTimer.current = setTimeout(() => setCopied(false), COPIED_FOR_MS);
+  }, []);
 
   return (
     // Sized to sit inside the viewport alongside the navbar and footer, so
@@ -47,7 +59,7 @@ export default function ContactsPage() {
                     {...(isEmail ? {} : { target: "_blank", rel: "noopener noreferrer" })}
                     className="flex min-w-0 flex-1 items-center gap-4"
                   >
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--surface-inset)] text-lg text-[var(--fg-muted)] transition-colors duration-300 group-hover:border-[var(--accent-ring)] group-hover:text-[var(--fg)]">
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--surface-inset)] text-lg text-[var(--fg-muted)] transition-colors duration-[var(--t-base)] group-hover:border-[var(--accent-ring)] group-hover:text-[var(--fg)]">
                       {contact.icon}
                     </span>
 
@@ -76,7 +88,7 @@ export default function ContactsPage() {
                   ) : (
                     <ArrowUpRight
                       aria-hidden="true"
-                      className="h-5 w-5 shrink-0 text-[var(--fg-subtle)] transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--fg)]"
+                      className="h-5 w-5 shrink-0 text-[var(--fg-subtle)] transition-[translate,color] duration-[var(--t-base)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--fg)]"
                     />
                   )}
                 </div>

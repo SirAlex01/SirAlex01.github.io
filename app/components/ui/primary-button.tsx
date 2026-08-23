@@ -45,7 +45,7 @@ export default function PrimaryButton({
       {trailingIcon !== undefined ? (
         trailingIcon
       ) : variant === "primary" ? (
-        <FiArrowRight className="shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
+        <FiArrowRight className="shrink-0 transition-transform duration-[var(--t-base)] group-hover:translate-x-1" />
       ) : null}
     </>
   );

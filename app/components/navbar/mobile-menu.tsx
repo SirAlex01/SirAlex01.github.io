@@ -10,17 +10,30 @@ interface MobileMenuProps {
   onClose: () => void;
 }
 
+/** Must match the drawer's slide-out transition, below. */
+const CLOSE_MS = 300;
+
 export default function MobileMenu({ links, onClose }: MobileMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [visible, setVisible] = useState(false);
 
+  // The drawer unmounts itself once it has slid out, so the timer that does
+  // the unmounting has to be cancellable - closing twice, or unmounting from
+  // somewhere else mid-slide, would otherwise leave it pending.
   const handleClose = useCallback(() => {
     setVisible(false);
-    setTimeout(onClose, 320);
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(onClose, CLOSE_MS);
   }, [onClose]);
 
-  // Animate the drawer in on mount.
-  useEffect(() => setVisible(true), []);
+  // Animate the drawer in on mount, and never leave a timer behind.
+  useEffect(() => {
+    setVisible(true);
+    return () => {
+      if (closeTimer.current) clearTimeout(closeTimer.current);
+    };
+  }, []);
 
   // Close on outside click or Escape.
   useEffect(() => {
@@ -57,14 +70,14 @@ export default function MobileMenu({ links, onClose }: MobileMenuProps) {
       aria-modal="true"
     >
       <div
-        className={`absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300
+        className={`absolute inset-0 bg-black/40 transition-opacity duration-[var(--t-base)]
           ${visible ? "opacity-100" : "opacity-0"}`}
       />
 
       <div
         ref={menuRef}
-        className={`relative z-10 flex h-full w-[min(20rem,85vw)] flex-col border-l border-[var(--line)]
-          bg-[var(--surface-solid)]/95 p-6 backdrop-blur-xl transition-transform duration-300 ease-[var(--ease-out)]
+        className={`glass relative z-10 flex h-full w-[min(20rem,85vw)] flex-col border-l border-[var(--line)]
+          bg-[var(--surface-solid)]/95 p-6 transition-transform duration-[var(--t-base)] ease-[var(--ease-out)]
           ${visible ? "translate-x-0" : "translate-x-full"}`}
       >
         <div className="mb-8 flex items-center justify-between">
@@ -78,8 +91,8 @@ export default function MobileMenu({ links, onClose }: MobileMenuProps) {
           {links.map((link, i) => (
             <div
               key={link.path}
-              style={{ transitionDelay: `${visible ? 80 + i * 60 : 0}ms` }}
-              className={`transition-all duration-500 ease-[var(--ease-out)]
+              style={{ transitionDelay: `${visible ? 60 + i * 50 : 0}ms` }}
+              className={`transition-[opacity,translate] duration-[var(--t-slow)] ease-[var(--ease-out)]
                 ${visible ? "translate-x-0 opacity-100" : "translate-x-6 opacity-0"}`}
             >
               <MobileMenuLink

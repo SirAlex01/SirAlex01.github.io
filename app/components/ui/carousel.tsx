@@ -3,12 +3,13 @@
 import Image from "next/image";
 import * as React from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi2";
-import YoutubePlayer, { YouTubePlayerHandle } from "./youtube-player";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import YouTubeEmbed, { YouTubeEmbedHandle } from "./youtube-embed";
 
 interface CarouselItem {
   src?: string;
-  video?: { id: string; start?: number };
+  alt?: string;
+  video?: { id: string; start?: number; title: string };
 }
 interface CarouselProps {
   items: CarouselItem[];
@@ -41,12 +42,25 @@ function SwipeShield({
     movedX.current = e.clientX - startX.current;
   };
 
+  const release = (e: React.PointerEvent) => {
+    const el = e.currentTarget as HTMLElement;
+    if (el.hasPointerCapture?.(e.pointerId)) el.releasePointerCapture(e.pointerId);
+  };
+
   const handleUp = (e: React.PointerEvent) => {
-    (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId);
+    release(e);
     if (Math.abs(movedX.current) >= SWIPE_THRESHOLD) {
       if (movedX.current > 0) onPrev();
       else onNext();
     }
+  };
+
+  // A gesture the browser takes over (a system back-swipe, say) ends in
+  // `pointercancel`, never `pointerup`. Without this the strip keeps the
+  // capture and goes on swallowing every pointer event on the slide.
+  const handleCancel = (e: React.PointerEvent) => {
+    release(e);
+    movedX.current = 0;
   };
 
   const handleStyle: React.CSSProperties = {
@@ -69,6 +83,7 @@ function SwipeShield({
           onPointerDown={handleDown}
           onPointerMove={handleMove}
           onPointerUp={handleUp}
+          onPointerCancel={handleCancel}
         />
       ))}
     </>
@@ -91,7 +106,7 @@ export default function Carousel({ items }: CarouselProps) {
   });
 
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const playerRefs = React.useRef<(YouTubePlayerHandle | null)[]>([]);
+  const playerRefs = React.useRef<(YouTubeEmbedHandle | null)[]>([]);
 
   // Sync index & pause inactive videos
   const onSelect = React.useCallback(() => {
@@ -99,7 +114,7 @@ export default function Carousel({ items }: CarouselProps) {
     const idx = emblaApi.selectedScrollSnap();
     setSelectedIndex(idx);
     playerRefs.current.forEach((ref, i) => {
-      if (ref && i !== idx) ref.pauseVideo();
+      if (ref && i !== idx) ref.pause();
     });
   }, [emblaApi]);
 
@@ -148,20 +163,20 @@ export default function Carousel({ items }: CarouselProps) {
               <div className="relative h-full w-full overflow-hidden rounded-[var(--r-lg)]">
                 <SwipeShield onPrev={goPrev} onNext={goNext} />
 
-                {/* YouTube Player */}
-                <YoutubePlayer
+                <YouTubeEmbed
                   ref={(el) => {
                     playerRefs.current[i] = el;
                   }}
                   videoId={item.video.id}
                   start={item.video.start}
+                  title={item.video.title}
                 />
               </div>
             ) : (
               <div className="relative h-full w-full overflow-hidden rounded-[var(--r-lg)]">
                 <Image
                   src={item.src!}
-                  alt={`CyberChallenge.IT slide ${i + 1}`}
+                  alt={item.alt ?? `CyberChallenge.IT slide ${i + 1}`}
                   fill
                   sizes="(min-width: 1024px) 55vw, (min-width: 768px) 80vw, 90vw"
                   className="select-none object-cover"
@@ -180,39 +195,39 @@ export default function Carousel({ items }: CarouselProps) {
         onClick={goPrev}
         aria-label="Previous slide"
         className="absolute left-4 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-[var(--line)]
-                   bg-[var(--surface-solid)]/80 p-2.5 text-[var(--fg)] opacity-0 shadow-[var(--shadow-md)]
-                   backdrop-blur-md transition-all duration-300 pointer-events-none
+                   glass bg-[var(--surface-solid)]/80 p-2.5 text-[var(--fg)] opacity-0 shadow-[var(--shadow-md)]
+                   pointer-events-none transition-[opacity,border-color,background-color] duration-[var(--t-base)]
                    hover:border-[var(--accent-ring)] hover:bg-[var(--surface-solid)]
                    group-hover:pointer-events-auto group-hover:opacity-100 sm:flex"
       >
-        <HiOutlineChevronLeft className="w-6 h-6" />
+        <ChevronLeft className="w-6 h-6" />
       </button>
             
       <button
         onClick={goNext}
         aria-label="Next slide"
         className="absolute right-4 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-[var(--line)]
-                   bg-[var(--surface-solid)]/80 p-2.5 text-[var(--fg)] opacity-0 shadow-[var(--shadow-md)]
-                   backdrop-blur-md transition-all duration-300 pointer-events-none
+                   glass bg-[var(--surface-solid)]/80 p-2.5 text-[var(--fg)] opacity-0 shadow-[var(--shadow-md)]
+                   pointer-events-none transition-[opacity,border-color,background-color] duration-[var(--t-base)]
                    hover:border-[var(--accent-ring)] hover:bg-[var(--surface-solid)]
                    group-hover:pointer-events-auto group-hover:opacity-100 sm:flex"
       >
-        <HiOutlineChevronRight className="w-6 h-6" />
+        <ChevronRight className="w-6 h-6" />
       </button>
             
       {/* --- Dots (desktop: floating over the slide, on hover) --- */}
       <div
         className="pointer-events-none absolute bottom-4 left-0 right-0 z-20 hidden justify-center
-                   opacity-0 transition-all duration-300 group-hover:pointer-events-auto
+                   opacity-0 transition-opacity duration-[var(--t-base)] group-hover:pointer-events-auto
                    group-hover:opacity-100 md:flex"
       >
-        <div className="flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[var(--surface-solid)]/75 px-3 py-2 backdrop-blur-md">
+        <div className="glass flex items-center gap-1.5 rounded-full border border-[var(--line)] bg-[var(--surface-solid)]/75 px-3 py-2">
           {items.map((_, i) => (
             <button
               key={i}
               onClick={() => emblaApi?.scrollTo(i)}
               aria-label={`Go to slide ${i + 1}`}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
+              className={`h-1.5 rounded-full transition-[width,background-color] duration-[var(--t-base)] ${
                 i === selectedIndex
                   ? "w-6 bg-[var(--accent)]"
                   : "w-1.5 bg-[var(--line-strong)] hover:bg-[var(--fg-subtle)]"
@@ -230,7 +245,7 @@ export default function Carousel({ items }: CarouselProps) {
             key={`mobile-${i}`}
             onClick={() => emblaApi?.scrollTo(i)}
             aria-label={`Go to slide ${i + 1}`}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
+            className={`h-1.5 rounded-full transition-[width,background-color] duration-[var(--t-base)] ${
               i === selectedIndex ? "w-5 bg-[var(--accent)]" : "w-1.5 bg-[var(--line-strong)]"
             }`}
           />

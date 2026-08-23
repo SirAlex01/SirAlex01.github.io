@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion, type Variants } from "framer-motion";
-import type { ReactNode } from "react";
+import { Children, cloneElement, isValidElement, type ReactNode } from "react";
+import useInView from "./use-in-view";
 
 type Direction = "up" | "down" | "left" | "right" | "none";
 
@@ -13,64 +13,75 @@ interface RevealProps {
   from?: Direction;
   /** Travel distance in px. */
   distance?: number;
+  /** Scale to grow from. 1 means no scaling. */
+  scale?: number;
   className?: string;
-  /** Re-run the animation every time the element re-enters the viewport. */
-  repeat?: boolean;
 }
 
-const offset = (from: Direction, d: number) => {
+/** Turns a direction into the offsets `.reveal` reads. */
+function offsetVars(from: Direction, distance: number) {
   switch (from) {
     case "up":
-      return { y: d };
+      return { "--rv-y": `${distance}px` };
     case "down":
-      return { y: -d };
+      return { "--rv-y": `${-distance}px` };
     case "left":
-      return { x: -d };
+      return { "--rv-x": `${-distance}px` };
     case "right":
-      return { x: d };
+      return { "--rv-x": `${distance}px` };
     default:
-      return {};
+      return { "--rv-y": "0px" };
   }
-};
+}
 
 /**
  * Scroll-triggered entrance. Used site-wide instead of ad-hoc
- * IntersectionObservers so timing and easing stay consistent, and so the
- * whole site honours `prefers-reduced-motion` from one place.
+ * IntersectionObservers, so timing and easing stay consistent and the whole
+ * site honours `prefers-reduced-motion` from one place.
+ *
+ * The animation itself is CSS - see the MOTION section of globals.css. All
+ * this component does is hand one element to the shared observer, which adds
+ * a class when it arrives. There is no per-frame JavaScript and no re-render.
  */
 export default function Reveal({
   children,
   delay = 0,
   from = "up",
   distance = 24,
+  scale,
   className,
-  repeat = false,
 }: RevealProps) {
-  const reduced = useReducedMotion();
-
-  if (reduced) return <div className={className}>{children}</div>;
+  const ref = useInView<HTMLDivElement>();
 
   return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, ...offset(from, distance) }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: !repeat, amount: 0.15, margin: "0px 0px -80px 0px" }}
-      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+    <div
+      ref={ref}
+      className={className ? `reveal ${className}` : "reveal"}
+      style={
+        {
+          ...offsetVars(from, distance),
+          ...(scale !== undefined ? { "--rv-scale": scale } : null),
+          ...(delay ? { "--rv-delay": `${Math.round(delay * 1000)}ms` } : null),
+        } as React.CSSProperties
+      }
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
 /**
  * Wraps a list so its children animate in one after another.
  * Pair with <RevealItem> for each child.
+ *
+ * The group is the observed element, not the items: a six-card grid is one
+ * observer target instead of six, and the stagger is a CSS `transition-delay`
+ * computed from each item's index rather than a JS timeline.
  */
 export function RevealGroup({
   children,
   className,
-  stagger = 0.08,
+  stagger = 0.07,
   delay = 0,
 }: {
   children: ReactNode;
@@ -78,45 +89,47 @@ export function RevealGroup({
   stagger?: number;
   delay?: number;
 }) {
-  const reduced = useReducedMotion();
-
-  if (reduced) return <div className={className}>{children}</div>;
+  const ref = useInView<HTMLDivElement>();
 
   return (
-    <motion.div
-      className={className}
-      initial="hidden"
-      whileInView="shown"
-      viewport={{ once: true, amount: 0.1, margin: "0px 0px -60px 0px" }}
-      variants={{
-        hidden: {},
-        shown: { transition: { staggerChildren: stagger, delayChildren: delay } },
-      }}
+    <div
+      ref={ref}
+      className={className ? `reveal-group ${className}` : "reveal-group"}
+      style={
+        {
+          "--rv-stagger": `${Math.round(stagger * 1000)}ms`,
+          ...(delay ? { "--rv-delay": `${Math.round(delay * 1000)}ms` } : null),
+        } as React.CSSProperties
+      }
     >
-      {children}
-    </motion.div>
+      {/* Each item is told its position so CSS can offset its delay. Doing it
+          here rather than asking every call site to pass an index keeps the
+          consumers identical to what they were. */}
+      {Children.map(children, (child, index) =>
+        isValidElement<{ index?: number }>(child)
+          ? cloneElement(child, { index })
+          : child
+      )}
+    </div>
   );
 }
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 22 },
-  shown: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-};
 
 export function RevealItem({
   children,
   className,
+  index = 0,
 }: {
   children: ReactNode;
   className?: string;
+  /** Set by <RevealGroup>; drives the stagger. */
+  index?: number;
 }) {
-  const reduced = useReducedMotion();
-
-  if (reduced) return <div className={className}>{children}</div>;
-
   return (
-    <motion.div className={className} variants={itemVariants}>
+    <div
+      className={className ? `reveal-item ${className}` : "reveal-item"}
+      style={{ "--rv-i": index } as React.CSSProperties}
+    >
       {children}
-    </motion.div>
+    </div>
   );
 }

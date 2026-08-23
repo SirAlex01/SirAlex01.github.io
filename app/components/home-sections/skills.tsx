@@ -47,10 +47,10 @@ export default function Skills() {
                   onClick={() => toggleOpen(i)}
                   aria-expanded={isOpen}
                   aria-controls={panelId}
-                  className="group flex w-full items-center gap-3 px-4 py-4 text-left transition-colors duration-300 hover:bg-[var(--surface-inset)] sm:gap-4 sm:px-6"
+                  className="group flex w-full items-center gap-3 px-4 py-4 text-left transition-colors duration-[var(--t-base)] hover:bg-[var(--surface-inset)] sm:gap-4 sm:px-6"
                 >
                   <span
-                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--r-sm)] border text-base transition-colors duration-300 sm:h-10 sm:w-10 sm:text-lg
+                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--r-sm)] border text-base transition-colors duration-[var(--t-base)] sm:h-10 sm:w-10 sm:text-lg
                       ${
                         isOpen
                           ? "border-[var(--accent-ring)] bg-[var(--accent-soft)] text-[var(--fg)]"

@@ -7,13 +7,19 @@ import Reveal, { RevealGroup, RevealItem } from "../ui/reveal";
 
 const ctfItems = [
   { src: "/cc/IMG_3661.webp" },
-  { video: { id: "m0b_5nNsiu4" } },
+  { video: { id: "m0b_5nNsiu4", title: "CyberChallenge.IT 2025 finals" } },
   { src: "/cc/067A2641.webp" },
   { src: "/cc/067A3373.webp" },
   { src: "/cc/067A4466.webp" },
   { src: "/cc/067A4500.webp" },
   { src: "/cc/067A4734.webp" },
-  { video: { id: "WapZTAImkdQ", start: 2125 } },
+  {
+    video: {
+      id: "WapZTAImkdQ",
+      start: 2125,
+      title: "CyberChallenge.IT 2025 award ceremony",
+    },
+  },
 ];
 
 const teams = [
@@ -67,14 +73,14 @@ function TeamLogo({ team }: { team: (typeof teams)[number] }) {
       href={team.href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex h-24 w-24 shrink-0 items-center justify-center rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-4 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-[var(--accent-ring)] hover:shadow-[var(--shadow-lg)] sm:h-28 sm:w-28"
+      className="glass group flex h-24 w-24 shrink-0 items-center justify-center rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-4 transition-[translate,border-color,box-shadow] duration-[var(--t-base)] ease-[var(--ease-out)] hover:-translate-y-1 hover:border-[var(--accent-ring)] hover:shadow-[var(--shadow-lg)] sm:h-28 sm:w-28"
     >
       <Image
         src={team.src}
         alt={team.alt}
         width={112}
         height={112}
-        className={`h-full w-full object-contain transition-transform duration-300 group-hover:scale-110 ${team.imgClass}`}
+        className={`h-full w-full object-contain transition-transform duration-[var(--t-base)] ease-[var(--ease-out)] group-hover:scale-110 ${team.imgClass}`}
       />
     </a>
   );
@@ -122,7 +128,7 @@ export default function CTFs() {
             <RevealItem key={award.title} className="h-full">
               <article className="card card-interactive group flex h-full gap-4 p-6 text-left">
                 <span
-                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--surface-inset)] text-xl text-[var(--fg-muted)] transition-colors duration-300 group-hover:border-[var(--accent-ring)] group-hover:text-[var(--fg)]"
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--surface-inset)] text-xl text-[var(--fg-muted)] transition-colors duration-[var(--t-base)] group-hover:border-[var(--accent-ring)] group-hover:text-[var(--fg)]"
                   aria-hidden="true"
                 >
                   {award.icon}

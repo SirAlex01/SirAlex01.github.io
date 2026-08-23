@@ -21,7 +21,7 @@ export default function Footer() {
               alt=""
               width={36}
               height={36}
-              className="h-9 w-9 transition-transform duration-300 group-hover:scale-110 dark:invert"
+              className="h-9 w-9 transition-transform duration-[var(--t-base)] group-hover:scale-110 dark:invert"
             />
             <span className="flex flex-col leading-tight">
               <span className="text-sm font-semibold text-[var(--fg)]">
@@ -37,7 +37,7 @@ export default function Footer() {
               <Link
                 key={link.path}
                 href={link.path}
-                className="text-sm text-[var(--fg-muted)] transition-colors duration-300 hover:text-[var(--fg)]"
+                className="text-sm text-[var(--fg-muted)] transition-colors duration-[var(--t-base)] hover:text-[var(--fg)]"
               >
                 {link.name}
               </Link>

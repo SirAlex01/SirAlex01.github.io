@@ -2,46 +2,107 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { createPortal } from "react-dom";
-import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
 import { navLinks } from "./nav-links";
 import MobileMenu from "./mobile-menu";
 import ThemeToggle from "../ui/theme-toggle";
-import ScrollProgress from "../ui/scroll-progress";
+
+/** Scroll distance at which the bar condenses into its pill. */
+const CONDENSE_AT = 24;
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const barRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => setMounted(true), []);
+
+  /**
+   * The site's only scroll listener.
+   *
+   * It feeds two things that used to be separate: whether the bar is
+   * condensed, and how far down the page the reader is. The second used to be
+   * a spring animation in the animation library, which ran a JS frame loop
+   * for the entire time anyone was scrolling; it is now one custom property
+   * that CSS scales the hairline from, so scrolling costs a single style
+   * write and no React render at all.
+   *
+   * Coalesced into an animation frame, because a scroll event can fire many
+   * times per frame and there is no point computing this more than once per
+   * paint. The page height is cached and refreshed by a ResizeObserver rather
+   * than measured inside the handler - reading it there would force a layout
+   * on every frame of every scroll.
+   */
   useEffect(() => {
-    setMounted(true);
+    const bar = barRef.current;
+    let frame = 0;
+    let scrollable = 0;
 
-    const handleScroll = () => setScrolled(window.scrollY > 24);
+    const measure = () => {
+      scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    };
 
+    const update = () => {
+      frame = 0;
+      const y = window.scrollY;
+      setScrolled(y > CONDENSE_AT);
+      bar?.style.setProperty(
+        "--scroll-progress",
+        scrollable > 0 ? String(Math.min(y / scrollable, 1)) : "0"
+      );
+    };
+
+    const onScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(update);
+    };
+
+    const onResize = () => {
+      measure();
+      onScroll();
+    };
+
+    measure();
     // Run immediately on mount so a reload part-way down the page is correct.
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    update();
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+
+    // The document grows as below-the-fold sections stream in and as images
+    // settle, so the scrollable height has to be re-measured rather than
+    // taken once at mount.
+    const resizeObserver = new ResizeObserver(measure);
+    resizeObserver.observe(document.documentElement);
+
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      resizeObserver.disconnect();
+    };
   }, []);
 
   const rawPathname = usePathname();
   const pathname = rawPathname?.replace(/\/$/, "") || "/";
 
-  const toggleMenu = () => setIsOpen((v) => !v);
+  const toggleMenu = useCallback(() => setIsOpen((v) => !v), []);
+  const closeMenu = useCallback(() => setIsOpen(false), []);
 
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-[var(--z-nav)]">
+        {/* `.navbar-shell` carries the condense transition; see globals.css. */}
         <div
-          className={`mx-auto flex w-[calc(100%-1.5rem)] items-center justify-between transition-all duration-500 ease-[var(--ease-out)]
+          ref={barRef}
+          className={`navbar-shell mx-auto flex w-[calc(100%-1.5rem)] items-center justify-between
             ${
               scrolled
-                ? "mt-2 max-w-5xl rounded-full border border-[var(--line-strong)] bg-[var(--surface-nav)] px-3 py-2 shadow-[var(--shadow-md)] backdrop-blur-xl sm:px-4"
+                ? "glass mt-2 max-w-5xl rounded-full border border-[var(--line-strong)] bg-[var(--surface-nav)] px-3 py-2 shadow-[var(--shadow-md)] sm:px-4"
                 : "mt-0 max-w-6xl rounded-none border border-transparent bg-transparent px-5 py-3 shadow-none sm:px-8"
             }`}
         >
@@ -56,13 +117,13 @@ export default function Navbar() {
               width={48}
               height={48}
               priority
-              className={`transition-all duration-500 ease-[var(--ease-out)] group-hover:scale-110 dark:invert
+              className={`transition-[width,height] duration-[var(--t-base)] ease-[var(--ease-out)] dark:invert
                 ${scrolled ? "h-9 w-9" : "h-11 w-11"}`}
             />
-            <span className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-[var(--accent-glow)] opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100" />
+            <span className="bloom pointer-events-none absolute inset-0 -z-10 rounded-full opacity-0 transition-opacity duration-[var(--t-base)] group-hover:opacity-100" />
           </Link>
 
-          {/* Desktop links - the active pill slides between items. */}
+          {/* Desktop links */}
           <nav className="hidden items-center gap-1 md:flex">
             {navLinks.map((link) => {
               const normalized = link.path.replace(/\/$/, "") || "/";
@@ -73,18 +134,20 @@ export default function Navbar() {
                   key={link.path}
                   href={link.path}
                   aria-current={isActive ? "page" : undefined}
-                  className={`relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300
+                  className={`relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-[var(--t-base)]
                     ${
                       isActive
                         ? "text-[var(--fg)]"
                         : "text-[var(--fg-subtle)] hover:text-[var(--fg)]"
                     }`}
                 >
+                  {/* A plain span, not a shared-layout animation. The pill can
+                      only move when the route changes, which unmounts the page
+                      anyway, so the slide was never actually visible. */}
                   {isActive && (
-                    <motion.span
-                      layoutId="nav-active"
+                    <span
+                      aria-hidden="true"
                       className="absolute inset-0 -z-10 rounded-full border border-[var(--accent-ring)] bg-[var(--accent-soft)]"
-                      transition={{ type: "spring", stiffness: 380, damping: 32 }}
                     />
                   )}
                   {link.name}
@@ -94,9 +157,10 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-1">
-            {mounted && <ThemeToggle />}
-            {mounted && !isOpen && (
+            <ThemeToggle />
+            {!isOpen && (
               <button
+                type="button"
                 onClick={toggleMenu}
                 className="btn-icon md:hidden"
                 aria-label="Open menu"
@@ -107,7 +171,7 @@ export default function Navbar() {
             )}
           </div>
 
-          {scrolled && <ScrollProgress />}
+          {scrolled && <div aria-hidden="true" className="nav-progress" />}
         </div>
       </header>
 
@@ -116,10 +180,7 @@ export default function Navbar() {
 
       {mounted &&
         isOpen &&
-        createPortal(
-          <MobileMenu links={navLinks} onClose={toggleMenu} />,
-          document.body
-        )}
+        createPortal(<MobileMenu links={navLinks} onClose={closeMenu} />, document.body)}
     </>
   );
 }

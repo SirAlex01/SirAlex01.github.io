@@ -6,14 +6,26 @@ import Footer from "./components/footer/footer";
 import ScrollRestorationManager from "./components/ui/scroll-restoration";
 import StructuredData from "./components/ui/structured-data";
 import AmbientBackground from "./components/ui/ambient-background";
-import { ThemeProvider } from "./components/ui/theme-provider";
 
-const themeInitScript = `
+/**
+ * Runs before first paint, and does two things that both have to happen
+ * before anything is on screen:
+ *
+ * - Applies the stored theme, so there is no flash of the wrong one.
+ * - Marks the document as scripted. Every scroll entrance hides its element
+ *   behind `html.js` (see the MOTION section of globals.css), so a client
+ *   that never runs this - no JS, or a crawler that does not execute it -
+ *   gets the finished page rather than a wall of `opacity: 0` waiting on an
+ *   observer that will never fire.
+ */
+const bootScript = `
 (function () {
+  var root = document.documentElement;
+  root.classList.add("js");
   try {
     var stored = localStorage.getItem("theme");
     var isDark = stored ? stored === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
-    document.documentElement.classList.toggle("dark", isDark);
+    root.classList.toggle("dark", isDark);
   } catch (e) {}
 })();
 `;
@@ -143,8 +155,8 @@ export default function RootLayout({
     // it becomes invalid at computed-value time - silently dropping the whole
     // type system back to the system stack.
     //
-    // The inline theme script sets `class="dark"` on <html> before hydration,
-    // which React would otherwise report as a server/client attribute mismatch.
+    // The inline boot script adds classes to <html> before hydration, which
+    // React would otherwise report as a server/client attribute mismatch.
     <html
       lang="en"
       suppressHydrationWarning
@@ -152,24 +164,22 @@ export default function RootLayout({
     >
       <head>
         <StructuredData />
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script dangerouslySetInnerHTML={{ __html: bootScript }} />
       </head>
       <body className="antialiased min-h-screen flex flex-col">
-        <ThemeProvider>
-          <ScrollRestorationManager />
-          <AmbientBackground />
-          <a
-            href="#main"
-            className="btn btn-secondary sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[var(--z-top)]"
-          >
-            Skip to content
-          </a>
-          <Navbar />
-          <main id="main" className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </ThemeProvider>
+        <ScrollRestorationManager />
+        <AmbientBackground />
+        <a
+          href="#main"
+          className="btn btn-secondary sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[var(--z-top)]"
+        >
+          Skip to content
+        </a>
+        <Navbar />
+        <main id="main" className="flex-1">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );
