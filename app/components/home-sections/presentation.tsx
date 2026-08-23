@@ -56,10 +56,11 @@ export default function Presentation() {
                 <b>CyberChallenge.IT 2025</b>.
               </p>
               <p className="prose-body">
-                What I enjoy most is work whose result can be measured: reverse-engineering
-                a proprietary industrial protocol with LLMs, redesigning a production
-                database to cut duplicate records by 90%, rebuilding a deployment pipeline
-                to cut its overhead by 86%.
+                These days I&apos;m a Cyber Technology Researcher at Leonardo, after a year
+                at Daikin working on the company&apos;s digitalization, building internal
+                production systems used across the business. What I care about most is the
+                impact my work has on the team: shipping things colleagues can rely on, and
+                sharing what I learn.
               </p>
             </div>
 
