@@ -618,6 +618,20 @@
   opacity: 1;
 }
 
+/* backdrop-filter is the single most expensive thing a card paints, and it is
+   recomputed on every frame of anything that changes the card's geometry - the
+   skills accordion animating its height sat directly on top of one, which is
+   what made that interaction feel heavy on a phone. Phones drop the filter
+   entirely; the surface alpha is high enough that the cards look nearly
+   identical without it, and scrolling gets cheaper everywhere as a bonus. */
+@media (max-width: 639px) {
+  .card,
+  .surface {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
 /* Project deck cards. The depth-of-field blur and the deep two-layer shadow
    are by far the most expensive things this component paints, and on a phone
    the cards are large enough that both cost real frames during the spring.
