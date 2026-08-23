@@ -58,12 +58,17 @@
      bloom; in light mode a light bloom on a near-white card is invisible, so
      it inverts to a soft shade instead. Kept separate from --accent-soft,
      which also fills chips and the nav pill. */
-  --spotlight: #0a0a0b26;
+  --spotlight: #8a8a9340;
   --accent-ring: #0a0a0b38;
   --accent-glow: #0a0a0b14;
 
   /* --- Ambient background ----------------------------------------------- */
-  --amb-rule: #0a0a0b0f;
+  /* Stronger than the dark-theme counterpart on purpose. Both themes' cards
+     pass a very different amount of what is behind them - the dark card is a
+     6% veil (94% passes through), the light one is 66% white (only 34%
+     passes) - so an identical wave strength is nearly invisible behind light
+     glass. This compensates so the backdrop reads in both. */
+  --amb-rule: #0a0a0b21;
   --amb-glow-1: #ffffffe6;   /* a white stage-light bloom on the grey canvas */
   --amb-glow-2: #ffffff99;
   --amb-noise: 0.03;
