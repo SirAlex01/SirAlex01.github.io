@@ -22,7 +22,7 @@
      colour instead (a dark panel in dark mode) kills the effect completely,
      at any alpha, because there is no longer any visible layering. Adjust the
      alpha, never the hue. */
-  --surface: #ffffffb3;
+  --surface: #ffffffbf;
   --surface-solid: #ffffff;
   --surface-raised: #fffffff2;
   --surface-inset: #0a0a0b06;
@@ -122,7 +122,7 @@
 
   --bg: #08090a;
   --bg-sunk: #050506;
-  --surface: #ffffff24;
+  --surface: #ffffff2b;
   --surface-solid: #121315;
   --surface-raised: #ffffff12;
   --surface-inset: #ffffff08;
