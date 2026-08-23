@@ -30,7 +30,7 @@ export default function Skills() {
       <SectionHeader title="Skills & Expertise" />
 
       <Reveal className="mt-10">
-        <div className="card overflow-hidden p-0">
+        <div className="card card--resizes overflow-hidden p-0">
           {skillCategories.map((cat, i) => {
             const isOpen = openItems.includes(i);
             const panelId = `skills-panel-${i}`;
@@ -67,7 +67,7 @@ export default function Skills() {
 
                   <span
                     aria-hidden="true"
-                    className={`shrink-0 text-[var(--fg-subtle)] transition-transform duration-200 ease-[var(--ease-out)] group-hover:text-[var(--fg)] ${
+                    className={`shrink-0 text-[var(--fg-subtle)] transition-transform duration-[180ms] ease-[var(--ease-out)] group-hover:text-[var(--fg)] ${
                       isOpen ? "rotate-180" : ""
                     }`}
                   >

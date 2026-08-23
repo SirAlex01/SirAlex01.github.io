@@ -223,6 +223,35 @@ bounding box and the whole thing reads as a square. Clip inside the child
 component, not by putting `overflow-hidden` on the navbar - that would also
 clip the logo's intentional hover glow.
 
+### 9. A card that resizes cannot keep its backdrop filter
+
+`.card` carries `backdrop-filter: blur(12px)`. That is fine while the card is
+a fixed size: the browser samples the backdrop once. The moment the card's own
+geometry animates, it has to re-sample and re-blur everything behind it on
+every frame - and the backdrop here includes an ambient glow layer with
+`filter: blur(100px)`.
+
+The skills accordion is the only card on the site whose height animates, so it
+carries `.card--resizes`, which sets `backdrop-filter: none`. Don't remove the
+modifier, and add it to any new card that animates its own size.
+
+Separately, phones drop the backdrop filter on `.card` and `.surface`
+altogether, at the same 639px breakpoint the deck uses. It is the most
+expensive thing a card paints and the surface alpha carries the look without
+it. So on desktop only the accordion is exempt; on a phone nothing has it.
+
+### 10. Accordion easing must be pure ease-out
+
+`.accordion-panel` transitions `grid-template-rows: 0fr -> 1fr`. It previously
+used `cubic-bezier(0.4, 0, 0.2, 1)`, whose first control point puts an
+**ease-in** ramp at the start - so there is a measurable pause between the tap
+and any visible movement, which reads as lag rather than as slowness.
+
+Measured cost of the open/close is ~0.3 ms of style+layout on a 269-node
+subtree, i.e. nothing. Any "it feels slow" here is the curve, not the work.
+Keep it on `var(--ease-out)` (`cubic-bezier(0.22, 1, 0.36, 1)`), which leaves
+at full speed and decelerates into place.
+
 ---
 
 ## Writing style
