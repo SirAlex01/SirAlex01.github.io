@@ -374,6 +374,14 @@
   background-size: calc(min(100%, 78rem) - 2 * var(--gutter)) 1px;
 }
 
+/* Suppresses the top hairline. For a page whose blocks are one continuous
+   piece of content rather than separate sections - the hairline is a
+   *boundary* marker, so drawing one under the navbar, or between a page
+   header and the grid it introduces, marks a division that isn't there. */
+.section--flush {
+  background-image: none;
+}
+
 /* Alternating tint with feathered edges reinforces the rhythm without the
    hard seams the old `bg-background/80` bands produced. */
 .section--tinted::before {

@@ -45,7 +45,7 @@ export default function ProjectsPage() {
   return (
     <>
       {/* --- Header --- */}
-      <section className="section pb-0">
+      <section className="section section--flush pb-0 pt-6">
         <div className="page">
           <Reveal className="flex flex-col items-start gap-6">
             <h1 className="display">{projectsMetadata.title}</h1>
@@ -55,7 +55,7 @@ export default function ProjectsPage() {
       </section>
 
       {/* --- Grid --- */}
-      <section className="section pt-12">
+      <section className="section section--flush pt-12">
         <div className="page">
           {/* No `auto-rows-fr`. Grid items stretch by default, so the two
               cards in a row already match each other via the h-full chain
