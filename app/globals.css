@@ -618,6 +618,35 @@
   opacity: 1;
 }
 
+/* Accordion panel.
+   Uses the grid `0fr -> 1fr` technique rather than animating `height: auto`.
+   The height approach has to be JS-driven - something must measure the content
+   and write an inline pixel height every frame on the main thread - and that
+   per-frame JS is what made this feel laggy on a phone. Grid rows interpolate
+   natively, so the browser drives the whole thing and React only flips one
+   attribute per tap.
+   The child needs `min-height: 0` or it refuses to shrink below its content,
+   and `overflow: hidden` so the rows clip while the track collapses. */
+.accordion-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  pointer-events: none;
+  transition: grid-template-rows 220ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 160ms linear;
+}
+
+.accordion-panel > * {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.accordion-panel[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  pointer-events: auto;
+}
+
 /* backdrop-filter is the single most expensive thing a card paints, and it is
    recomputed on every frame of anything that changes the card's geometry - the
    skills accordion animating its height sat directly on top of one, which is

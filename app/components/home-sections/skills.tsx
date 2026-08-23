@@ -1,12 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { skillCategories } from "../skills-data";
 import { Section, SectionHeader } from "../ui/section";
 import Reveal from "../ui/reveal";
 
+/**
+ * Skills accordion.
+ *
+ * Deliberately free of Framer Motion. Animating `height: auto` there means JS
+ * measures the panel and then writes an inline style every frame on the main
+ * thread, which is what made this feel laggy on a phone. The open/close is now
+ * a plain CSS transition (`.accordion-panel` in globals.css) that the browser
+ * drives itself, and the chevron is a CSS rotate.
+ */
 export default function Skills() {
   // Every panel starts collapsed: the section is a list to scan, and opening
   // one row by default makes it the odd one out for no real gain.
@@ -57,43 +65,34 @@ export default function Skills() {
                     {cat.title}
                   </span>
 
-                  <motion.span
-                    className="shrink-0 text-[var(--fg-subtle)] group-hover:text-[var(--fg)]"
-                    animate={{ rotate: isOpen ? 180 : 0 }}
-                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  <span
+                    aria-hidden="true"
+                    className={`shrink-0 text-[var(--fg-subtle)] transition-transform duration-200 ease-[var(--ease-out)] group-hover:text-[var(--fg)] ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
                   >
                     <ChevronDown size={18} />
-                  </motion.span>
+                  </span>
                 </button>
 
-                {/* The panel stays mounted and only its height animates.
-                    Mounting and unmounting it per toggle meant React had to
-                    build and tear down every row on each tap, which is what
-                    made this feel heavy on a phone - and it also kept the
-                    collapsed skills out of the server-rendered HTML entirely,
-                    so none of them were crawlable. */}
-                <motion.div
+                {/* Stays mounted so the skills are in the server-rendered HTML
+                    and so a tap does not rebuild every row. */}
+                <div
                   id={panelId}
-                  initial={false}
-                  animate={isOpen ? "open" : "collapsed"}
-                  variants={{
-                    open: { height: "auto", opacity: 1 },
-                    collapsed: { height: 0, opacity: 0 },
-                  }}
-                  transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
-                  className="overflow-hidden"
-                  style={{
-                    pointerEvents: isOpen ? "auto" : "none",
-                    willChange: "height, opacity",
-                  }}
+                  className="accordion-panel"
+                  data-open={isOpen}
                   aria-hidden={!isOpen}
                 >
-                  {/* Indented to line up with the title on ≥sm; full width
-                      on phones, where the extra indent would squeeze the
-                      longer skill lines into unreadable columns. The top
-                      padding keeps the first row clear of the row button's
-                      hover highlight, which ends flush at this element's top
-                      edge. */}
+                  {/* The padding lives on the <ul>, not on this wrapper. The
+                      wrapper is the grid child, and padding on a grid child
+                      survives `min-height: 0` - it would hold the collapsed
+                      panel open at the height of its own padding. */}
+                  <div>
+                  {/* Indented to line up with the title on >=sm; full width on
+                      phones, where the extra indent would squeeze the longer
+                      skill lines into unreadable columns. The top padding
+                      keeps the first row clear of the row button's hover
+                      highlight, which ends flush at this element's top edge. */}
                   <ul className="grid gap-x-8 gap-y-2.5 px-4 pb-5 pt-2 sm:grid-cols-2 sm:px-6 sm:pb-6 sm:pl-[4.5rem] sm:pt-3">
                     {cat.skills.map((skill) => (
                       <li
@@ -108,7 +107,8 @@ export default function Skills() {
                       </li>
                     ))}
                   </ul>
-                </motion.div>
+                  </div>
+                </div>
               </div>
             );
           })}
