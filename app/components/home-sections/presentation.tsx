@@ -18,8 +18,8 @@ const headline = ["Software Engineer.", "AI Enthusiast.", "CTF Player."];
 export default function Presentation() {
   return (
     <section id="presentation" className="relative">
-      <div className="page flex min-h-[calc(100svh-var(--nav-h)-2rem)] flex-col justify-center py-12">
-        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-10">
+      <div className="page flex min-h-[calc(100svh-var(--nav-h)-2rem)] flex-col justify-center py-8 sm:py-12">
+        <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-10">
           {/* ---------------- Left: identity ---------------- */}
           <div className="order-2 flex flex-col items-center text-center lg:order-1 lg:col-span-8 lg:items-start lg:text-left">
             <span className="eyebrow enter">Alessio Maiola · Rome, Italy</span>
@@ -42,45 +42,45 @@ export default function Presentation() {
             </h1>
 
             <div
-              className="enter mt-8 max-w-xl space-y-5"
+              className="enter mt-6 max-w-xl space-y-4"
               style={{ "--enter-delay": "500ms" } as React.CSSProperties}
             >
               <p className="prose-body">
-                Hi, I&apos;m <b>Alessio Maiola</b>, a Master&apos;s graduate in Engineering
-                in Computer Science from Sapienza University of Rome, where I focused on
-                artificial intelligence, machine learning and data engineering.
+                Hi, I&apos;m <b>Alessio</b>. I studied Engineering in Computer Science
+                at <b>Sapienza</b>, where I focused on AI and machine learning.
+                I also love a good security challenge: I play CTFs with <b>TRX</b>{" "}
+                and helped Sapienza win <b>CyberChallenge.IT 2025</b>.
               </p>
               <p className="prose-body">
-                I work in security too. I play CTFs with <b>TRX</b>, and I was part of
-                the Sapienza team that won the national final of{" "}
-                <b>CyberChallenge.IT 2025</b>.
-              </p>
-              <p className="prose-body">
-                These days I&apos;m a Cyber Technology Researcher at Leonardo, after a year
-                at Daikin working on the company&apos;s digitalization, building internal
-                production systems used across the business. What I care about most is the
-                impact my work has on the team: shipping things colleagues can rely on, and
-                sharing what I learn.
+                These days I&apos;m a <b>Cyber Technology Researcher at Leonardo</b>,
+                after building production software at Daikin. What matters most to
+                me is making things colleagues can rely on, and sharing what I learn
+                along the way.
               </p>
             </div>
 
             <div
-              className="enter mt-10 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
+              className="enter mt-7 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
               style={{ "--enter-delay": "620ms" } as React.CSSProperties}
             >
               <PrimaryButton label="View Projects" icon={<FiFolder />} href="/projects" />
               <PrimaryButton
-                label="Curriculum Vitae"
+                label="View CV"
                 icon={<FiFileText />}
                 href={CV_PATH}
                 variant="secondary"
                 external
               />
+            </div>
+            <div
+              className="enter mt-3 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
+              style={{ "--enter-delay": "620ms" } as React.CSSProperties}
+            >
               <PrimaryButton
                 label="Get in touch"
                 icon={<FiMail />}
                 href="/contacts"
-                variant="secondary"
+                variant="ghost"
               />
               <PrimaryButton
                 label="GitHub"

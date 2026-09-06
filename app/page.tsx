@@ -24,10 +24,10 @@ export default function Home() {
   return (
     <>
       <Presentation />
-      <Education />
       <Work />
-      <CTFs />
+      <Education />
       <Projects />
+      <CTFs />
       <Skills />
       <Contact />
     </>

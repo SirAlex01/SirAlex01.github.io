@@ -68,7 +68,7 @@ export default function ContactsPage() {
                       <span className="block font-semibold text-[var(--fg)]">
                         {contact.label}
                       </span>
-                      <span className="block truncate font-mono text-xs text-[var(--fg-subtle)]">
+                      <span className="block break-all font-mono text-xs text-[var(--fg-muted)]">
                         {isEmail
                           ? emailAddress
                           : contact.href.replace(/^https?:\/\/(www\.)?/, "")}
