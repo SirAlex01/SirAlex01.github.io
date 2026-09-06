@@ -7,7 +7,7 @@ import { FaFolderOpen } from "react-icons/fa";
 
 export default function Projects() {
   return (
-    <Section id="projects">
+    <Section id="projects" tinted>
       <SectionHeader
         title={projectsMetadata.title}
         lead={projectsMetadata.subtitle}

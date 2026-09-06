@@ -5,7 +5,7 @@ import { RevealGroup, RevealItem } from "../../ui/reveal";
 
 export default function Education() {
   return (
-    <Section id="education" tinted>
+    <Section id="education">
       <SectionHeader
         title="Education"
         lead="Both Sapienza degrees finished at 110/110 cum laude, the Bachelor's ranked first in its faculty."

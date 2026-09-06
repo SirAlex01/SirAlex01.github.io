@@ -10,7 +10,7 @@ export default function Work() {
   const railRef = useInView<HTMLDivElement>();
 
   return (
-    <Section id="work">
+    <Section id="work" tinted>
       <SectionHeader
         title="Work Experience"
         lead="My contributions and what I've learned: designing, building, securing, and shipping systems."

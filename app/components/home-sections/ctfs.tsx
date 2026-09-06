@@ -88,7 +88,7 @@ function TeamLogo({ team }: { team: (typeof teams)[number] }) {
 
 export default function CTFs() {
   return (
-    <Section id="ctfs" tinted>
+    <Section id="ctfs">
       <SectionHeader title="CTF Experience" />
 
       {/* --- Teams + intro --- */}
